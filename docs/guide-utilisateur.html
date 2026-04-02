@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guide utilisateur — Adventiste</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #00b464;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 24px auto;
+            padding: 0 16px 32px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #00b464 0%, #0e9f6e 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            margin: 0 0 4px;
+            font-size: 26px;
+        }
+
+        .hero p {
+            margin: 0;
+            opacity: .95;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+            margin-bottom: 14px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+
+        h3 {
+            margin: 14px 0 6px;
+            font-size: 16px;
+        }
+
+        ul, ol {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        code {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1px 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.92em;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="hero">
+            <h1>Guide utilisateur — Adventiste</h1>
+            <p>Utilisation quotidienne des modules église et mission.</p>
+        </header>
+
+        <section class="card">
+            <h2>1) Connexion et navigation</h2>
+            <ul>
+                <li>Connectez-vous avec votre compte.</li>
+                <li>Le menu latéral affiche les modules selon vos droits.</li>
+                <li>Le <code>Tableau de bord</code> présente les KPI, priorités du jour, comparatifs mensuels et accès rapides.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>2) Rôles et responsabilités</h2>
+            <ul>
+                <li><code>secretaire_eglise</code> : gestion des membres, rapports membres, suivi baptêmes.</li>
+                <li><code>tresorier_eglise</code> : saisie/validation des récaps sabbat et rapports mensuels église.</li>
+                <li><code>secretaire_executif_mission</code> : supervision mission (églises, membres, rapports).</li>
+                <li><code>tresorier_mission</code> : ventilation mission, synthèse annuelle, rapprochement transferts.</li>
+                <li><code>president_mission</code> : validation/rejet des rapports soumis.</li>
+                <li><code>admin_mission</code> : administration générale (utilisateurs, paramètres, permissions).</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>3) Gestion des membres</h2>
+            <h3>Créer un membre</h3>
+            <ol>
+                <li>Ouvrir <code>Membres</code> &gt; <code>Nouveau membre</code>.</li>
+                <li>Renseigner les champs obligatoires.</li>
+                <li>Choisir le <code>mode d'entrée</code>.</li>
+                <li>Enregistrer.</li>
+            </ol>
+
+            <h3>Cas <code>transfert</code></h3>
+            <ul>
+                <li>Les champs <code>Reçu(e) dans l'église de</code> et <code>Reçu(e) le</code> sont obligatoires.</li>
+                <li>Le membre est automatiquement positionné en statut actif.</li>
+            </ul>
+
+            <h3>Recette église depuis la liste membres</h3>
+            <ul>
+                <li>Depuis <code>Membres</code>, cliquer sur le bouton d'enregistrement recette.</li>
+                <li>Le formulaire s'ouvre dans une modale (sans changer de page).</li>
+                <li>Saisir les montants puis enregistrer.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>4) Récaps sabbat (finances église)</h2>
+            <ol>
+                <li>Ouvrir <code>Finances</code> &gt; <code>Récaps</code>.</li>
+                <li>Créer ou modifier le récap de la date sabbat.</li>
+                <li>Saisir lignes dîmes/offrandes.</li>
+                <li>Soumettre selon workflow.</li>
+            </ol>
+        </section>
+
+        <section class="card">
+            <h2>5) Rapport mensuel église</h2>
+            <p>Le rapport mensuel consolide les récaps du mois.</p>
+            <ul>
+                <li><strong>Brouillon</strong> : modifiable.</li>
+                <li><strong>Soumis</strong> : envoyé à la mission.</li>
+                <li><strong>Validé mission</strong> : approuvé.</li>
+                <li><strong>Refusé mission</strong> : renvoyé avec commentaire.</li>
+            </ul>
+            <p class="muted">Le bloc récapitulatif affiche <code>mois / précédent / cumulé</code>.</p>
+        </section>
+
+        <section class="card">
+            <h2>6) Ventilation trésorerie mission</h2>
+            <p>Module <code>Finances</code> &gt; <code>Ventilation trésorerie mission</code>.</p>
+            <ul>
+                <li><code>Dîmes des églises</code> et <code>Offrandes du mois</code> sont préremplies depuis les agrégats.</li>
+                <li>Le trésorier mission saisit/ajuste les éléments requis.</li>
+                <li>Workflow mission : <code>Soumettre</code> &gt; <code>Valider</code> ou <code>Refuser</code>.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>7) État des dîmes des églises</h2>
+            <p>Vue mission annuelle par église :</p>
+            <ul>
+                <li>objectif dîmes,</li>
+                <li>collectes,</li>
+                <li>année précédente,</li>
+                <li>écart annuel,</li>
+                <li>contribution.</li>
+            </ul>
+            <p class="muted">Exports disponibles : PDF et Excel.</p>
+        </section>
+
+        <section class="card">
+            <h2>8) Synthèse annuelle mission</h2>
+            <p>Suivi annuel des :</p>
+            <ul>
+                <li>dîmes/offrandes,</li>
+                <li>revenus,</li>
+                <li>transferts bancaires,</li>
+                <li>écarts de rapprochement.</li>
+            </ul>
+            <p class="muted">Les mois avec écart apparaissent dans les priorités dashboard (<code>Transferts non rapprochés</code>).</p>
+        </section>
+
+        <section class="card">
+            <h2>9) Tableau de bord</h2>
+            <p>Le dashboard met en avant :</p>
+            <ul>
+                <li>KPI principaux,</li>
+                <li>priorités à traiter (<code>Rapports églises en retard</code>, <code>Transferts non rapprochés</code>),</li>
+                <li>comparatif mensuel courant vs précédent,</li>
+                <li>actions rapides.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>10) Exports et impression</h2>
+            <p>Chaque écran de reporting propose généralement :</p>
+            <ul>
+                <li><code>Aperçu impression</code>,</li>
+                <li><code>Export PDF</code>,</li>
+                <li><code>Export Excel</code>.</li>
+            </ul>
+            <p class="muted">Vérifier la période (<code>mois</code>, <code>année</code>) avant export.</p>
+        </section>
+
+        <section class="card">
+            <h2>11) Bonnes pratiques</h2>
+            <ul>
+                <li>Toujours vérifier la période active avant saisie.</li>
+                <li>Traiter d'abord les éléments des <code>Priorités du jour</code>.</li>
+                <li>En cas de refus mission, lire le commentaire et corriger avant nouvelle soumission.</li>
+                <li>Utiliser les exports en fin de cycle pour archivage.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>12) Dépannage rapide</h2>
+            <ul>
+                <li>Donnée manquante : vérifier vos droits/role et la période sélectionnée.</li>
+                <li>Bouton absent : contrôle d'autorisation (rôle/permission).</li>
+                <li>Écart transfert : contrôler la saisie <code>Transf. Bank. effectué</code> dans la synthèse annuelle.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
