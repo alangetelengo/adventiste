@@ -24,7 +24,7 @@ $labelsStatutLigne = [
 <div class="grid w-full gap-6 md:grid-cols-2 md:gap-8 md:items-start">
     <div class="space-y-6 md:col-span-1">
         @if (! empty($lignesFigees))
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3">Lignes figées (validation mission)</h2>
             <div class="overflow-x-auto text-sm">
                 <table class="min-w-full">
@@ -54,11 +54,11 @@ $labelsStatutLigne = [
         @endif
 
         @can('update', $recap)
-        <form method="post" action="{{ route('finances.recaps.update', $recap) }}" class="space-y-6">
+        <form method="post" action="{{ route('finances.recaps.update', $recap) }}" class="space-y-6" data-offline-queue>
             @csrf
             @method('PUT')
 
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 space-y-4">
+            <div class="adventiste-card-pro-static p-6 space-y-4">
                 <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">En-tête</h2>
                 <p class="text-sm text-slate-500">Date du sabbat : <strong>{{ $recap->date_sabbat->format('d/m/Y') }}</strong> (non modifiable)</p>
                 <div>
@@ -75,7 +75,7 @@ $labelsStatutLigne = [
                 </div>
             </div>
 
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+            <div class="adventiste-card-pro-static p-6">
                 <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">Recettes assemblée (modifiable)</h2>
                 <p class="text-sm text-slate-500 mb-4">Saisie simplifiée: type + montant. Les règles de répartition sont appliquées automatiquement.</p>
                 <div class="overflow-x-auto">
@@ -120,7 +120,7 @@ $labelsStatutLigne = [
                 <button type="button" id="btn-add-assemblee" class="mt-2 text-sm font-semibold text-[#00b464] dark:text-emerald-400 hover:underline">+ Ligne assemblée</button>
             </div>
 
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-4">
+            <div class="adventiste-card-pro-static p-4">
                 <p class="text-sm text-slate-600 dark:text-slate-300">
                     Les recettes <strong>individuelles</strong> (offrande, dîme, don) se font désormais uniquement depuis la
                     <strong>liste des membres</strong> via l’action dédiée.
@@ -133,7 +133,7 @@ $labelsStatutLigne = [
             </div>
         </form>
         @else
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 text-sm text-slate-600 dark:text-slate-400">
+        <div class="adventiste-card-pro-static p-6 text-sm text-slate-600 dark:text-slate-400">
             Vous consultez ce récap en lecture seule. La saisie et la soumission sont réservées au <strong>trésorier d’église</strong>.
         </div>
         @endcan

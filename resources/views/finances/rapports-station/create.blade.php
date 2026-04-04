@@ -11,7 +11,7 @@
     <p class="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed border-b border-slate-200/80 dark:border-slate-600/60 pb-6">
         Créer un rapport de station pour la période spécifiée. Les lignes de ventilation seront initialisées selon les règles de votre mission.
     </p>
-    <form method="post" action="{{ route('finances.rapports-station.store') }}" class="space-y-8">
+    <form method="post" action="{{ route('finances.rapports-station.store') }}" class="space-y-8" data-offline-queue>
         @csrf
         <div class="grid gap-4 sm:grid-cols-2">
             <div>

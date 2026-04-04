@@ -12,16 +12,18 @@
 
 @section('btn-create')
 @can('create', App\Models\Membre::class)
+<div class="flex flex-wrap items-center gap-2">
 <a href="{{ route('membres.create') }}" class="adventiste-btn-primary">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
     Nouveau membre
 </a>
+</div>
 @endcan
 @endsection
 
 @section('content')
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden mb-6">
+<div class="adventiste-card-pro-static overflow-hidden mb-6">
     <form method="get" action="{{ route('membres.index') }}" class="px-6 py-4 flex flex-wrap items-end gap-4 border-b border-slate-200/80 dark:border-slate-600/60 bg-slate-50/80 dark:bg-slate-900/40">
         @if ($eglisesFiltre !== null && $eglisesFiltre->isNotEmpty())
         <div class="min-w-48">
@@ -68,6 +70,7 @@
             <thead>
                 <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Nom</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden md:table-cell">Date d'entrée</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden md:table-cell">Entrée</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden lg:table-cell">Statut</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden md:table-cell">Téléphone</th>
@@ -80,9 +83,11 @@
                     <td class="px-6 py-4 font-medium">
                         <span class="block">{{ $membre->nom }} {{ $membre->prenom }}</span>
                         <span class="sm:hidden text-xs text-slate-500 dark:text-slate-400 mt-1 block">
-                            {{ $modesEntree[$membre->mode_entree] ?? '—' }} · {{ $membre->typeStatut?->libelle ?? '—' }}
+                            <span class="tabular-nums">Entrée le {{ $membre->resolveDateEntreeEglise()?->format('d/m/Y') ?? '—' }}</span>
+                            · {{ $modesEntree[$membre->mode_entree] ?? '—' }} · {{ $membre->typeStatut?->libelle ?? '—' }}
                         </span>
                     </td>
+                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 tabular-nums hidden md:table-cell">{{ $membre->resolveDateEntreeEglise()?->format('d/m/Y') ?? '—' }}</td>
                     <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden md:table-cell">{{ $modesEntree[$membre->mode_entree] ?? '—' }}</td>
                     <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden lg:table-cell">{{ $membre->typeStatut?->libelle ?? '—' }}</td>
                     <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden md:table-cell">{{ $membre->telephone ?? '—' }}</td>
@@ -116,7 +121,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400 text-sm">
+                    <td colspan="6" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400 text-sm">
                         Aucun membre ne correspond aux critères.
                     </td>
                 </tr>
@@ -134,7 +139,7 @@
 @if (auth()->user()->eglise_locale_id !== null && auth()->user()->can('create', App\Models\RecapSabbatEglise::class))
 <div id="recette-member-modal" class="fixed inset-0 z-1200 hidden items-center justify-center p-4">
     <div class="absolute inset-0 bg-slate-900/60" data-close-recette-modal></div>
-    <div class="relative z-1201 w-[95%] max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-2xl">
+    <div class="relative z-1201 w-[95%] max-w-2xl adventiste-card-pro-static shadow-2xl">
         <div class="flex items-start justify-between gap-4 border-b border-slate-200 dark:border-slate-700 px-5 py-4">
             <div>
                 <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Enregistrement d'une recette de l'église</h3>

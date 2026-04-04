@@ -19,7 +19,7 @@ Suivi mission — objectifs, collectes et apport des églises locales
 @endsection
 
 @section('content')
-<div class="mb-6 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-5 sm:p-6">
+<div class="adventiste-card-pro-static mb-6 p-5 sm:p-6">
     <form method="get" action="{{ route('finances.etat-dimes-eglises.index') }}" class="flex flex-wrap items-end gap-4">
         <div>
             <label for="annee" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Année</label>
@@ -31,7 +31,7 @@ Suivi mission — objectifs, collectes et apport des églises locales
     </form>
 </div>
 
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="adventiste-card-pro-static overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm min-w-[1200px]">
             <thead>

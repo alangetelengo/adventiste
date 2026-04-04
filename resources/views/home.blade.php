@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<div class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-6 shadow-sm">
+<div class="adventiste-card-pro-static p-6">
     <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
         Bienvenue dans l’interface de gestion de l’église. La structure (barre latérale, en-tête, pied de page) reprend le gabarit du projet E-Ged ; les entrées de menu sont pour l’instant statiques.
     </p>

@@ -29,12 +29,12 @@
             </li>
             @auth
             <li class="mr-3">
-                <button id="notifToggle" type="button" class="relative flex items-center gap-1 px-3 py-2 rounded hover:bg-white/10 text-lg" title="Notifications" aria-haspopup="true" aria-expanded="false">
-                    <span class="relative inline-block">
-                        🔔
-                        <span id="notifBadge" class="hidden absolute -top-1 -right-1 min-w-6 h-6 px-1.5 items-center justify-center rounded-full bg-red-600 text-white text-xs font-bold shadow-lg ring-2 ring-white/95">0</span>
+                <button id="notifToggle" type="button" class="relative flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors" title="Notifications" aria-haspopup="true" aria-expanded="false">
+                    <span class="relative inline-flex h-10 w-10 shrink-0 items-center justify-center">
+                        <span class="text-[1.35rem] leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]" aria-hidden="true">🔔</span>
+                        <span id="notifBadge" class="notif-count-badge hidden" role="status" aria-live="polite" aria-atomic="true"></span>
                     </span>
-                    <span class="text-xs opacity-80">▼</span>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-white/50">▼</span>
                 </button>
             </li>
             <li class="flex items-center user-box">
@@ -152,23 +152,42 @@
     border-radius: 50%; background: #f1f5f9; color: #94a3b8; font-size: 1.25rem;
 }
 .notif-empty p { margin: 0; font-size: 0.9rem; }
-#notifBadge {
+
+.notif-count-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    z-index: 10;
+    box-sizing: border-box;
+    min-height: 1.125rem;
+    min-width: 1.125rem;
+    padding: 0 5px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 2px #0a0f15;
+    font-size: 10px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #dc2626;
     align-items: center;
     justify-content: center;
-    min-width: 30px;
-    height: 30px;
-    padding: 0 9px;
-    border-radius: 9999px;
-    background: #ffffff !important;
-    color: #7f1d1d !important;
-    border: 2px solid #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    line-height: 1;
-    font-weight: 900;
-    letter-spacing: 0;
-    text-shadow: 0 0 1px #7f1d1d, 0 1px 0 #ffffff;
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+.notif-count-badge.is-on {
+    display: flex;
+}
+.notif-count-badge.notif-count-badge--2 {
+    min-width: 1.35rem;
+    padding: 0 5px;
+    font-size: 9px;
+}
+.notif-count-badge.notif-count-badge--3 {
+    min-width: 1.65rem;
+    padding: 0 4px;
+    font-size: 8px;
 }
 
 .header .nav-control .hamburger.is-active .line:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
@@ -253,14 +272,29 @@ document.addEventListener('DOMContentLoaded', function () {
     function setNotifBadge(count) {
         if (!notifBadge) return;
         const safeCount = Number.isFinite(Number(count)) ? Math.max(0, Math.trunc(Number(count))) : 0;
+        notifBadge.classList.remove('is-on', 'notif-count-badge--2', 'notif-count-badge--3');
         if (safeCount > 0) {
+            const label = safeCount > 99 ? '99+' : String(safeCount);
+            notifBadge.textContent = label;
             notifBadge.classList.remove('hidden');
-            notifBadge.classList.add('inline-flex');
-            notifBadge.textContent = safeCount > 99 ? '99+' : String(safeCount);
+            notifBadge.classList.add('is-on');
+            if (label.length >= 3) {
+                notifBadge.classList.add('notif-count-badge--3');
+            } else if (label.length === 2) {
+                notifBadge.classList.add('notif-count-badge--2');
+            }
+            notifBadge.setAttribute(
+                'aria-label',
+                safeCount > 99
+                    ? 'Plus de 99 notifications non lues'
+                    : safeCount === 1
+                        ? '1 notification non lue'
+                        : `${safeCount} notifications non lues`
+            );
         } else {
+            notifBadge.textContent = '';
             notifBadge.classList.add('hidden');
-            notifBadge.classList.remove('inline-flex');
-            notifBadge.textContent = '0';
+            notifBadge.removeAttribute('aria-label');
         }
     }
 

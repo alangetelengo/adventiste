@@ -1,36 +1,40 @@
 <?php
 
-use App\Http\Controllers\Parametres\DistrictController;
-use App\Http\Controllers\Parametres\GroupeMissionController;
-use App\Http\Controllers\Parametres\EntreeFinanciereGroupeMissionController;
-use App\Http\Controllers\Parametres\EgliseLocaleController;
+use App\Http\Controllers\BaptemeController;
+use App\Http\Controllers\Finances\EtatDimesEglisesMissionController;
+use App\Http\Controllers\Finances\RapportStationMissionController;
+use App\Http\Controllers\Finances\SyntheseAnnuelleMissionController;
+use App\Http\Controllers\MembreController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Parametres\DepartementMinistereController;
-use App\Http\Controllers\Parametres\PermissionController;
-use App\Http\Controllers\Parametres\RoleController;
+use App\Http\Controllers\Parametres\DistrictController;
+use App\Http\Controllers\Parametres\EgliseLocaleController;
+use App\Http\Controllers\Parametres\EntreeFinanciereGroupeMissionController;
+use App\Http\Controllers\Parametres\GroupeMissionController;
 use App\Http\Controllers\Parametres\MissionTresorerieVentilationLignesController;
 use App\Http\Controllers\Parametres\MissionVentilationRecettesController;
+use App\Http\Controllers\Parametres\PermissionController;
+use App\Http\Controllers\Parametres\RoleController;
 use App\Http\Controllers\Parametres\TypeRecetteMissionController;
 use App\Http\Controllers\Parametres\TypeStatutMembreController;
 use App\Http\Controllers\Parametres\UtilisateurMissionController;
-use App\Http\Controllers\BaptemeController;
-use App\Http\Controllers\MembreController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParametresController;
-use App\Http\Controllers\RapportMensuelEgliseController;
-use App\Http\Controllers\RapportMembreEgliseController;
-use App\Http\Controllers\VentilationTresorerieMissionController;
-use App\Http\Controllers\RecapSabbatEgliseController;
-use App\Http\Controllers\TableauDeBordController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Finances\RapportStationMissionController;
-use App\Http\Controllers\Finances\EtatDimesEglisesMissionController;
-use App\Http\Controllers\Finances\SyntheseAnnuelleMissionController;
+use App\Http\Controllers\PwaManifestController;
+use App\Http\Controllers\RapportMembreEgliseController;
+use App\Http\Controllers\RapportMensuelEgliseController;
+use App\Http\Controllers\RecapSabbatEgliseController;
+use App\Http\Controllers\SyncController;
+use App\Http\Controllers\TableauDeBordController;
+use App\Http\Controllers\VentilationTresorerieMissionController;
 use App\Models\GroupeMission;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->get('/connexion', fn() => redirect()->route('login'));
+Route::middleware('guest')->get('/connexion', fn () => redirect()->route('login'));
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
+
+Route::get('/manifest.webmanifest', PwaManifestController::class)->name('pwa.manifest');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
@@ -40,10 +44,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/tableau-de-bord', TableauDeBordController::class)->name('tableau-de-bord');
 
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profil/mot-de-passe', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
+    Route::put('/profil/mot-de-passe', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/feed', [NotificationController::class, 'feed'])->name('notifications.feed');
     Route::get('/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+
+    Route::get('/sync/csrf', [SyncController::class, 'csrf'])->name('sync.csrf');
 
     Route::prefix('finances')->name('finances.')->group(function () {
         Route::get('/recaps-sabbat', [RecapSabbatEgliseController::class, 'index'])->name('recaps.index');

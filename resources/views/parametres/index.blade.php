@@ -16,7 +16,7 @@
 
     <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         @can('viewAny', App\Models\EgliseLocale::class)
-            <a href="{{ route('parametres.eglises.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.eglises.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -54,7 +54,7 @@
         @endcan
 
         @can('viewAny', App\Models\District::class)
-            <a href="{{ route('parametres.districts.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.districts.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -78,7 +78,7 @@
         @endcan
 
         @can('viewAny', App\Models\GroupeMission::class)
-            <a href="{{ route('parametres.groupes-mission.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.groupes-mission.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -102,7 +102,7 @@
         @endcan
 
         @can('viewAny', App\Models\MissionTresorerieVentilationLigne::class)
-            <a href="{{ route('parametres.tresorerie-ventilation-lignes.edit') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.tresorerie-ventilation-lignes.edit') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -126,7 +126,7 @@
         @endcan
 
         @can('viewAny', App\Models\TypeRecetteMission::class)
-            <a href="{{ route('parametres.types-recette.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.types-recette.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -150,7 +150,7 @@
         @endcan
 
         @can('viewAny', App\Models\TypeStatutMembre::class)
-            <a href="{{ route('parametres.types-statut-membre.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.types-statut-membre.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -174,7 +174,7 @@
         @endcan
 
         @can('viewAny', App\Models\MissionReglesVentilationRecettes::class)
-            <a href="{{ route('parametres.ventilation-recettes.edit') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.ventilation-recettes.edit') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -198,7 +198,7 @@
         @endcan
 
         @can('viewAny', App\Models\User::class)
-            <a href="{{ route('parametres.utilisateurs.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.utilisateurs.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -236,7 +236,7 @@
         @endcan
 
         @can('viewAny', App\Models\Role::class)
-            <a href="{{ route('parametres.roles.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.roles.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
@@ -260,7 +260,7 @@
         @endcan
 
         @can('viewAny', App\Models\Permission::class)
-            <a href="{{ route('parametres.permissions.index') }}" class="group block rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-[#00b464]/30 transition-all duration-200 p-6 sm:p-7 text-left no-underline">
+            <a href="{{ route('parametres.permissions.index') }}" class="adventiste-card-pro group block p-6 sm:p-7 text-left no-underline">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#00b464] ring-1 ring-emerald-200/60 dark:ring-emerald-800/50 group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">

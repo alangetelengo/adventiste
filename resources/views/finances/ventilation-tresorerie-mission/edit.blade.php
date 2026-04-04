@@ -46,7 +46,7 @@
         };
     @endphp
 
-    <div class="mb-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex flex-wrap items-center gap-3">
+    <div class="adventiste-card-pro-static mb-5 p-4 flex flex-wrap items-center gap-3">
         <span class="text-sm text-slate-600 dark:text-slate-300">Statut du workflow:</span>
         <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $etatClass }}">
             {{ \App\Models\MissionTresorerieRapportMensuel::labelsEtatsTransmission()[$etat] ?? 'Brouillon' }}
@@ -58,7 +58,7 @@
 
     <div class="mb-6 flex flex-wrap gap-3">
         @can('soumettre', $rapport)
-            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.soumettre', ['annee' => $annee, 'mois' => $mois]) }}">
+            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.soumettre', ['annee' => $annee, 'mois' => $mois]) }}" data-offline-queue>
                 @csrf
                 <button type="submit" class="rounded-lg bg-indigo-700 text-white px-4 py-2 text-sm font-medium hover:bg-indigo-800">
                     Soumettre à validation
@@ -67,7 +67,7 @@
         @endcan
 
         @can('reviewMission', $rapport)
-            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.valider-mission', ['annee' => $annee, 'mois' => $mois]) }}" class="flex flex-wrap items-center gap-2">
+            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.valider-mission', ['annee' => $annee, 'mois' => $mois]) }}" class="flex flex-wrap items-center gap-2" data-offline-queue>
                 @csrf
                 <input type="text" name="mission_commentaire" placeholder="Commentaire (optionnel)" class="rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2 py-1.5 text-xs min-w-48">
                 <button type="submit" class="rounded-lg bg-emerald-700 text-white px-4 py-2 text-sm font-medium hover:bg-emerald-800">
@@ -75,7 +75,7 @@
                 </button>
             </form>
 
-            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.refuser-mission', ['annee' => $annee, 'mois' => $mois]) }}" class="flex flex-wrap items-center gap-2">
+            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.refuser-mission', ['annee' => $annee, 'mois' => $mois]) }}" class="flex flex-wrap items-center gap-2" data-offline-queue>
                 @csrf
                 <input type="text" name="mission_commentaire" required placeholder="Commentaire de refus (obligatoire)" class="rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2 py-1.5 text-xs min-w-48">
                 <button type="submit" class="rounded-lg bg-rose-700 text-white px-4 py-2 text-sm font-medium hover:bg-rose-800">
@@ -93,9 +93,9 @@
         </div>
     @endcan
 
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden mb-8">
+    <div class="adventiste-card-pro-static overflow-hidden mb-8">
         @can('update', $rapport)
-            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.update', ['annee' => $annee, 'mois' => $mois]) }}" class="p-6 sm:p-7 space-y-6">
+            <form method="post" action="{{ route('finances.ventilation-tresorerie-mission.update', ['annee' => $annee, 'mois' => $mois]) }}" class="p-6 sm:p-7 space-y-6" data-offline-queue>
                 @csrf
                 @method('PUT')
 
@@ -152,7 +152,7 @@
                     };
                 @endphp
 
-                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                <div class="adventiste-card-pro-static overflow-x-auto">
                     <table class="w-full text-sm min-w-[840px]">
                         <thead>
                             <tr class="bg-slate-100 dark:bg-slate-700/80 border-b border-slate-200 dark:border-slate-600">

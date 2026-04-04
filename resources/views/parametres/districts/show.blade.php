@@ -18,7 +18,7 @@
 @section('content')
     @include('parametres._nav')
 
-    <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 sm:p-8 max-w-2xl">
+    <div class="adventiste-card-pro-static p-6 sm:p-8 max-w-2xl">
         <dl class="space-y-4 text-sm">
             <div class="flex flex-wrap justify-between gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
                 <dt class="text-slate-500 dark:text-slate-400">Églises rattachées</dt>

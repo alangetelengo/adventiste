@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RapportDimesOffrandesMissionExport;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\MissionTresorerieRapportMensuel;
 use App\Models\NotificationInterne;
 use App\Models\User;
 use App\Services\Finances\VentilationTresorerieMissionService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -20,12 +21,18 @@ class VentilationTresorerieMissionController extends Controller
 {
     public function __construct(
         private readonly VentilationTresorerieMissionService $ventilationTresorerieMissionService
-    ) {}
+    ) {
+        $this->middleware(function (Request $request, \Closure $next) {
+            if (! Gate::forUser($request->user())->allows('ventilationModule', MissionTresorerieRapportMensuel::class)) {
+                abort(403);
+            }
+
+            return $next($request);
+        });
+    }
 
     public function index(Request $request): View
     {
-        $this->authorize('viewAny', MissionTresorerieRapportMensuel::class);
-
         $missionId = (int) $request->user()->mission_id;
 
         $rapports = MissionTresorerieRapportMensuel::query()

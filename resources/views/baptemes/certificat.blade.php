@@ -32,9 +32,12 @@
             font-weight: 600;
         }
         .btn-primary {
-            background: #0ea5a3;
-            border-color: #0ea5a3;
+            background: #059669;
+            border-color: #047857;
             color: #fff;
+        }
+        .btn-primary:hover {
+            background: #047857;
         }
 
         .page {
@@ -452,7 +455,7 @@
                     <div class="admission-title">Admission</div>
                     <div class="line-block" style="margin-top: 10px;">
                         <div>Reçu comme membre de l'Église Adventiste du septième jour</div>
-                        <div>De: <span class="field-sm">{{ $bapteme->egliseLocale?->nom ?? '____________________' }}</span> Le: <span class="field-xs">{{ $bapteme->date_bapteme?->format('d/m/Y') ?? '____/____/______' }}</span></div>
+                        <div>De: <span class="field-sm">{{ $bapteme->egliseLocale?->nom ?? '____________________' }}</span> Le: <span class="field-xs">{{ ($bapteme->membre?->date_admission_eglise ?? $bapteme->date_bapteme)?->format('d/m/Y') ?? '____/____/______' }}</span></div>
                     </div>
 
                     <div class="signature-row">

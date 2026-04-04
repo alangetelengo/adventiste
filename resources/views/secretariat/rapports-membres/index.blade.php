@@ -20,7 +20,7 @@
 @endphp
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden mb-6">
+    <div class="adventiste-card-pro-static overflow-hidden mb-6">
         <form method="get" action="{{ route('secretariat.rapports-membres.index') }}" class="px-6 py-4 flex flex-wrap items-end gap-4 border-b border-slate-200/80 dark:border-slate-600/60 bg-slate-50/80 dark:bg-slate-900/40">
             @if ($eglisesFiltre !== null && $eglisesFiltre->isNotEmpty())
                 <div class="min-w-48">

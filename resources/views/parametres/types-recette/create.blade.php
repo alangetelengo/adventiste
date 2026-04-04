@@ -7,7 +7,7 @@
 @section('content')
     @include('parametres._nav')
 
-    <div class="max-w-xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 sm:p-8">
+    <div class="max-w-xl adventiste-card-pro-static p-6 sm:p-8">
         <form method="post" action="{{ route('parametres.types-recette.store') }}" class="space-y-5">
             @csrf
             <div>

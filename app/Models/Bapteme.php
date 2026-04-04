@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\PersonNameFormat;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +38,24 @@ class Bapteme extends Model
         ];
     }
 
+    /** @return Attribute<string, string> */
+    protected function nom(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => PersonNameFormat::nom($value),
+            set: fn (?string $value) => PersonNameFormat::nom($value),
+        );
+    }
+
+    /** @return Attribute<string, string> */
+    protected function prenom(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => PersonNameFormat::prenom($value),
+            set: fn (?string $value) => PersonNameFormat::prenom($value),
+        );
+    }
+
     /** @return array<string, string> */
     public static function labelsTypes(): array
     {
@@ -55,4 +75,3 @@ class Bapteme extends Model
         return $this->belongsTo(Membre::class, 'membre_id');
     }
 }
-

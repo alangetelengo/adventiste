@@ -11,7 +11,7 @@
 @section('content')
     @include('parametres._nav')
 
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+    <div class="adventiste-card-pro-static overflow-hidden">
         <form method="post" action="{{ route('parametres.tresorerie-ventilation-lignes.update') }}" class="p-6 sm:p-8">
             @csrf
             @method('PUT')

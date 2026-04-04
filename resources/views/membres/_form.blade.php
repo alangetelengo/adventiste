@@ -221,6 +221,14 @@
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
+        <div id="block-date-admission-eglise">
+            <label for="date_admission_eglise" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date d'admission au registre</label>
+            <input type="date" name="date_admission_eglise" id="date_admission_eglise" value="{{ old('date_admission_eglise', $m?->date_admission_eglise?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Inscription comme membre (secrétariat). Vide = même date que le baptême pour le tri et l’affichage.</p>
+            @error('date_admission_eglise')
+                <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
         <div id="block-lieu-bapteme">
             <label for="lieu_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Lieu de baptême</label>
             <input type="text" name="lieu_bapteme" id="lieu_bapteme" value="{{ old('lieu_bapteme', $m?->lieu_bapteme) }}" class="{{ $fieldGrid }} min-w-0">
@@ -273,6 +281,7 @@
         const mode = document.getElementById('mode_entree');
         const blockType = document.getElementById('block-type-bapteme');
         const blockDateBapteme = document.getElementById('block-date-bapteme');
+        const blockDateAdmissionEglise = document.getElementById('block-date-admission-eglise');
         const blockLieuBapteme = document.getElementById('block-lieu-bapteme');
         const blockBaptisePar = document.getElementById('block-baptise-par');
         const blockEgliseOrigine = document.getElementById('block-eglise-origine');
@@ -288,6 +297,7 @@
 
             blockType.style.display = isBapteme ? '' : 'none';
             if (blockDateBapteme) blockDateBapteme.style.display = isTransfert ? 'none' : '';
+            if (blockDateAdmissionEglise) blockDateAdmissionEglise.style.display = isTransfert ? 'none' : '';
             if (blockLieuBapteme) blockLieuBapteme.style.display = isTransfert ? 'none' : '';
             if (blockBaptisePar) blockBaptisePar.style.display = isTransfert ? 'none' : '';
             if (blockEgliseOrigine) blockEgliseOrigine.style.display = isTransfert ? '' : 'none';

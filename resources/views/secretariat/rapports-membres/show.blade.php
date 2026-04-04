@@ -30,7 +30,7 @@
     <div class="space-y-6">
         <div class="flex flex-wrap gap-3">
             @can('soumettre', $rapport)
-                <form method="post" action="{{ route('secretariat.rapports-membres.soumettre', $rapport) }}" class="inline">
+                <form method="post" action="{{ route('secretariat.rapports-membres.soumettre', $rapport) }}" class="inline" data-offline-queue>
                     @csrf
                     <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#00b464] text-white font-semibold hover:bg-[#00a055] shadow-sm hover:shadow transition-all duration-200 text-sm">
                         Envoyer à la mission
@@ -39,13 +39,13 @@
             @endcan
 
             @can('review', $rapport)
-                <form method="post" action="{{ route('secretariat.rapports-membres.valider', $rapport) }}" class="inline-flex items-center gap-2">
+                <form method="post" action="{{ route('secretariat.rapports-membres.valider', $rapport) }}" class="inline-flex items-center gap-2" data-offline-queue>
                     @csrf
                     <input type="text" name="commentaire_mission" placeholder="Commentaire (optionnel)" class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
                     <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800">Valider</button>
                 </form>
 
-                <form method="post" action="{{ route('secretariat.rapports-membres.rejeter', $rapport) }}" class="inline-flex items-center gap-2">
+                <form method="post" action="{{ route('secretariat.rapports-membres.rejeter', $rapport) }}" class="inline-flex items-center gap-2" data-offline-queue>
                     @csrf
                     <input type="text" name="commentaire_mission" required placeholder="Motif du rejet (obligatoire)" class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
                     <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-red-300 text-red-700 dark:text-red-400 text-sm font-semibold hover:bg-red-50 dark:hover:bg-red-900/20">Rejeter</button>
@@ -61,7 +61,7 @@
             @endcan
         </div>
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">État de transmission</h2>
             <dl class="grid gap-3 sm:grid-cols-2 text-sm">
                 <div>
@@ -87,7 +87,7 @@
             </dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Synthèse membres</h2>
             <dl class="grid gap-3 sm:grid-cols-2 text-sm">
                 <div class="flex justify-between gap-4 border-b border-slate-100 dark:border-slate-700 pb-2">
@@ -113,7 +113,7 @@
             </dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Répartition par statut membre</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
@@ -139,7 +139,7 @@
             </div>
         </div>
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">Notes du secrétaire</h2>
             <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{{ $rapport->notes_locales ?? '—' }}</p>
         </div>

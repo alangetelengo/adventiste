@@ -126,7 +126,6 @@ class RapportMensuelEgliseController extends Controller
         $validated = $request->validate([
             'date_signature_tresorier' => ['nullable', 'date'],
             'date_signature_pasteur' => ['nullable', 'date'],
-            'date_signature_secretaire' => ['nullable', 'date'],
             'verrouiller' => ['nullable', Rule::in(['0', '1'])],
         ]);
 
@@ -135,8 +134,8 @@ class RapportMensuelEgliseController extends Controller
             'date_signature_tresorier' => $validated['date_signature_tresorier'] ?? null,
             'signe_pasteur' => $request->boolean('signe_pasteur'),
             'date_signature_pasteur' => $validated['date_signature_pasteur'] ?? null,
-            'signe_secretaire' => $request->boolean('signe_secretaire'),
-            'date_signature_secretaire' => $validated['date_signature_secretaire'] ?? null,
+            'signe_secretaire' => false,
+            'date_signature_secretaire' => null,
             'etabli_a' => null,
             'etabli_le' => null,
             'verrouille_le' => ($rapport->verrouille_le === null && ($validated['verrouiller'] ?? '0') === '1')

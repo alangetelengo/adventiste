@@ -62,7 +62,7 @@ class MembresTest extends TestCase
         $response = $this->actingAs($admin)->post(route('membres.store'), [
             'eglise_locale_id' => $eglise->id,
             'groupe_mission_id' => '',
-            'mode_entree' => \App\Models\Membre::MODE_ENTREE_TRANSFERT,
+            'mode_entree' => Membre::MODE_ENTREE_TRANSFERT,
             'nom' => 'Kimbembe',
             'prenom' => 'Paul',
             'telephone' => '+242060000000',
@@ -70,7 +70,7 @@ class MembresTest extends TestCase
             'recu_le' => now()->toDateString(),
         ]);
 
-        $membre = Membre::query()->where('nom', 'Kimbembe')->where('prenom', 'Paul')->first();
+        $membre = Membre::query()->where('nom', 'KIMBEMBE')->where('prenom', 'Paul')->first();
         $this->assertNotNull($membre);
         $response->assertRedirect(route('membres.edit', $membre));
         $this->assertSame((int) $eglise->id, (int) $membre->eglise_locale_id);
@@ -105,6 +105,48 @@ class MembresTest extends TestCase
         ]);
 
         $this->actingAs($tresorier)->get(route('membres.show', $membre))->assertNotFound();
+    }
+
+    public function test_liste_membres_triee_par_date_entree_desc(): void
+    {
+        $mission = Mission::query()->create(['nom' => 'M', 'nom_court' => 'M']);
+        $eglise = EgliseLocale::query()->create([
+            'mission_id' => $mission->id,
+            'nom' => 'Centre',
+            'code_unique' => 'C1',
+            'actif' => true,
+        ]);
+        $user = User::factory()->create([
+            'mission_id' => $mission->id,
+            'eglise_locale_id' => $eglise->id,
+            'role_id' => $this->roleId('tresorier_eglise'),
+        ]);
+
+        Membre::query()->create([
+            'identifiant_public' => (string) Str::uuid(),
+            'eglise_locale_id' => $eglise->id,
+            'mode_entree' => Membre::MODE_ENTREE_TRANSFERT,
+            'nom' => 'ANCIEN',
+            'prenom' => 'Membre',
+            'recu_dans_eglise_de' => 'Autre',
+            'recu_le' => '2019-03-10',
+        ]);
+        Membre::query()->create([
+            'identifiant_public' => (string) Str::uuid(),
+            'eglise_locale_id' => $eglise->id,
+            'mode_entree' => Membre::MODE_ENTREE_TRANSFERT,
+            'nom' => 'RECENT',
+            'prenom' => 'Membre',
+            'recu_dans_eglise_de' => 'Autre',
+            'recu_le' => '2026-01-15',
+        ]);
+
+        $html = $this->actingAs($user)->get(route('membres.index'))->assertOk()->getContent();
+        $posRecent = strpos($html, 'RECENT');
+        $posAncien = strpos($html, 'ANCIEN');
+        $this->assertNotFalse($posRecent);
+        $this->assertNotFalse($posAncien);
+        $this->assertLessThan($posAncien, $posRecent, 'Le membre avec la date d’entrée la plus récente doit apparaître avant dans le HTML.');
     }
 
     public function test_tableau_de_bord_tresorier_propose_l_annuaire_membres(): void

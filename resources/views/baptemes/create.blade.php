@@ -11,7 +11,7 @@
     <p class="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed border-b border-slate-200/80 dark:border-slate-600/60 pb-6">
         Enregistrez le baptême avec le type exact (immersion ou profession de foi). La fiche membre est créée automatiquement dans l'église locale.
     </p>
-    <form method="post" action="{{ route('baptemes.store') }}" class="space-y-8">
+    <form method="post" action="{{ route('baptemes.store') }}" class="space-y-8" data-offline-queue>
         @csrf
         @include('baptemes._form', ['bapteme' => null])
         <div class="flex flex-wrap gap-3 pt-2 border-t border-slate-200/80 dark:border-slate-600/60">

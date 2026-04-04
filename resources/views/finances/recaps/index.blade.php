@@ -12,11 +12,13 @@ Toutes les églises de la mission
 
 @section('btn-create')
 @can('create', App\Models\RecapSabbatEglise::class)
+<div class="flex flex-wrap items-center gap-2">
 <a href="{{ route('finances.recaps.create') }}" class="adventiste-btn-primary">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
     Nouveau récap
 </a>
+</div>
 @endcan
 @endsection
 
@@ -25,11 +27,11 @@ $labelsStatut = ['brouillon' => 'Brouillon', 'soumis' => 'Soumis', 'verrouille' 
 @endphp
 
 @section('content')
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="adventiste-card-pro-static overflow-hidden mb-6">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
-                <tr class="bg-gradient-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
+                <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Date du sabbat</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Église</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Statut</th>

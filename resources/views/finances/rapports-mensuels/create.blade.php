@@ -7,11 +7,11 @@
 @endsection
 
 @section('content')
-    <div class="max-w-xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+    <div class="max-w-xl adventiste-card-pro-static p-6">
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">
             Le rapport est calculé automatiquement à partir des récaps du sabbat du mois choisi (dîmes, parts mission, synthèse).
         </p>
-        <form method="post" action="{{ route('finances.rapports-mensuels.store') }}" class="space-y-5">
+        <form method="post" action="{{ route('finances.rapports-mensuels.store') }}" class="space-y-5" data-offline-queue>
             @csrf
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>

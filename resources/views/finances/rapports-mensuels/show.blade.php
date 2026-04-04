@@ -13,7 +13,7 @@
     <div class="flex flex-wrap items-center gap-2">
         @can('update', $rapport)
             @if ($rapport->verrouille_le === null)
-                <form method="post" action="{{ route('finances.rapports-mensuels.regenerer', $rapport) }}" class="inline">
+                <form method="post" action="{{ route('finances.rapports-mensuels.regenerer', $rapport) }}" class="inline" data-offline-queue>
                     @csrf
                     <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-[#00b464]/40 text-[#00a055] dark:text-emerald-400 font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-all text-sm">
                         Régénérer depuis les récaps
@@ -22,7 +22,7 @@
             @endif
         @endcan
         @can('soumettre', $rapport)
-            <form method="post" action="{{ route('finances.rapports-mensuels.soumettre', $rapport) }}" class="inline">
+            <form method="post" action="{{ route('finances.rapports-mensuels.soumettre', $rapport) }}" class="inline" data-offline-queue>
                 @csrf
                 <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#00b464] text-white font-semibold hover:bg-[#00a055] shadow-sm hover:shadow transition-all duration-200 text-sm">
                     Soumettre à la mission
@@ -61,15 +61,15 @@
         </div>
 
         @can('reviewMission', $rapport)
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+            <div class="adventiste-card-pro-static p-6">
                 <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Validation mission</h2>
                 <div class="flex flex-wrap gap-3">
-                    <form method="post" action="{{ route('finances.rapports-mensuels.valider-mission', $rapport) }}" class="inline-flex items-center gap-2">
+                    <form method="post" action="{{ route('finances.rapports-mensuels.valider-mission', $rapport) }}" class="inline-flex items-center gap-2" data-offline-queue>
                         @csrf
                         <input type="text" name="mission_commentaire" placeholder="Commentaire (optionnel)" class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
                         <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800">Valider</button>
                     </form>
-                    <form method="post" action="{{ route('finances.rapports-mensuels.refuser-mission', $rapport) }}" class="inline-flex items-center gap-2">
+                    <form method="post" action="{{ route('finances.rapports-mensuels.refuser-mission', $rapport) }}" class="inline-flex items-center gap-2" data-offline-queue>
                         @csrf
                         <input type="text" name="mission_commentaire" required placeholder="Motif du refus (obligatoire)" class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
                         <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-red-300 text-red-700 dark:text-red-400 text-sm font-semibold hover:bg-red-50 dark:hover:bg-red-900/20">Refuser</button>
@@ -78,7 +78,7 @@
             </div>
         @endcan
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Transmission vers la mission</h2>
             <dl class="grid gap-3 sm:grid-cols-2 text-sm">
                 <div>
@@ -104,7 +104,7 @@
             </dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
+        <div class="adventiste-card-pro-static p-6">
             <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Récapitulatif (mois / précédent / cumulé)</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm min-w-[760px]">
@@ -153,7 +153,7 @@
         </div>
 
         @if ($rapport->lignesSabbat->isNotEmpty())
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+            <div class="adventiste-card-pro-static overflow-hidden">
                 <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700">
                     <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Par sabbat</h2>
                 </div>
@@ -185,7 +185,7 @@
         @endif
 
         @if ($rapport->lignesSynthese->isNotEmpty())
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+            <div class="adventiste-card-pro-static overflow-hidden">
                 <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700">
                     <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Grille de synthèse</h2>
                 </div>

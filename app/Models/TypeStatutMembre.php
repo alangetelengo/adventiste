@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TypeStatutMembre extends Model
 {
+    public const CODE_ACTIF = 'actif';
+
+    public const CODE_REGULIER = 'regulier';
+
+    public const CODE_REFROIDI = 'refroidi';
+
     protected $table = 'types_statut_membres';
 
     protected $fillable = [

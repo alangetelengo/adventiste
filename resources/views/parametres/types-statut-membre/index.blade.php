@@ -17,7 +17,7 @@ Catégories de suivi pastoral et disciplinaire des membres.
 @section('content')
 @include('parametres._nav')
 
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="adventiste-card-pro-static overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>

@@ -7,11 +7,11 @@
 @endsection
 
 @section('content')
-    <div class="max-w-lg rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 sm:p-8">
+    <div class="max-w-lg adventiste-card-pro-static p-6 sm:p-8">
         @if ($typesRecette->isEmpty())
             <p class="text-sm text-amber-800 dark:text-amber-200">Aucun type de recette actif. Configurez-les dans les paramètres mission.</p>
         @else
-            <form method="post" action="{{ route('finances.recaps.contribution-membre.store', $membre) }}" class="space-y-5">
+            <form method="post" action="{{ route('finances.recaps.contribution-membre.store', $membre) }}" class="space-y-5" data-offline-queue>
                 @csrf
                 <div>
                     <label for="date_sabbat" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date du sabbat</label>

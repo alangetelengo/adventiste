@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Bapteme;
 use App\Models\EgliseLocale;
 use App\Models\Membre;
+use App\Models\MembreHistoriqueStatut;
+use App\Models\TypeStatutMembre;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -95,6 +98,16 @@ class BaptemeController extends Controller
 
         $payload = $this->normalizePayload($validated);
 
+        $dateAdmission = $validated['date_admission_eglise'] ?? null;
+        if ($dateAdmission === null || $dateAdmission === '') {
+            $dateAdmission = $payload['date_bapteme'];
+        }
+
+        unset($payload['date_admission_eglise']);
+
+        $missionId = (int) EgliseLocale::query()->whereKey((int) $payload['eglise_locale_id'])->value('mission_id');
+        [$typeStatutId, $membreActif] = $this->typeStatutPourNouveauBaptise($missionId);
+
         $membre = Membre::query()->create([
             'identifiant_public' => (string) Str::uuid(),
             'eglise_locale_id' => (int) $payload['eglise_locale_id'],
@@ -104,9 +117,27 @@ class BaptemeController extends Controller
             'mode_entree' => Membre::MODE_ENTREE_BAPTEME,
             'type_bapteme_entree' => $payload['type_bapteme'],
             'date_bapteme' => $payload['date_bapteme'],
+            'date_admission_eglise' => $dateAdmission,
             'lieu_bapteme' => $payload['lieu_bapteme'] ?? null,
             'baptise_par' => $payload['officiant'] ?? null,
+            'type_statut_membre_id' => $typeStatutId,
+            'actif' => $membreActif,
         ]);
+
+        if ($typeStatutId !== null) {
+            $codeApplique = TypeStatutMembre::query()->whereKey($typeStatutId)->value('code');
+            $motif = $codeApplique === TypeStatutMembre::CODE_REGULIER
+                ? 'Statut initial : Régulier (nouveau baptisé).'
+                : 'Statut initial lors de l\'enregistrement du baptême.';
+
+            MembreHistoriqueStatut::query()->create([
+                'membre_id' => $membre->id,
+                'type_statut_membre_id' => $typeStatutId,
+                'change_par_user_id' => $request->user()->id,
+                'motif' => $motif,
+                'changed_at' => now(),
+            ]);
+        }
 
         $bapteme = Bapteme::query()->create(array_merge($payload, [
             'identifiant_public' => (string) Str::uuid(),
@@ -151,6 +182,13 @@ class BaptemeController extends Controller
 
         $payload = $this->normalizePayload($validated);
 
+        $dateAdmission = $validated['date_admission_eglise'] ?? null;
+        if ($dateAdmission === null || $dateAdmission === '') {
+            $dateAdmission = $payload['date_bapteme'];
+        }
+
+        unset($payload['date_admission_eglise']);
+
         $bapteme->update($payload);
 
         $membre = $bapteme->membre;
@@ -162,6 +200,7 @@ class BaptemeController extends Controller
                 'mode_entree' => Membre::MODE_ENTREE_BAPTEME,
                 'type_bapteme_entree' => $payload['type_bapteme'],
                 'date_bapteme' => $payload['date_bapteme'],
+                'date_admission_eglise' => $dateAdmission,
                 'lieu_bapteme' => $payload['lieu_bapteme'] ?? null,
                 'baptise_par' => $payload['officiant'] ?? null,
                 'recu_dans_eglise_de' => null,
@@ -196,7 +235,7 @@ class BaptemeController extends Controller
     }
 
     /**
-     * @return array{0: \Illuminate\Database\Eloquent\Collection<int, EgliseLocale>, 1?: int|null}
+     * @return array{0: Collection<int, EgliseLocale>, 1?: int|null}
      */
     private function optionsFormulaire(Request $request, ?int $egliseChoisieId = null): array
     {
@@ -227,6 +266,7 @@ class BaptemeController extends Controller
             'prenom' => ['required', 'string', 'max:255'],
             'type_bapteme' => ['required', Rule::in(array_keys(Bapteme::labelsTypes()))],
             'date_bapteme' => ['required', 'date'],
+            'date_admission_eglise' => ['nullable', 'date'],
             'lieu_bapteme' => ['nullable', 'string', 'max:255'],
             'officiant' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:5000'],
@@ -263,5 +303,33 @@ class BaptemeController extends Controller
 
         return mb_convert_case($lower, MB_CASE_TITLE, 'UTF-8');
     }
-}
 
+    /**
+     * @return array{0: ?int, 1: bool} Identifiant du type « Régulier » si présent pour la mission, sinon « Actif », et indicateur membre.actif.
+     */
+    private function typeStatutPourNouveauBaptise(int $missionId): array
+    {
+        if ($missionId <= 0) {
+            return [null, true];
+        }
+
+        $regulier = TypeStatutMembre::query()
+            ->where('mission_id', $missionId)
+            ->where('code', TypeStatutMembre::CODE_REGULIER)
+            ->where('actif', true)
+            ->first();
+        if ($regulier !== null) {
+            return [(int) $regulier->id, $regulier->code !== TypeStatutMembre::CODE_REFROIDI];
+        }
+
+        $actif = TypeStatutMembre::query()
+            ->where('mission_id', $missionId)
+            ->where('code', TypeStatutMembre::CODE_ACTIF)
+            ->where('actif', true)
+            ->first();
+
+        return $actif !== null
+            ? [(int) $actif->id, $actif->code !== TypeStatutMembre::CODE_REFROIDI]
+            : [null, true];
+    }
+}

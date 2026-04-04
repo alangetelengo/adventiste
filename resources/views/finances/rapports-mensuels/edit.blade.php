@@ -10,13 +10,14 @@
 @endsection
 
 @section('content')
-    <div class="max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
-        <form method="post" action="{{ route('finances.rapports-mensuels.update', $rapport) }}" class="space-y-6">
+    <div class="max-w-2xl adventiste-card-pro-static p-6">
+        <form method="post" action="{{ route('finances.rapports-mensuels.update', $rapport) }}" class="space-y-6" data-offline-queue>
             @csrf
             @method('PUT')
 
             <div class="space-y-4">
-                <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Signatures</h2>
+                <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Signatures (trésorerie &amp; pasteur)</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Le secrétaire d’église ne signe pas ce document financier.</p>
                 <div class="flex flex-wrap items-center gap-3">
                     <label class="inline-flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                         <input type="checkbox" name="signe_tresorier" value="1" class="rounded border-slate-300" @checked(old('signe_tresorier', $rapport->signe_tresorier))>
@@ -31,14 +32,6 @@
                         Signé pasteur
                     </label>
                     <input type="date" name="date_signature_pasteur" value="{{ old('date_signature_pasteur', $rapport->date_signature_pasteur?->format('Y-m-d')) }}"
-                        class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2 py-1.5 text-sm">
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <label class="inline-flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                        <input type="checkbox" name="signe_secretaire" value="1" class="rounded border-slate-300" @checked(old('signe_secretaire', $rapport->signe_secretaire))>
-                        Signé secrétaire
-                    </label>
-                    <input type="date" name="date_signature_secretaire" value="{{ old('date_signature_secretaire', $rapport->date_signature_secretaire?->format('Y-m-d')) }}"
                         class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2 py-1.5 text-sm">
                 </div>
             </div>

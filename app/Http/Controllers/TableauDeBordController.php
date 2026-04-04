@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bapteme;
+use App\Models\District;
 use App\Models\EgliseLocale;
+use App\Models\GroupeMission;
 use App\Models\LigneDimeOffrandeRecap;
 use App\Models\Membre;
-use App\Models\RapportMembreEglise;
-use App\Models\RapportMensuelEglise;
-use App\Models\RecapSabbatEglise;
-use App\Models\User;
 use App\Models\MissionTresorerieRapportMensuel;
 use App\Models\MissionTresorerieTransfertBancaire;
+use App\Models\Permission;
+use App\Models\RapportMembreEglise;
+use App\Models\RapportMensuelEglise;
+use App\Models\RapportStationMission;
+use App\Models\RecapSabbatEglise;
+use App\Models\Role;
+use App\Models\User;
+use App\Support\NavigationGate;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
@@ -21,8 +30,8 @@ class TableauDeBordController extends Controller
     public function __invoke(Request $request): View
     {
         $user = $request->user();
-        $stats = $this->statsPour($user);
-        $roleStats = $this->statsParRole($user);
+        $stats = $this->ajusterStatsHeroPourRole($user, $this->statsPour($user));
+        $roleStats = $this->filtrerRoleStatsPourUtilisateur($user, $this->statsParRole($user));
         $dashboard = $this->dashboardV2Data($user);
 
         return view('tableau-de-bord', compact('stats', 'roleStats', 'dashboard'));
@@ -74,14 +83,29 @@ class TableauDeBordController extends Controller
         ];
     }
 
-    private function membresScopes(User $user): \Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  array{recaps_total: int, recaps_brouillon: int, recaps_ce_mois: int, rapports_total: int, rapports_non_verrouilles: int, eglises_actives: int|null, membres_total: int}  $stats
+     * @return array{recaps_total: int, recaps_brouillon: int, recaps_ce_mois: int, rapports_total: int, rapports_non_verrouilles: int, eglises_actives: int|null, membres_total: int}
+     */
+    private function ajusterStatsHeroPourRole(User $user, array $stats): array
+    {
+        if ($user->hasRole('secretaire_eglise') || $user->hasRole('secretaire_executif_mission')) {
+            $stats['recaps_total'] = 0;
+            $stats['recaps_brouillon'] = 0;
+            $stats['recaps_ce_mois'] = 0;
+        }
+
+        return $stats;
+    }
+
+    private function membresScopes(User $user): Builder
     {
         $q = Membre::query();
 
         if ($user->eglise_locale_id !== null) {
             $q->where('eglise_locale_id', $user->eglise_locale_id);
         } elseif ($user->mission_id !== null) {
-            $q->whereHas('egliseLocale', fn($q2) => $q2->where('mission_id', $user->mission_id));
+            $q->whereHas('egliseLocale', fn ($q2) => $q2->where('mission_id', $user->mission_id));
         } else {
             $q->whereRaw('1 = 0');
         }
@@ -89,14 +113,14 @@ class TableauDeBordController extends Controller
         return $q;
     }
 
-    private function recapsScopes(User $user): \Illuminate\Database\Eloquent\Builder
+    private function recapsScopes(User $user): Builder
     {
         $q = RecapSabbatEglise::query();
 
         if ($user->eglise_locale_id !== null) {
             $q->where('eglise_locale_id', $user->eglise_locale_id);
         } elseif ($user->mission_id !== null) {
-            $q->whereHas('egliseLocale', fn($q2) => $q2->where('mission_id', $user->mission_id));
+            $q->whereHas('egliseLocale', fn ($q2) => $q2->where('mission_id', $user->mission_id));
         } else {
             $q->whereRaw('1 = 0');
         }
@@ -104,14 +128,14 @@ class TableauDeBordController extends Controller
         return $q;
     }
 
-    private function rapportsScopes(User $user): \Illuminate\Database\Eloquent\Builder
+    private function rapportsScopes(User $user): Builder
     {
         $q = RapportMensuelEglise::query();
 
         if ($user->eglise_locale_id !== null) {
             $q->where('eglise_locale_id', $user->eglise_locale_id);
         } elseif ($user->mission_id !== null) {
-            $q->whereHas('egliseLocale', fn($q2) => $q2->where('mission_id', $user->mission_id));
+            $q->whereHas('egliseLocale', fn ($q2) => $q2->where('mission_id', $user->mission_id));
         } else {
             $q->whereRaw('1 = 0');
         }
@@ -155,20 +179,48 @@ class TableauDeBordController extends Controller
                     'color' => 'blue',
                 ],
                 [
-                    'title' => 'Récaps du sabbat',
-                    'description' => 'Saisie des dîmes et offrandes hebdomadaires',
-                    'icon' => 'currency-dollar',
-                    'route' => 'finances.recaps.index',
+                    'title' => 'Rapports membres',
+                    'description' => 'Secrétariat : états et transmissions vers la mission',
+                    'icon' => 'clipboard-list',
+                    'route' => 'secretariat.rapports-membres.index',
                     'stats' => [
-                        'ce_mois' => $this->recapsScopes($user)->whereYear('date_sabbat', now()->year)->whereMonth('date_sabbat', now()->month)->count(),
-                        'brouillons' => $this->recapsScopes($user)->where('statut', 'brouillon')->count(),
+                        'soumis' => RapportMembreEglise::query()
+                            ->where('eglise_locale_id', $user->eglise_locale_id)
+                            ->where('etat', RapportMembreEglise::ETAT_SOUMIS)
+                            ->count(),
                     ],
-                    'color' => 'green',
+                    'color' => 'indigo',
+                ],
+                [
+                    'title' => 'Rapports mensuels',
+                    'description' => 'Consultation des synthèses financières (rédigées par la trésorerie)',
+                    'icon' => 'chart-bar',
+                    'route' => 'finances.rapports-mensuels.index',
+                    'stats' => [
+                        'total' => $this->rapportsScopes($user)->count(),
+                        'soumis_mission' => $this->rapportsScopes($user)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(),
+                    ],
+                    'color' => 'purple',
+                ],
+                [
+                    'title' => 'Baptêmes',
+                    'description' => 'Registre et certificats',
+                    'icon' => 'document',
+                    'route' => 'baptemes.index',
+                    'stats' => [
+                        'ce_mois' => Bapteme::query()
+                            ->where('eglise_locale_id', $user->eglise_locale_id)
+                            ->whereYear('date_bapteme', now()->year)
+                            ->whereMonth('date_bapteme', now()->month)
+                            ->count(),
+                    ],
+                    'color' => 'emerald',
                 ],
             ],
             'actions' => [
                 ['label' => 'Nouveau membre', 'route' => 'membres.create', 'icon' => 'plus'],
-                ['label' => 'Nouveau récap', 'route' => 'finances.recaps.create', 'icon' => 'document-plus'],
+                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => 'Rapports membres', 'route' => 'secretariat.rapports-membres.index', 'icon' => 'document-chart-bar'],
             ],
         ];
     }
@@ -212,37 +264,54 @@ class TableauDeBordController extends Controller
 
     private function statsSecretaireMission(User $user): array
     {
+        $missionId = (int) $user->mission_id;
+        $qRm = RapportMensuelEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId));
+
         return [
             'role_name' => 'secretaire_executif_mission',
             'role_label' => 'Secrétaire exécutif de mission',
             'cards' => [
                 [
                     'title' => 'Vue d\'ensemble mission',
-                    'description' => 'Tableau consolidé de toutes les églises',
-                    'icon' => 'building-office',
+                    'description' => 'Églises et membres de la mission',
+                    'icon' => 'building',
                     'route' => 'tableau-de-bord',
                     'stats' => [
-                        'eglises' => \App\Models\EgliseLocale::where('mission_id', $user->mission_id)->where('actif', true)->count(),
+                        'eglises' => EgliseLocale::where('mission_id', $missionId)->where('actif', true)->count(),
                         'membres_total' => $this->membresScopes($user)->count(),
                     ],
                     'color' => 'indigo',
                 ],
                 [
-                    'title' => 'Rapports consolidés',
-                    'description' => 'Synthèse mensuelle de la mission',
+                    'title' => 'Rapports mensuels (églises)',
+                    'description' => 'Synthèses financières par paroisse — consultation (rédaction : trésoriers)',
                     'icon' => 'chart-bar',
-                    'route' => 'finances.rapports-station.index',
+                    'route' => 'finances.rapports-mensuels.index',
                     'stats' => [
-                        'total' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->count(),
-                        'ce_mois' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->where('annee', now()->year)->where('mois', now()->month)->count(),
+                        'total' => (clone $qRm)->count(),
+                        'soumis_mission' => (clone $qRm)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(),
                     ],
                     'color' => 'purple',
                 ],
+                [
+                    'title' => 'Rapports membres',
+                    'description' => 'Secrétariat : suivi par église',
+                    'icon' => 'clipboard-list',
+                    'route' => 'secretariat.rapports-membres.index',
+                    'stats' => [
+                        'soumis' => RapportMembreEglise::query()
+                            ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))
+                            ->where('etat', RapportMembreEglise::ETAT_SOUMIS)
+                            ->count(),
+                    ],
+                    'color' => 'blue',
+                ],
             ],
             'actions' => [
-                ['label' => 'Gérer églises', 'route' => 'parametres.eglises.index', 'icon' => 'building-storefront'],
+                ['label' => 'Gérer églises', 'route' => 'parametres.eglises.index', 'icon' => 'building'],
                 ['label' => 'Gérer membres', 'route' => 'membres.index', 'icon' => 'users'],
-                ['label' => 'Rapports station', 'route' => 'finances.rapports-station.index', 'icon' => 'document-chart-bar'],
+                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => 'Rapports membres', 'route' => 'secretariat.rapports-membres.index', 'icon' => 'clipboard-list'],
             ],
         ];
     }
@@ -259,8 +328,8 @@ class TableauDeBordController extends Controller
                     'icon' => 'banknotes',
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
-                        'rapports_total' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->count(),
-                        'rapports_mois' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->where('annee', now()->year)->where('mois', now()->month)->count(),
+                        'rapports_total' => RapportStationMission::where('mission_id', $user->mission_id)->count(),
+                        'rapports_mois' => RapportStationMission::where('mission_id', $user->mission_id)->where('annee', now()->year)->where('mois', now()->month)->count(),
                     ],
                     'color' => 'emerald',
                 ],
@@ -276,21 +345,38 @@ class TableauDeBordController extends Controller
                     'color' => 'blue',
                 ],
                 [
+                    'title' => 'Rapports mensuels (églises)',
+                    'description' => 'Liste des synthèses par paroisse et validation mission',
+                    'icon' => 'chart-bar',
+                    'route' => 'finances.rapports-mensuels.index',
+                    'stats' => [
+                        'total' => RapportMensuelEglise::query()
+                            ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $user->mission_id))
+                            ->count(),
+                        'a_valider' => RapportMensuelEglise::query()
+                            ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $user->mission_id))
+                            ->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)
+                            ->count(),
+                    ],
+                    'color' => 'purple',
+                ],
+                [
                     'title' => 'Groupes mission',
                     'description' => 'Gestion des groupes et de leurs finances',
-                    'icon' => 'user-group',
+                    'icon' => 'users',
                     'route' => 'parametres.groupes-mission.index',
                     'stats' => [
-                        'total' => \App\Models\GroupeMission::where('mission_id', $user->mission_id)->count(),
-                        'actifs' => \App\Models\GroupeMission::where('mission_id', $user->mission_id)->where('actif', true)->count(),
+                        'total' => GroupeMission::where('mission_id', $user->mission_id)->count(),
+                        'actifs' => GroupeMission::where('mission_id', $user->mission_id)->where('actif', true)->count(),
                     ],
                     'color' => 'orange',
                 ],
             ],
             'actions' => [
                 ['label' => 'Nouveau rapport station', 'route' => 'finances.rapports-station.create', 'icon' => 'plus'],
-                ['label' => 'Gérer groupes', 'route' => 'parametres.groupes-mission.index', 'icon' => 'user-group'],
-                ['label' => 'Types de recette', 'route' => 'parametres.types-recette.index', 'icon' => 'tag'],
+                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => 'Gérer groupes', 'route' => 'parametres.groupes-mission.index', 'icon' => 'users'],
+                ['label' => 'Types de recette', 'route' => 'parametres.types-recette.index', 'icon' => 'document'],
             ],
         ];
     }
@@ -307,9 +393,9 @@ class TableauDeBordController extends Controller
                     'icon' => 'presentation-chart-line',
                     'route' => 'tableau-de-bord',
                     'stats' => [
-                        'eglises_actives' => \App\Models\EgliseLocale::where('mission_id', $user->mission_id)->where('actif', true)->count(),
+                        'eglises_actives' => EgliseLocale::where('mission_id', $user->mission_id)->where('actif', true)->count(),
                         'membres_total' => $this->membresScopes($user)->count(),
-                        'districts' => \App\Models\District::where('mission_id', $user->mission_id)->count(),
+                        'districts' => District::where('mission_id', $user->mission_id)->count(),
                     ],
                     'color' => 'slate',
                 ],
@@ -319,7 +405,7 @@ class TableauDeBordController extends Controller
                     'icon' => 'currency-dollar',
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
-                        'rapports_ce_mois' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->where('annee', now()->year)->where('mois', now()->month)->count(),
+                        'rapports_ce_mois' => RapportStationMission::where('mission_id', $user->mission_id)->where('annee', now()->year)->where('mois', now()->month)->count(),
                         'recaps_ce_mois' => $this->recapsScopes($user)->whereYear('date_sabbat', now()->year)->whereMonth('date_sabbat', now()->month)->count(),
                     ],
                     'color' => 'green',
@@ -330,16 +416,17 @@ class TableauDeBordController extends Controller
                     'icon' => 'cog-6-tooth',
                     'route' => 'parametres.utilisateurs.index',
                     'stats' => [
-                        'utilisateurs' => \App\Models\User::where('mission_id', $user->mission_id)->count(),
-                        'roles_actifs' => \App\Models\Role::whereHas('users', fn($q) => $q->where('mission_id', $user->mission_id))->count(),
+                        'utilisateurs' => User::where('mission_id', $user->mission_id)->count(),
+                        'roles_actifs' => Role::whereHas('users', fn ($q) => $q->where('mission_id', $user->mission_id))->count(),
                     ],
                     'color' => 'gray',
                 ],
             ],
             'actions' => [
                 ['label' => 'Gérer utilisateurs', 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
-                ['label' => 'Paramètres mission', 'route' => 'parametres.index', 'icon' => 'cog-6-tooth'],
-                ['label' => 'Rapports globaux', 'route' => 'finances.rapports-station.index', 'icon' => 'document-chart-bar'],
+                ['label' => 'Paramètres mission', 'route' => 'parametres.index', 'icon' => 'cog'],
+                ['label' => 'Rapports mensuels églises', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => 'Rapports station', 'route' => 'finances.rapports-station.index', 'icon' => 'chart-bar'],
             ],
         ];
     }
@@ -356,9 +443,9 @@ class TableauDeBordController extends Controller
                     'icon' => 'shield-check',
                     'route' => 'parametres.index',
                     'stats' => [
-                        'utilisateurs_total' => \App\Models\User::where('mission_id', $user->mission_id)->count(),
-                        'permissions_total' => \App\Models\Permission::count(),
-                        'roles_total' => \App\Models\Role::count(),
+                        'utilisateurs_total' => User::where('mission_id', $user->mission_id)->count(),
+                        'permissions_total' => Permission::count(),
+                        'roles_total' => Role::count(),
                     ],
                     'color' => 'red',
                 ],
@@ -369,28 +456,29 @@ class TableauDeBordController extends Controller
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
                         'tous_recaps' => $this->recapsScopes($user)->count(),
-                        'tous_rapports' => \App\Models\RapportStationMission::where('mission_id', $user->mission_id)->count(),
+                        'tous_rapports' => RapportStationMission::where('mission_id', $user->mission_id)->count(),
                     ],
                     'color' => 'emerald',
                 ],
                 [
                     'title' => 'Structure mission',
                     'description' => 'Gestion complète de l\'organisation',
-                    'icon' => 'building-office',
+                    'icon' => 'building',
                     'route' => 'parametres.eglises.index',
                     'stats' => [
-                        'eglises_total' => \App\Models\EgliseLocale::where('mission_id', $user->mission_id)->count(),
-                        'districts_total' => \App\Models\District::where('mission_id', $user->mission_id)->count(),
-                        'groupes_total' => \App\Models\GroupeMission::where('mission_id', $user->mission_id)->count(),
+                        'eglises_total' => EgliseLocale::where('mission_id', $user->mission_id)->count(),
+                        'districts_total' => District::where('mission_id', $user->mission_id)->count(),
+                        'groupes_total' => GroupeMission::where('mission_id', $user->mission_id)->count(),
                     ],
                     'color' => 'blue',
                 ],
             ],
             'actions' => [
-                ['label' => 'Administration', 'route' => 'parametres.index', 'icon' => 'cog-6-tooth'],
+                ['label' => 'Administration', 'route' => 'parametres.index', 'icon' => 'cog'],
                 ['label' => 'Gérer utilisateurs', 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
-                ['label' => 'Permissions', 'route' => 'parametres.permissions.index', 'icon' => 'key'],
-                ['label' => 'Rôles', 'route' => 'parametres.roles.index', 'icon' => 'user-circle'],
+                ['label' => 'Rapports mensuels églises', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => 'Permissions', 'route' => 'parametres.permissions.index', 'icon' => 'document'],
+                ['label' => 'Rôles', 'route' => 'parametres.roles.index', 'icon' => 'users'],
             ],
         ];
     }
@@ -418,8 +506,8 @@ class TableauDeBordController extends Controller
      * @return array{
      *   periode:string,
      *   kpis:array<string,int|float>,
-     *   recapsRecents:\Illuminate\Support\Collection<int,\App\Models\RecapSabbatEglise>,
-     *   rapportsSoumis:\Illuminate\Support\Collection<int,\App\Models\RapportMensuelEglise>
+     *   recapsRecents:Collection<int,RecapSabbatEglise>,
+     *   rapportsSoumis:Collection<int,RapportMensuelEglise>
      * }
      */
     private function dashboardV2Data(User $user): array
@@ -427,14 +515,53 @@ class TableauDeBordController extends Controller
         $dashboard = match ($user->role?->name) {
             'secretaire_eglise' => $this->dashboardSecretaireEglise($user),
             'tresorier_eglise' => $this->dashboardTresorierEglise($user),
-            'president_mission' => $this->dashboardPresidentMission($user),
+            'secretaire_executif_mission' => $this->dashboardMissionConsolidee($user, 'secretaire_executif_mission'),
+            'president_mission' => $this->dashboardMissionConsolidee($user, 'president_mission'),
             default => $this->dashboardParDefaut($user),
         };
 
-        $dashboard['priorites'] = $this->prioritesPour($user);
-        $dashboard['comparatifMensuel'] = $this->comparatifMensuelPour($user);
+        $dashboard['priorites'] = array_values(array_filter(
+            $this->prioritesPour($user),
+            fn (array $p) => empty($p['route']) || NavigationGate::canVisitRoute($user, $p['route']),
+        ));
+        $dashboard['comparatifMensuel'] = $this->peutVoirComparatifMensuel($user)
+            ? $this->comparatifMensuelPour($user)
+            : [];
 
         return $dashboard;
+    }
+
+    /**
+     * @param  array{role_name: string, role_label: string, cards: array, actions: array}  $roleStats
+     * @return array{role_name: string, role_label: string, cards: array, actions: array}
+     */
+    private function filtrerRoleStatsPourUtilisateur(User $user, array $roleStats): array
+    {
+        $roleStats['cards'] = array_values(array_filter(
+            $roleStats['cards'] ?? [],
+            fn (array $c) => empty($c['route']) || NavigationGate::canVisitRoute($user, $c['route']),
+        ));
+        $roleStats['actions'] = array_values(array_filter(
+            $roleStats['actions'] ?? [],
+            fn (array $a) => empty($a['route']) || NavigationGate::canVisitRoute($user, $a['route']),
+        ));
+
+        return $roleStats;
+    }
+
+    private function peutVoirComparatifMensuel(User $user): bool
+    {
+        if (in_array($user->role?->name, ['secretaire_eglise', 'secretaire_executif_mission'], true)) {
+            return false;
+        }
+
+        $g = Gate::forUser($user);
+
+        if ($user->mission_id !== null && $user->eglise_locale_id === null) {
+            return $g->allows('viewAny', MissionTresorerieRapportMensuel::class);
+        }
+
+        return $g->allows('viewAny', RapportMensuelEglise::class);
     }
 
     /**
@@ -442,13 +569,17 @@ class TableauDeBordController extends Controller
      *   role:string,
      *   periode:string,
      *   kpis:list<array{label:string,value:int|float,suffix:string}>,
-     *   recapsRecents:\Illuminate\Support\Collection<int,\App\Models\RecapSabbatEglise>,
-     *   rapportsSoumis:\Illuminate\Support\Collection<int,\App\Models\RapportMensuelEglise>
+     *   recapsRecents:Collection<int,RecapSabbatEglise>,
+     *   rapportsSoumis:Collection<int,RapportMensuelEglise>
      * }
      */
     private function dashboardTresorierEglise(User $user): array
     {
         $now = now();
+        $g = Gate::forUser($user);
+        $canRecap = $g->allows('viewAny', RecapSabbatEglise::class);
+        $canRapport = $g->allows('viewAny', RapportMensuelEglise::class);
+
         $recapBase = $this->recapsScopes($user);
         $rapportBase = $this->rapportsScopes($user);
 
@@ -458,7 +589,7 @@ class TableauDeBordController extends Controller
 
         $recapIdsMois = (clone $recapsMois)->pluck('id');
         $recettesMois = 0.0;
-        if ($recapIdsMois->isNotEmpty()) {
+        if ($canRecap && $recapIdsMois->isNotEmpty()) {
             $recettesMois = (float) LigneDimeOffrandeRecap::query()
                 ->whereIn('recap_sabbat_eglise_id', $recapIdsMois)
                 ->selectRaw('COALESCE(SUM(dimes + offrandes),0) as total')
@@ -469,37 +600,39 @@ class TableauDeBordController extends Controller
             ->where('annee', $now->year)
             ->where('mois', $now->month);
 
-        $kpis = [
-            'recettes_mois' => (int) round($recettesMois),
-            'a_transferer_mission' => (int) round((float) (clone $rapportMois)->sum('total_a_transferer_mission_mois')),
-            'recaps_saisis_mois' => (int) (clone $recapsMois)->count(),
-            'rapports_soumis' => (int) (clone $rapportBase)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(),
-        ];
+        $kpisList = [];
+        if ($canRecap) {
+            $kpisList[] = ['label' => 'Recettes du mois', 'value' => (int) round($recettesMois), 'suffix' => 'FCFA'];
+            $kpisList[] = ['label' => 'Récaps saisis', 'value' => (int) (clone $recapsMois)->count(), 'suffix' => ''];
+        }
+        if ($canRapport) {
+            $kpisList[] = ['label' => 'À transférer mission', 'value' => (int) round((float) (clone $rapportMois)->sum('total_a_transferer_mission_mois')), 'suffix' => 'FCFA'];
+            $kpisList[] = ['label' => 'Rapports soumis', 'value' => (int) (clone $rapportBase)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+        }
 
-        $recapsRecents = (clone $recapBase)
-            ->with('egliseLocale')
-            ->withSum('lignesContributions as total_dimes', 'dimes')
-            ->withSum('lignesContributions as total_offrandes', 'offrandes')
-            ->latest('date_sabbat')
-            ->limit(6)
-            ->get();
+        $recapsRecents = $canRecap
+            ? (clone $recapBase)
+                ->with('egliseLocale')
+                ->withSum('lignesContributions as total_dimes', 'dimes')
+                ->withSum('lignesContributions as total_offrandes', 'offrandes')
+                ->latest('date_sabbat')
+                ->limit(6)
+                ->get()
+            : collect();
 
-        $rapportsSoumis = (clone $rapportBase)
-            ->with('egliseLocale')
-            ->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)
-            ->orderByDesc('soumis_le')
-            ->limit(6)
-            ->get();
+        $rapportsSoumis = $canRapport
+            ? (clone $rapportBase)
+                ->with('egliseLocale')
+                ->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)
+                ->orderByDesc('soumis_le')
+                ->limit(6)
+                ->get()
+            : collect();
 
         return [
             'role' => 'tresorier_eglise',
             'periode' => $now->translatedFormat('F Y'),
-            'kpis' => [
-                ['label' => 'Recettes du mois', 'value' => (int) $kpis['recettes_mois'], 'suffix' => 'FCFA'],
-                ['label' => 'À transférer mission', 'value' => (int) $kpis['a_transferer_mission'], 'suffix' => 'FCFA'],
-                ['label' => 'Récaps saisis', 'value' => (int) $kpis['recaps_saisis_mois'], 'suffix' => ''],
-                ['label' => 'Rapports soumis', 'value' => (int) $kpis['rapports_soumis'], 'suffix' => ''],
-            ],
+            'kpis' => $kpisList,
             'recapsRecents' => $recapsRecents,
             'rapportsSoumis' => $rapportsSoumis,
         ];
@@ -510,37 +643,53 @@ class TableauDeBordController extends Controller
      *   role:string,
      *   periode:string,
      *   kpis:list<array{label:string,value:int|float,suffix:string}>,
-     *   rapportsMembresRecents:\Illuminate\Support\Collection<int,\App\Models\RapportMembreEglise>,
-     *   baptemesRecents:\Illuminate\Support\Collection<int,\App\Models\Bapteme>
+     *   rapportsMembresRecents:Collection<int,RapportMembreEglise>,
+     *   baptemesRecents:Collection<int,Bapteme>
      * }
      */
     private function dashboardSecretaireEglise(User $user): array
     {
         $now = now();
+        $g = Gate::forUser($user);
+        $canMembre = $g->allows('viewAny', Membre::class);
+        $canBapteme = $g->allows('viewAny', Bapteme::class);
+        $canRapportMembre = $g->allows('viewAny', RapportMembreEglise::class);
+
         $membresBase = $this->membresScopes($user);
         $egliseId = (int) ($user->eglise_locale_id ?? 0);
 
-        $rapportsMembresRecents = RapportMembreEglise::query()
-            ->where('eglise_locale_id', $egliseId)
-            ->orderByDesc('created_at')
-            ->limit(6)
-            ->get();
+        $rapportsMembresRecents = $canRapportMembre
+            ? RapportMembreEglise::query()
+                ->where('eglise_locale_id', $egliseId)
+                ->orderByDesc('created_at')
+                ->limit(6)
+                ->get()
+            : collect();
 
-        $baptemesRecents = Bapteme::query()
-            ->where('eglise_locale_id', $egliseId)
-            ->orderByDesc('date_bapteme')
-            ->limit(6)
-            ->get();
+        $baptemesRecents = $canBapteme
+            ? Bapteme::query()
+                ->where('eglise_locale_id', $egliseId)
+                ->orderByDesc('date_bapteme')
+                ->limit(6)
+                ->get()
+            : collect();
+
+        $kpisList = [];
+        if ($canMembre) {
+            $kpisList[] = ['label' => 'Membres total', 'value' => (int) (clone $membresBase)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => 'Membres actifs', 'value' => (int) (clone $membresBase)->where('actif', true)->count(), 'suffix' => ''];
+        }
+        if ($canBapteme) {
+            $kpisList[] = ['label' => 'Baptêmes (mois)', 'value' => (int) Bapteme::query()->where('eglise_locale_id', $egliseId)->whereYear('date_bapteme', $now->year)->whereMonth('date_bapteme', $now->month)->count(), 'suffix' => ''];
+        }
+        if ($canRapportMembre) {
+            $kpisList[] = ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->where('eglise_locale_id', $egliseId)->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+        }
 
         return [
             'role' => 'secretaire_eglise',
             'periode' => $now->translatedFormat('F Y'),
-            'kpis' => [
-                ['label' => 'Membres total', 'value' => (int) (clone $membresBase)->count(), 'suffix' => ''],
-                ['label' => 'Membres actifs', 'value' => (int) (clone $membresBase)->where('actif', true)->count(), 'suffix' => ''],
-                ['label' => 'Baptêmes (mois)', 'value' => (int) Bapteme::query()->where('eglise_locale_id', $egliseId)->whereYear('date_bapteme', $now->year)->whereMonth('date_bapteme', $now->month)->count(), 'suffix' => ''],
-                ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->where('eglise_locale_id', $egliseId)->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''],
-            ],
+            'kpis' => $kpisList,
             'rapportsMembresRecents' => $rapportsMembresRecents,
             'baptemesRecents' => $baptemesRecents,
         ];
@@ -551,38 +700,69 @@ class TableauDeBordController extends Controller
      *   role:string,
      *   periode:string,
      *   kpis:list<array{label:string,value:int|float,suffix:string}>,
-     *   rapportsFinancesMission:\Illuminate\Support\Collection<int,\App\Models\RapportMensuelEglise>,
-     *   rapportsMembresMission:\Illuminate\Support\Collection<int,\App\Models\RapportMembreEglise>
+     *   rapportsFinancesMission:Collection<int,RapportMensuelEglise>,
+     *   rapportsMembresMission:Collection<int,RapportMembreEglise>
      * }
      */
-    private function dashboardPresidentMission(User $user): array
+    /**
+     * @param  'president_mission'|'secretaire_executif_mission'  $dashboardRole
+     * @return array{
+     *   role:string,
+     *   periode:string,
+     *   kpis:list<array{label:string,value:int|float,suffix:string}>,
+     *   rapportsFinancesMission:Collection<int,RapportMensuelEglise>,
+     *   rapportsMembresMission:Collection<int,RapportMembreEglise>
+     * }
+     */
+    private function dashboardMissionConsolidee(User $user, string $dashboardRole): array
     {
         $now = now();
         $missionId = (int) ($user->mission_id ?? 0);
+        $g = Gate::forUser($user);
+        $canEglise = $g->allows('viewAny', EgliseLocale::class);
+        $canMembre = $g->allows('viewAny', Membre::class);
+        $canRapportFin = $g->allows('viewAny', RapportMensuelEglise::class);
+        $canRapportMembre = $g->allows('viewAny', RapportMembreEglise::class);
 
-        $rapportsFinancesMission = RapportMensuelEglise::query()
-            ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))
-            ->with('egliseLocale')
-            ->orderByDesc('soumis_le')
-            ->limit(8)
-            ->get();
+        $rapportsFinancesMission = $canRapportFin
+            ? RapportMensuelEglise::query()
+                ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))
+                ->with('egliseLocale')
+                ->orderByDesc('soumis_le')
+                ->limit(8)
+                ->get()
+            : collect();
 
-        $rapportsMembresMission = RapportMembreEglise::query()
-            ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))
-            ->with('egliseLocale')
-            ->orderByDesc('soumis_le')
-            ->limit(8)
-            ->get();
+        $rapportsMembresMission = $canRapportMembre
+            ? RapportMembreEglise::query()
+                ->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))
+                ->with('egliseLocale')
+                ->orderByDesc('soumis_le')
+                ->limit(8)
+                ->get()
+            : collect();
+
+        $kpisList = [];
+        if ($canEglise) {
+            $kpisList[] = ['label' => 'Églises actives', 'value' => (int) EgliseLocale::query()->where('mission_id', $missionId)->where('actif', true)->count(), 'suffix' => ''];
+        }
+        if ($canMembre) {
+            $kpisList[] = ['label' => 'Membres mission', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
+        }
+        if ($canRapportFin) {
+            $labelFinSoumis = $dashboardRole === 'secretaire_executif_mission'
+                ? 'Rapports mensuels soumis'
+                : 'Rapports finances soumis';
+            $kpisList[] = ['label' => $labelFinSoumis, 'value' => (int) RapportMensuelEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+        }
+        if ($canRapportMembre) {
+            $kpisList[] = ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+        }
 
         return [
-            'role' => 'president_mission',
+            'role' => $dashboardRole,
             'periode' => $now->translatedFormat('F Y'),
-            'kpis' => [
-                ['label' => 'Églises actives', 'value' => (int) EgliseLocale::query()->where('mission_id', $missionId)->where('actif', true)->count(), 'suffix' => ''],
-                ['label' => 'Membres mission', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''],
-                ['label' => 'Rapports finances soumis', 'value' => (int) RapportMensuelEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''],
-                ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''],
-            ],
+            'kpis' => $kpisList,
             'rapportsFinancesMission' => $rapportsFinancesMission,
             'rapportsMembresMission' => $rapportsMembresMission,
         ];
@@ -597,13 +777,19 @@ class TableauDeBordController extends Controller
      */
     private function dashboardParDefaut(User $user): array
     {
+        $g = Gate::forUser($user);
+        $kpisList = [];
+        if ($g->allows('viewAny', RapportMensuelEglise::class)) {
+            $kpisList[] = ['label' => 'Rapports total', 'value' => (int) $this->rapportsScopes($user)->count(), 'suffix' => ''];
+        }
+        if ($g->allows('viewAny', Membre::class)) {
+            $kpisList[] = ['label' => 'Membres total', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
+        }
+
         return [
             'role' => 'default',
             'periode' => now()->translatedFormat('F Y'),
-            'kpis' => [
-                ['label' => 'Rapports total', 'value' => (int) $this->rapportsScopes($user)->count(), 'suffix' => ''],
-                ['label' => 'Membres total', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''],
-            ],
+            'kpis' => $kpisList,
         ];
     }
 
@@ -616,25 +802,33 @@ class TableauDeBordController extends Controller
 
         if ($user->mission_id !== null && $user->eglise_locale_id === null) {
             $missionId = (int) $user->mission_id;
+            $prioritesMission = [];
+            $prioritesTresoMission = $user->hasRole('tresorier_mission')
+                || $user->hasRole('president_mission')
+                || $user->hasRole('admin_mission');
 
-            return $this->trierPriorites([
-                [
+            if ($prioritesTresoMission) {
+                $prioritesMission[] = [
                     'label' => 'Transferts non rapprochés',
                     'value' => $this->transfertsNonRapproches($missionId, (int) $now->year, (int) $now->month),
                     'route' => 'finances.synthese-annuelle-mission.index',
                     'tone' => 'amber',
                     'help' => 'Mois avec écart entre transfert attendu et montant bancaire saisi.',
                     'icon' => 'banknotes',
-                ],
-                [
-                    'label' => 'Rapports églises en retard',
-                    'value' => $this->rapportsEglisesEnRetard($missionId, (int) $now->year, (int) $now->month),
-                    'route' => 'finances.rapports-mensuels.index',
-                    'tone' => 'rose',
-                    'help' => 'Églises n’ayant pas encore soumis/validé le rapport mensuel de la période.',
-                    'icon' => 'document-chart-bar',
-                ],
-                [
+                ];
+            }
+
+            $prioritesMission[] = [
+                'label' => 'Rapports églises en retard',
+                'value' => $this->rapportsEglisesEnRetard($missionId, (int) $now->year, (int) $now->month),
+                'route' => 'finances.rapports-mensuels.index',
+                'tone' => 'rose',
+                'help' => 'Églises sans rapport mensuel finalisé pour la période.',
+                'icon' => 'document-chart-bar',
+            ];
+
+            if ($prioritesTresoMission) {
+                $prioritesMission[] = [
                     'label' => 'Rapports soumis à valider',
                     'value' => (int) RapportMensuelEglise::query()
                         ->where('annee', (int) $now->year)
@@ -644,10 +838,12 @@ class TableauDeBordController extends Controller
                         ->count(),
                     'route' => 'finances.rapports-mensuels.index',
                     'tone' => 'indigo',
-                    'help' => 'Rapports mensuels en attente d’action mission.',
+                    'help' => 'Rapports mensuels en attente de validation par la trésorerie / direction.',
                     'icon' => 'check-circle',
-                ],
-            ]);
+                ];
+            }
+
+            return $this->trierPriorites($prioritesMission);
         }
 
         $rapportMoisCount = (int) $this->rapportsScopes($user)
@@ -665,6 +861,19 @@ class TableauDeBordController extends Controller
                     RapportMensuelEglise::ETAT_REFUSE_MISSION,
                 ])
                 ->count();
+
+        if ($user->hasRole('secretaire_eglise')) {
+            return $this->trierPriorites([
+                [
+                    'label' => 'Rapport mensuel à finaliser (trésorerie)',
+                    'value' => $rapportRetard,
+                    'route' => 'finances.rapports-mensuels.index',
+                    'tone' => 'rose',
+                    'help' => 'Suivi du rapport financier mensuel — rédaction et signatures : trésorier d’église.',
+                    'icon' => 'document-chart-bar',
+                ],
+            ]);
+        }
 
         return $this->trierPriorites([
             [

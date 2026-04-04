@@ -15,14 +15,14 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
 @section('content')
 <div class="grid w-full min-h-[calc(100dvh-9.5rem)] grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 md:items-stretch">
     <div class="flex h-full min-h-[calc(100dvh-9.5rem)] flex-col md:min-h-0">
-        <div class="flex h-full min-h-0 flex-1 flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 sm:p-8">
+        <div class="flex h-full min-h-0 flex-1 flex-col adventiste-card-pro-static p-6 sm:p-8">
             @if ($typesRecette->isEmpty())
             <p class="text-sm text-amber-800 dark:text-amber-200 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50/80 dark:bg-amber-950/30 p-4">
                 Aucun type de recette actif pour votre mission. Un administrateur ou le trésorier de mission doit en créer dans
                 <a href="{{ route('parametres.types-recette.index') }}" class="font-semibold underline">Paramètres → Types de recette</a>.
             </p>
             @else
-            <form method="post" action="{{ route('finances.recaps.store') }}" class="flex min-h-0 flex-1 flex-col space-y-5">
+            <form method="post" action="{{ route('finances.recaps.store') }}" class="flex min-h-0 flex-1 flex-col space-y-5" data-offline-queue>
                 @csrf
                 <div>
                     <label for="date_sabbat" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date du sabbat</label>

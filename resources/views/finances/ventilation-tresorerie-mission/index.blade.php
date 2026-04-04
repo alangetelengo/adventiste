@@ -11,7 +11,7 @@
 @endphp
 
 @section('content')
-    <div class="mb-8 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6 sm:p-7">
+    <div class="adventiste-card-pro-static mb-8 p-6 sm:p-7">
         <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-4">Ouvrir une période</h2>
         <form class="flex flex-wrap items-end gap-4" onsubmit="return false;">
             <div>
@@ -45,7 +45,7 @@
         @endpush
     </div>
 
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+    <div class="adventiste-card-pro-static overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>

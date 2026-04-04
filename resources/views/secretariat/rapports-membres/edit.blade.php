@@ -7,8 +7,8 @@
 @endsection
 
 @section('content')
-    <div class="max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-6">
-        <form method="post" action="{{ route('secretariat.rapports-membres.update', $rapport) }}" class="space-y-6">
+    <div class="max-w-2xl adventiste-card-pro-static p-6">
+        <form method="post" action="{{ route('secretariat.rapports-membres.update', $rapport) }}" class="space-y-6" data-offline-queue>
             @csrf
             @method('PUT')
 

@@ -24,7 +24,7 @@
 @endphp
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+    <div class="adventiste-card-pro-static overflow-hidden">
         <form method="get" action="{{ route('finances.rapports-mensuels.index') }}" class="px-6 py-4 flex flex-wrap items-end gap-4 border-b border-slate-200/80 dark:border-slate-600/60 bg-slate-50/80 dark:bg-slate-900/40">
             <div class="min-w-48">
                 <label for="f_etat" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Transmission mission</label>

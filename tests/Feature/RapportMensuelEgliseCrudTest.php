@@ -125,4 +125,22 @@ class RapportMensuelEgliseCrudTest extends TestCase
         $response->assertSee('E1', false);
         $response->assertSee('E2', false);
     }
+
+    public function test_secretaire_eglise_ne_peut_pas_consulter_la_liste_rapports_mensuels(): void
+    {
+        $mission = Mission::query()->create(['nom' => 'M', 'nom_court' => 'M']);
+        $eglise = EgliseLocale::query()->create([
+            'mission_id' => $mission->id,
+            'nom' => 'E1',
+            'code_unique' => 'E1',
+            'actif' => true,
+        ]);
+        $user = User::factory()->create([
+            'mission_id' => $mission->id,
+            'eglise_locale_id' => $eglise->id,
+            'role_id' => $this->roleId('secretaire_eglise'),
+        ]);
+
+        $this->actingAs($user)->get(route('finances.rapports-mensuels.index'))->assertForbidden();
+    }
 }

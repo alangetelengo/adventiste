@@ -39,6 +39,7 @@ class MembreFactory extends Factory
             'religion_anterieure' => null,
             'recu_dans_eglise_de' => null,
             'recu_le' => null,
+            'date_admission_eglise' => null,
             'baptise_par' => null,
             'observations' => null,
         ];

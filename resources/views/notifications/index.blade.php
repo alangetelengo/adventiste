@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+    <div class="adventiste-card-pro-static overflow-hidden">
         <div class="divide-y divide-slate-100 dark:divide-slate-700">
             @forelse ($notifications as $notification)
                 <div class="px-6 py-4 {{ $notification->read_at ? 'bg-white dark:bg-slate-800' : 'bg-emerald-50/40 dark:bg-emerald-900/15' }}">

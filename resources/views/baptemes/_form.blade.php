@@ -67,6 +67,15 @@
     </div>
 
     <div>
+        <label for="date_admission_eglise" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date d'admission au registre</label>
+        <input type="date" name="date_admission_eglise" id="date_admission_eglise" value="{{ old('date_admission_eglise', $b?->membre?->date_admission_eglise?->format('Y-m-d')) }}" class="{{ $field }}">
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Section « Admission » du certificat. Laisser vide pour reprendre la date de baptême.</p>
+        @error('date_admission_eglise')
+            <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div>
         <label for="lieu_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Lieu de baptême</label>
         <input type="text" name="lieu_bapteme" id="lieu_bapteme" value="{{ old('lieu_bapteme', $b?->lieu_bapteme) }}" class="{{ $field }}">
         @error('lieu_bapteme')

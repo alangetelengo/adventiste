@@ -4,9 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -63,6 +63,21 @@ class User extends Authenticatable
         return $this->belongsTo(EgliseLocale::class, 'eglise_locale_id');
     }
 
+    /**
+     * Mission utilisée pour le périmètre métier (membres, statuts, groupes, etc.) :
+     * compte mission, ou mission de l’église locale lorsque seul un rattachement paroisse est défini.
+     */
+    public function resolvedMissionId(): int
+    {
+        if ($this->mission_id !== null) {
+            return (int) $this->mission_id;
+        }
+
+        $this->loadMissing('egliseLocale');
+
+        return (int) ($this->egliseLocale?->mission_id ?? 0);
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
@@ -87,6 +102,18 @@ class User extends Authenticatable
     public function estAdministrateurMission(): bool
     {
         return $this->hasRole('admin_mission');
+    }
+
+    /**
+     * Affiche l’entrée « Rapports mensuels » (finances) dans le menu latéral.
+     * Trésoriers, président et admin mission (consultation finances) — pas les secrétaires d’église ni le secrétaire exécutif de mission.
+     */
+    public function voitMenuRapportsMensuelsFinances(): bool
+    {
+        return $this->hasRole('tresorier_eglise')
+            || $this->hasRole('tresorier_mission')
+            || $this->hasRole('president_mission')
+            || $this->hasRole('admin_mission');
     }
 
     public function hasRole(string $name): bool

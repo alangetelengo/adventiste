@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\EgliseLocale;
 use App\Models\GroupeMission;
-use App\Models\MembreHistoriqueStatut;
 use App\Models\Membre;
+use App\Models\MembreHistoriqueStatut;
+use App\Models\RecapSabbatEglise;
 use App\Models\TypeRecetteMission;
 use App\Models\TypeStatutMembre;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,18 +26,13 @@ class MembreController extends Controller
         $this->authorize('viewAny', Membre::class);
 
         $user = $request->user();
-        $missionId = (int) $user->mission_id;
+        $missionId = $user->resolvedMissionId();
 
         $query = Membre::query()
             ->with(['egliseLocale', 'groupeMission', 'typeStatut'])
-            ->orderBy('nom')
-            ->orderBy('prenom');
+            ->orderByDateEntreeEgliseDesc();
 
-        if ($user->eglise_locale_id !== null) {
-            $query->where('eglise_locale_id', $user->eglise_locale_id);
-        } else {
-            $query->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId));
-        }
+        $this->appliquerPerimetreMembres($query, $user, $missionId);
 
         if ($request->filled('eglise_locale_id') && $user->eglise_locale_id === null) {
             $egliseId = (int) $request->input('eglise_locale_id');
@@ -88,7 +87,7 @@ class MembreController extends Controller
         $typesRecetteContribution = collect();
         if (
             $user->eglise_locale_id !== null
-            && $user->can('create', \App\Models\RecapSabbatEglise::class)
+            && $user->can('create', RecapSabbatEglise::class)
         ) {
             $typesRecetteContribution = TypeRecetteMission::query()
                 ->actifsPourMission($missionId)
@@ -112,7 +111,7 @@ class MembreController extends Controller
         $this->authorize('create', Membre::class);
 
         $user = $request->user();
-        $missionId = (int) $user->mission_id;
+        $missionId = $user->resolvedMissionId();
 
         $egliseRule = Rule::exists('eglises_locales', 'id')->where(fn ($q) => $q->where('mission_id', $missionId));
 
@@ -155,6 +154,7 @@ class MembreController extends Controller
                 'date',
                 Rule::requiredIf(fn () => $request->input('mode_entree') === Membre::MODE_ENTREE_TRANSFERT),
             ],
+            'date_admission_eglise' => ['nullable', 'date'],
             'baptise_par' => ['nullable', 'string', 'max:255'],
             'noms_pere' => ['nullable', 'string', 'max:255'],
             'noms_mere' => ['nullable', 'string', 'max:255'],
@@ -185,6 +185,7 @@ class MembreController extends Controller
             $validated['date_bapteme'] = null;
             $validated['lieu_bapteme'] = null;
             $validated['baptise_par'] = null;
+            $validated['date_admission_eglise'] = null;
         }
         if (($validated['mode_entree'] ?? null) !== Membre::MODE_ENTREE_TRANSFERT) {
             $validated['recu_dans_eglise_de'] = null;
@@ -268,7 +269,7 @@ class MembreController extends Controller
         $this->authorize('update', $membre);
 
         $user = $request->user();
-        $missionId = (int) $user->mission_id;
+        $missionId = $user->resolvedMissionId();
 
         $egliseRule = Rule::exists('eglises_locales', 'id')->where(fn ($q) => $q->where('mission_id', $missionId));
 
@@ -311,6 +312,7 @@ class MembreController extends Controller
                 'date',
                 Rule::requiredIf(fn () => $request->input('mode_entree') === Membre::MODE_ENTREE_TRANSFERT),
             ],
+            'date_admission_eglise' => ['nullable', 'date'],
             'baptise_par' => ['nullable', 'string', 'max:255'],
             'noms_pere' => ['nullable', 'string', 'max:255'],
             'noms_mere' => ['nullable', 'string', 'max:255'],
@@ -342,6 +344,7 @@ class MembreController extends Controller
             $validated['date_bapteme'] = null;
             $validated['lieu_bapteme'] = null;
             $validated['baptise_par'] = null;
+            $validated['date_admission_eglise'] = null;
         }
         if (($validated['mode_entree'] ?? null) !== Membre::MODE_ENTREE_TRANSFERT) {
             $validated['recu_dans_eglise_de'] = null;
@@ -434,16 +437,16 @@ class MembreController extends Controller
 
     /**
      * @return array{
-     *     0: \Illuminate\Database\Eloquent\Collection<int, EgliseLocale>,
-     *     1: \Illuminate\Database\Eloquent\Collection<int, GroupeMission>,
+     *     0: Collection<int, EgliseLocale>,
+     *     1: Collection<int, GroupeMission>,
      *     2: int|null,
-     *     3: \Illuminate\Database\Eloquent\Collection<int, TypeStatutMembre>
+     *     3: Collection<int, TypeStatutMembre>
      * }
      */
     private function optionsFormulaire(Request $request): array
     {
         $user = $request->user();
-        $missionId = (int) $user->mission_id;
+        $missionId = $user->resolvedMissionId();
 
         $eglises = EgliseLocale::query()
             ->where('mission_id', $missionId)
@@ -465,7 +468,7 @@ class MembreController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $validated
+     * @param  array<string, mixed>  $validated
      */
     private function resolveTypeStatutId(Request $request, array $validated, int $missionId): ?int
     {
@@ -492,7 +495,7 @@ class MembreController extends Controller
         return $type ? (int) $type->id : null;
     }
 
-    private function peutChoisirGroupeMission(\App\Models\User $user): bool
+    private function peutChoisirGroupeMission(User $user): bool
     {
         return $user->hasRole('secretaire_executif_mission')
             || $user->hasRole('president_mission');
@@ -510,5 +513,14 @@ class MembreController extends Controller
             ->value('code');
 
         return $code !== 'refroidi';
+    }
+
+    private function appliquerPerimetreMembres(Builder $query, User $user, int $missionId): void
+    {
+        if ($user->eglise_locale_id !== null) {
+            $query->where('eglise_locale_id', $user->eglise_locale_id);
+        } else {
+            $query->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId));
+        }
     }
 }

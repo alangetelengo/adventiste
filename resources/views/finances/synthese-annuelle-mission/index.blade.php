@@ -28,7 +28,7 @@
 @endphp
 
 @section('content')
-<div class="mb-5 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm p-5 sm:p-6">
+<div class="adventiste-card-pro-static mb-5 p-5 sm:p-6">
     <form method="get" action="{{ route('finances.synthese-annuelle-mission.index') }}" class="flex flex-wrap items-end gap-4">
         <div>
             <label for="annee" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Année</label>
@@ -38,7 +38,7 @@
     </form>
 </div>
 
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="adventiste-card-pro-static overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm min-w-[1500px]">
             <thead>
@@ -108,9 +108,9 @@
     </div>
 </div>
 
-<div class="mt-6 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="adventiste-card-pro-static overflow-hidden mt-6">
     @if ($peutSaisir)
-    <form method="post" action="{{ route('finances.synthese-annuelle-mission.update', ['annee' => $annee]) }}">
+    <form method="post" action="{{ route('finances.synthese-annuelle-mission.update', ['annee' => $annee]) }}" data-offline-queue>
         @csrf
         @method('PUT')
     @endif

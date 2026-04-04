@@ -22,21 +22,23 @@
         );
 @endphp
 @if ($canCreateBapteme)
+<div class="flex flex-wrap items-center gap-2">
 <a href="{{ route('baptemes.create') }}" class="adventiste-btn-primary">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
     Nouveau baptême
 </a>
+</div>
 @endif
 @endsection
 
 @section('content')
-<div class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden mb-6">
+<div class="adventiste-card-pro-static overflow-hidden mb-6">
     <form method="get" action="{{ route('baptemes.index') }}" class="px-6 py-4 flex flex-wrap items-end gap-4 border-b border-slate-200/80 dark:border-slate-600/60 bg-slate-50/80 dark:bg-slate-900/40">
         @if ($eglisesFiltre !== null && $eglisesFiltre->isNotEmpty())
         <div class="min-w-48">
             <label for="f_eglise" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Église</label>
-            <select name="eglise_locale_id" id="f_eglise" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100">
+            <select name="eglise_locale_id" id="f_eglise" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
                 <option value="">Toutes</option>
                 @foreach ($eglisesFiltre as $e)
                 <option value="{{ $e->id }}" @selected((string) request('eglise_locale_id') === (string) $e->id)>{{ $e->nom }}</option>
@@ -46,7 +48,7 @@
         @endif
         <div class="min-w-48">
             <label for="f_type" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Type</label>
-            <select name="type_bapteme" id="f_type" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100">
+            <select name="type_bapteme" id="f_type" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
                 <option value="">Tous</option>
                 @foreach ($typesBapteme as $key => $label)
                 <option value="{{ $key }}" @selected(request('type_bapteme') === $key)>{{ $label }}</option>
@@ -55,7 +57,7 @@
         </div>
         <div class="min-w-48 flex-1 max-w-md">
             <label for="f_q" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Recherche</label>
-            <input type="search" name="q" id="f_q" value="{{ request('q') }}" placeholder="Nom, officiant..." class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100">
+            <input type="search" name="q" id="f_q" value="{{ request('q') }}" placeholder="Nom, officiant..." class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
         </div>
         <div class="flex gap-2">
             <button type="submit" class="adventiste-btn-primary">Filtrer</button>

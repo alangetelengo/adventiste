@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="adventiste-card-pro-static w-full max-w-5xl p-6 sm:p-8">
-    <form method="post" action="{{ route('baptemes.update', $bapteme) }}" class="space-y-8">
+    <form method="post" action="{{ route('baptemes.update', $bapteme) }}" class="space-y-8" data-offline-queue>
         @csrf
         @method('PUT')
         @include('baptemes._form', ['bapteme' => $bapteme])

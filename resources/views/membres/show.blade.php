@@ -75,6 +75,10 @@
                 <dd class="mt-1 text-slate-800 dark:text-slate-200">{{ $membre->date_bapteme?->translatedFormat('d M Y') ?? '—' }}</dd>
             </div>
             <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Date d'admission au registre</dt>
+                <dd class="mt-1 text-slate-800 dark:text-slate-200">{{ $membre->date_admission_eglise?->translatedFormat('d M Y') ?? '—' }}</dd>
+            </div>
+            <div>
                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Lieu de baptême</dt>
                 <dd class="mt-1 text-slate-800 dark:text-slate-200">{{ $membre->lieu_bapteme ?? '—' }}</dd>
             </div>
@@ -98,7 +102,7 @@
         @can('changeStatut', $membre)
             <div class="adventiste-card-pro-static p-6 sm:p-7 space-y-5">
                 <h2 class="text-sm font-bold text-slate-800 dark:text-slate-200">Changer le statut du membre</h2>
-                <form method="post" action="{{ route('membres.change-statut', $membre) }}" class="grid gap-4 md:grid-cols-2">
+                <form method="post" action="{{ route('membres.change-statut', $membre) }}" class="grid gap-4 md:grid-cols-2" data-offline-queue>
                     @csrf
                     <div>
                         <label for="type_statut_membre_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Nouveau statut</label>

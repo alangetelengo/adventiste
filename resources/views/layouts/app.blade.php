@@ -9,6 +9,14 @@
         <title>@yield('title', config('app.name', 'Adventiste'))</title>
 
         @include('partials.favicon')
+        <link rel="manifest" href="{{ route('pwa.manifest') }}">
+        @auth
+        <meta name="sync-csrf-url" content="{{ url('/sync/csrf') }}">
+        <meta name="service-worker-url" content="{{ asset('sw.js') }}">
+        @else
+        <meta name="service-worker-url" content="{{ asset('sw.js') }}">
+        @endauth
+        <meta name="theme-color" content="#0f172a">
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap" rel="stylesheet" />
 
@@ -21,6 +29,9 @@
         @include('partials.preload')
         @include('partials.nav-header')
         @include('partials.header')
+        @auth
+            @include('partials.offline-sync-status')
+        @endauth
         @include('partials.sidebar')
 
         <div id="mainContent" class="main-content flex-1 flex flex-col transition-all duration-300 adventiste-content-canvas" style="margin-top: 80px;">
@@ -38,7 +49,14 @@
                             <h1 class="@yield('page-title-class', 'text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white')">@yield('page-title')</h1>
                             @hasSection('page-title-info')<div class="@yield('page-title-info-class', 'mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl')">@yield('page-title-info')</div>@endif
                         </div>
-                        <div class="flex shrink-0 items-center gap-2">
+                        <div class="flex shrink-0 flex-wrap items-center gap-2">
+                            @unless(request()->routeIs('home', 'tableau-de-bord'))
+                                @hasSection('header-back')
+                                    @yield('header-back')
+                                @else
+                                    <x-back-link :href="\App\Support\HeaderBackUrl::url()" />
+                                @endif
+                            @endunless
                             @yield('btn-create')
                         </div>
                     </div>

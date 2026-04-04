@@ -12,7 +12,7 @@
         Complétez les montants mensuels pour chaque ligne de ventilation. Les cumuls se calculent automatiquement.
     </p>
 
-    <form method="post" action="{{ route('finances.rapports-station.update', $rapport) }}" class="space-y-8">
+    <form method="post" action="{{ route('finances.rapports-station.update', $rapport) }}" class="space-y-8" data-offline-queue>
         @csrf
         @method('PUT')
 
@@ -21,7 +21,7 @@
             <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="bg-gradient-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                        <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b border-slate-200 dark:border-slate-700">
                             <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Code</th>
                             <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">%</th>
                             <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Mois (FCFA)</th>
@@ -65,7 +65,7 @@
             <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="bg-gradient-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                        <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b border-slate-200 dark:border-slate-700">
                             <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Catégorie</th>
                             <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Montant (FCFA)</th>
                         </tr>
