@@ -10,6 +10,8 @@
 /.nova
 /.phpunit.cache
 /.vscode
+# Historique local (extension / éditeur) — ne pas versionner
+/.history
 /.zed
 /auth.json
 /node_modules
