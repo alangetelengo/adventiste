@@ -33,7 +33,7 @@
 <body>
     <div class="shell">
         <section class="hero">
-            <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="{{ config('app.name') }}" class="logo" width="108" height="108">
+            <img src="{{ asset('images/logo_sda.png') }}" alt="{{ config('app.name') }}" class="logo" width="108" height="108">
             <h1>{{ config('app.name') }}</h1>
             <p>Dîmes, offrandes et membres — Mission &amp; églises locales</p>
             <p>
