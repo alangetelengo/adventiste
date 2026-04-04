@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="color-scheme" content="light dark">
 
-        <title>@yield('title', config('app.name', 'Adventiste'))</title>
+        <title>@yield('title', config('app.name', 'SDA'))</title>
 
         @include('partials.favicon')
         <link rel="manifest" href="{{ route('pwa.manifest') }}">

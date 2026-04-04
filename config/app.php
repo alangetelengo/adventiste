@@ -13,7 +13,19 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'LINGOMBA ADVENTISTE'),
+    'name' => env('APP_NAME', 'SDA'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Libellé long (dénomination)
+    |--------------------------------------------------------------------------
+    |
+    | Utilisé dans l’en-tête, le pied de page et la PWA pour préciser
+    | « Seven-day Adventist » / Église adventiste du septième jour.
+    |
+    */
+
+    'denomination' => env('APP_DENOMINATION', 'Église adventiste du septième jour'),
 
     /*
     |--------------------------------------------------------------------------

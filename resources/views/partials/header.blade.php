@@ -13,7 +13,7 @@
     <div class="flex-1 flex justify-between items-center px-6 min-w-0">
         <span class="text-sm font-semibold system-label truncate text-white/90">
             <span class="text-emerald-100/90">
-                Église adventiste du septième jour
+                {{ config('app.name') }} — {{ config('app.denomination') }}
                 @auth
                     @if (auth()->user()->egliseLocale?->nom)
                         — {{ mb_strtoupper(auth()->user()->egliseLocale->nom) }}

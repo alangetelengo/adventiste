@@ -7,7 +7,7 @@
 ">
     <div class="copyright" style="padding: 1rem 1.5rem;">
         <p style="text-align: center; margin: 0; font-size: 0.875rem; color: #2d1f4a;">
-            © {{ date('Y') }} — {{ config('app.name') }} — <span style="color: #8b6cb8;">Église adventiste du septième jour</span>
+            © {{ date('Y') }} — {{ config('app.name') }} — <span style="color: #8b6cb8;">{{ config('app.denomination') }}</span>
         </p>
     </div>
 </div>

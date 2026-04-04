@@ -2,7 +2,7 @@
     <div class="preloader-bubble-wrapper">
         <div class="bubble-glow"></div>
         <div class="bubble-ring"></div>
-        <img src="{{ asset('images/logo_adventiste.jpg') }}" class="logo-in-bubble" alt="Logo Église adventiste du septième jour" width="100" height="100">
+        <img src="{{ asset('images/logo_adventiste.jpg') }}" class="logo-in-bubble" alt="Logo {{ config('app.name') }}" width="100" height="100">
     </div>
 </div>
 

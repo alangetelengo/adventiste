@@ -68,7 +68,7 @@
 
 <div id="navHeader" class="nav-header theme-nav-header">
     <a href="{{ route('home') }}" class="brand-logo">
-        <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="Logo — Église adventiste du septième jour" width="48" height="48">
-        <span class="sidebar-label">Adventiste</span>
+        <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="Logo — {{ config('app.name') }}" width="48" height="48">
+        <span class="sidebar-label">{{ config('app.name') }}</span>
     </a>
 </div>

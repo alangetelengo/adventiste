@@ -9,9 +9,9 @@ class PwaManifestController extends Controller
     public function __invoke(): JsonResponse
     {
         $data = [
-            'name' => config('app.name', 'Adventiste'),
-            'short_name' => config('app.name', 'Adventiste'),
-            'description' => 'Gestion paroissiale — mode hors ligne partiel',
+            'name' => config('app.name').' — '.config('app.denomination'),
+            'short_name' => config('app.name'),
+            'description' => 'SDA — Seven-day Adventist — gestion paroissiale (hors ligne partiel)',
             'start_url' => url('/'),
             'scope' => url('/'),
             'display' => 'standalone',

@@ -426,7 +426,7 @@
                 <div class="watermark">⛪</div>
                 <div class="card-content">
                     <div class="institution-with-logo">
-                        <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="Logo Église Adventiste" class="institution-logo">
+                        <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="Logo {{ config('app.name') }}" class="institution-logo">
                         <div class="institution-text">
                             <div><strong>ÉGLISE DES ADVENTISTES DU SEPTIÈME JOUR</strong></div>
                             <div>Union Mission de l'Afrique Centrale</div>

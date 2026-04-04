@@ -1,8 +1,8 @@
 /**
- * Service worker Adventiste — met en cache les assets Vite pour usage dégradé hors ligne.
+ * Service worker SDA — met en cache les assets Vite pour usage dégradé hors ligne.
  * Les pages HTML restent chargées depuis le réseau (session Laravel).
  */
-const CACHE = 'adventiste-assets-v1';
+const CACHE = 'sda-assets-v1';
 
 self.addEventListener('install', (event) => {
     event.waitUntil(self.skipWaiting());

@@ -35,7 +35,7 @@
         <section class="hero">
             <img src="{{ asset('images/logo_adventiste.jpg') }}" alt="{{ config('app.name') }}" class="logo" width="108" height="108">
             <h1>{{ config('app.name') }}</h1>
-            <p>Dîmes, offrandes et membres — Mission &amp; églises locales</p>
+            <p>Seven-day Adventist (SDA) — dîmes, offrandes et membres, mission &amp; églises locales</p>
             <p class="muted" style="text-align: center;">   République du Congo  </p>
         </section>
         <section class="form">
