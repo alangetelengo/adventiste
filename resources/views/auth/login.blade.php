@@ -28,13 +28,54 @@
         .form-submit-loading { opacity: .78; cursor: not-allowed; }
         @keyframes form-submit-spin { to { transform: rotate(360deg); } }
         .err { background: #fff1f2; border: 1px solid #fecdd3; color: #be123c; padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; font-size: .88rem; }
+        /* Sélecteur FR | EN (sans Tailwind sur cette page) */
+        .locale-segmented {
+            display: inline-flex;
+            align-items: stretch;
+            padding: 3px;
+            gap: 2px;
+            background: #e8eef3;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            box-shadow: inset 0 1px 2px rgba(15, 23, 42, .06);
+        }
+        .locale-segmented__btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.75rem;
+            padding: 7px 14px;
+            border: 0;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-decoration: none;
+            color: #64748b;
+            background: transparent;
+            cursor: pointer;
+            transition: color .15s ease, background .15s ease, box-shadow .15s ease;
+        }
+        .locale-segmented__btn:hover:not(.is-active) {
+            color: #0f172a;
+            background: rgba(255, 255, 255, .85);
+        }
+        .locale-segmented__btn.is-active {
+            color: #fff;
+            background: linear-gradient(135deg, #00b464, #009d58);
+            box-shadow: 0 2px 10px rgba(0, 180, 100, .35);
+        }
+        .locale-segmented__btn:focus-visible {
+            outline: 2px solid #00a86b;
+            outline-offset: 2px;
+        }
         @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } .hero .logo { width: 128px; height: 128px; padding: 8px; margin: 0 auto; } .hero { text-align: center; } .hero h1 { margin-top: 14px; } }
     </style>
 </head>
 <body>
     <div class="shell">
         <div class="locale-fixed">
-            @include('partials.locale-switcher', ['tone' => 'dark'])
+            @include('partials.locale-switcher', ['variant' => 'login'])
         </div>
         <section class="hero">
             <img src="{{ asset('images/logo_sda.png') }}" alt="{{ config('app.name') }}" class="logo" width="152" height="152">
