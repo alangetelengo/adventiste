@@ -47,7 +47,7 @@
                         <x-action-button variant="edit" href="{{ route('parametres.groupes-mission.entrees.edit', [$groupe, $entree]) }}" custom-classes="text-emerald-600 dark:text-emerald-400 hover:underline text-xs font-semibold group-hover:text-emerald-700 dark:group-hover:text-emerald-300 bg-transparent border-0 p-0" />
                         @endcan
                         @can('update', $groupe)
-                        <x-action-button variant="delete" action="{{ route('parametres.groupes-mission.entrees.destroy', [$groupe, $entree]) }}" method="DELETE" confirm-message="Confirmez la suppression ?" custom-classes="text-red-600 dark:text-red-400 hover:underline text-xs font-semibold group-hover:text-red-700 dark:group-hover:text-red-300 bg-transparent border-0 p-0" />
+                        <x-action-button variant="delete" action="{{ route('parametres.groupes-mission.entrees.destroy', [$groupe, $entree]) }}" method="DELETE" :confirm-message="__('modules.common.confirm_delete_entree_groupe')" custom-classes="text-red-600 dark:text-red-400 hover:underline text-xs font-semibold group-hover:text-red-700 dark:group-hover:text-red-300 bg-transparent border-0 p-0" />
                         @endcan
                     </td>
                 </tr>

@@ -100,7 +100,7 @@ class RapportMembreEgliseController extends Controller
         if ($existant !== null) {
             return redirect()
                 ->route('secretariat.rapports-membres.show', $existant)
-                ->with('info', 'Un rapport existe déjà pour cette période.');
+                ->with('info', __('flash.rapport_membres_exists'));
         }
 
         $stats = $this->calculerStats($egliseId, $validated['type_periode'], (int) $validated['annee'], $mois);
@@ -116,7 +116,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.show', $rapport)
-            ->with('success', 'Rapport membres généré.');
+            ->with('success', __('flash.rapport_membres_generated'));
     }
 
     public function show(RapportMembreEglise $rapport): View
@@ -177,7 +177,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.show', $rapport)
-            ->with('success', 'Rapport mis à jour.');
+            ->with('success', __('flash.rapport_membres_updated'));
     }
 
     public function destroy(RapportMembreEglise $rapport): RedirectResponse
@@ -187,7 +187,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.index')
-            ->with('success', 'Rapport supprimé.');
+            ->with('success', __('flash.rapport_membres_deleted'));
     }
 
     public function soumettre(Request $request, RapportMembreEglise $rapport): RedirectResponse
@@ -207,7 +207,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.show', $rapport)
-            ->with('success', 'Rapport soumis à la mission.');
+            ->with('success', __('flash.rapport_membres_submitted'));
     }
 
     public function valider(Request $request, RapportMembreEglise $rapport): RedirectResponse
@@ -229,7 +229,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.show', $rapport)
-            ->with('success', 'Rapport validé par la mission.');
+            ->with('success', __('flash.rapport_membres_validated'));
     }
 
     public function rejeter(Request $request, RapportMembreEglise $rapport): RedirectResponse
@@ -251,7 +251,7 @@ class RapportMembreEgliseController extends Controller
 
         return redirect()
             ->route('secretariat.rapports-membres.show', $rapport)
-            ->with('success', 'Rapport rejeté avec commentaire.');
+            ->with('success', __('flash.rapport_membres_rejected'));
     }
 
     /**

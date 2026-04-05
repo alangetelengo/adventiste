@@ -56,8 +56,8 @@ class RapportMembreEglise extends Model
     public static function labelsTypesPeriode(): array
     {
         return [
-            self::TYPE_MENSUEL => 'Mensuel',
-            self::TYPE_ANNUEL => 'Annuel',
+            self::TYPE_MENSUEL => __('secretariat.rapport_membre.type_mensuel'),
+            self::TYPE_ANNUEL => __('secretariat.rapport_membre.type_annuel'),
         ];
     }
 
@@ -65,10 +65,10 @@ class RapportMembreEglise extends Model
     public static function labelsEtats(): array
     {
         return [
-            self::ETAT_BROUILLON => 'Brouillon',
-            self::ETAT_SOUMIS => 'Soumis',
-            self::ETAT_VALIDE => 'Validé',
-            self::ETAT_REJETE => 'Rejeté',
+            self::ETAT_BROUILLON => __('secretariat.rapport_membre.etat_brouillon'),
+            self::ETAT_SOUMIS => __('secretariat.rapport_membre.etat_soumis'),
+            self::ETAT_VALIDE => __('secretariat.rapport_membre.etat_valide'),
+            self::ETAT_REJETE => __('secretariat.rapport_membre.etat_rejete'),
         ];
     }
 

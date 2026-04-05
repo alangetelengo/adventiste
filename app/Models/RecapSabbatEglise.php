@@ -52,11 +52,11 @@ class RecapSabbatEglise extends Model
     public static function libellesSemainesSabbat(): array
     {
         return [
-            1 => 'Semaine 1',
-            2 => 'Semaine 2',
-            3 => 'Semaine 3',
-            4 => 'Semaine 4',
-            5 => 'Semaine 5',
+            1 => __('finances.recaps.week_label', ['n' => 1]),
+            2 => __('finances.recaps.week_label', ['n' => 2]),
+            3 => __('finances.recaps.week_label', ['n' => 3]),
+            4 => __('finances.recaps.week_label', ['n' => 4]),
+            5 => __('finances.recaps.week_label', ['n' => 5]),
         ];
     }
 

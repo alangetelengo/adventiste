@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name') }} - Connexion</title>
+    <title>{{ config('app.name') }} — {{ __('ui.login.heading') }}</title>
     @include('partials.favicon')
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background: #0b1320; color: #fff; min-height: 100vh; display: grid; place-items: center; }
-        .shell { width: min(1040px, 94vw); display: grid; grid-template-columns: minmax(0, 1fr) 360px; background: #fff; color: #0f172a; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,.35); }
+        .shell { width: min(1040px, 94vw); display: grid; grid-template-columns: minmax(0, 1fr) 360px; background: #fff; color: #0f172a; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,.35); position: relative; }
+        .locale-fixed { position: absolute; top: 14px; right: 14px; z-index: 5; }
         .hero { background: radial-gradient(circle at 20% 80%, rgba(0,180,100,.35), transparent 45%), linear-gradient(135deg, #0a0f15, #111b24, #0a0f15); padding: 42px; position: relative; }
         .hero h1 { margin-top: 18px; font-size: 2.2rem; color: #f3f4f6; }
         .hero p { margin-top: 10px; color: #cbd5e1; line-height: 1.5; }
@@ -32,35 +33,38 @@
 </head>
 <body>
     <div class="shell">
+        <div class="locale-fixed">
+            @include('partials.locale-switcher', ['tone' => 'dark'])
+        </div>
         <section class="hero">
             <img src="{{ asset('images/logo_sda.png') }}" alt="{{ config('app.name') }}" class="logo" width="152" height="152">
             <h1>{{ config('app.name') }}</h1>
-            <p>Gestion intégrée des dîmes, offrandes et membres</p>
-            <p class="muted">   Églises & missions du Congo  </p>
+            <p>{{ __('ui.hero_tagline') }}</p>
+            <p class="muted" style="text-align: center;">{{ __('ui.hero_footer') }}</p>
         </section>
         <section class="form">
-            <h2>Connexion</h2>
-            <p class="muted">Saisissez vos identifiants.</p>
+            <h2>{{ __('ui.login.heading') }}</h2>
+            <p class="muted">{{ __('ui.login.subheading') }}</p>
 
             @if ($errors->any())
                 <div class="err">{{ $errors->first() }}</div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" data-loading-text="Connexion...">
+            <form method="POST" action="{{ route('login') }}" data-loading-text="{{ __('ui.signing_in') }}">
                 @csrf
                 <div class="group">
-                    <label for="email">Adresse email</label>
+                    <label for="email">{{ __('ui.email') }}</label>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
                 </div>
                 <div class="group">
-                    <label for="password">Mot de passe</label>
+                    <label for="password">{{ __('ui.password') }}</label>
                     <input id="password" type="password" name="password" required autocomplete="current-password">
                 </div>
                 <label class="remember">
                     <input type="checkbox" name="remember" value="1">
-                    Se souvenir de moi
+                    {{ __('ui.remember_me') }}
                 </label>
-                <button type="submit" class="btn" data-loading-text="Connexion...">Se connecter</button>
+                <button type="submit" class="btn" data-loading-text="{{ __('ui.signing_in') }}">{{ __('ui.sign_in') }}</button>
             </form>
         </section>
     </div>
@@ -83,7 +87,7 @@
                     btn.dataset.originalHtml = btn.innerHTML;
                 }
 
-                var loadingText = btn.dataset.loadingText || form.dataset.loadingText || 'Chargement...';
+                var loadingText = btn.dataset.loadingText || form.dataset.loadingText || @json(__('ui.loading'));
                 if (btn instanceof HTMLButtonElement) {
                     btn.innerHTML = '<span class="form-submit-spinner"></span> ' + loadingText;
                 } else {

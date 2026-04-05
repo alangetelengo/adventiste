@@ -6,10 +6,10 @@ $semainesSabbat = \App\Models\RecapSabbatEglise::libellesSemainesSabbat();
 
 @section('content-container-class', 'w-full max-w-none mx-auto px-4 sm:px-6 lg:px-8 xl:px-10')
 
-@section('page-title', 'Saisie simplifiée — sabbat')
+@section('page-title', __('finances.recaps.page_create_title'))
 
 @section('page-title-info')
-Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }}
+{{ __('finances.recaps.page_create_sub', ['church' => auth()->user()->egliseLocale?->nom ?? '—']) }}
 @endsection
 
 @section('content')
@@ -18,29 +18,28 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
         <div class="flex h-full min-h-0 flex-1 flex-col adventiste-card-pro-static p-6 sm:p-8">
             @if ($typesRecette->isEmpty())
             <p class="text-sm text-amber-800 dark:text-amber-200 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50/80 dark:bg-amber-950/30 p-4">
-                Aucun type de recette actif pour votre mission. Un administrateur ou le trésorier de mission doit en créer dans
-                <a href="{{ route('parametres.types-recette.index') }}" class="font-semibold underline">Paramètres → Types de recette</a>.
+                {!! __('finances.recaps.no_types_html', ['url' => route('parametres.types-recette.index')]) !!}
             </p>
             @else
             <form method="post" action="{{ route('finances.recaps.store') }}" class="flex min-h-0 flex-1 flex-col space-y-5" data-offline-queue>
                 @csrf
                 <div>
-                    <label for="date_sabbat" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date du sabbat</label>
+                    <label for="date_sabbat" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ __('finances.recaps.col_sabbat_date') }}</label>
                     <input type="date" name="date_sabbat" id="date_sabbat" value="{{ old('date_sabbat') }}" required class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-slate-900 dark:text-slate-100">
                     @error('date_sabbat')
                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="rounded-lg border border-emerald-200/80 dark:border-emerald-800/40 bg-emerald-50/50 dark:bg-emerald-950/20 p-4 space-y-3">
-                    <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Recettes du culte (totaux assemblée)</h3>
-                    <p class="text-xs text-slate-600 dark:text-slate-400">Une ligne = un type + un montant. Si un sabbat existe déjà à cette date, les lignes assemblée brouillon seront remplacées automatiquement.</p>
+                    <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ __('finances.recaps.cult_totals_title') }}</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">{{ __('finances.recaps.cult_totals_hint') }}</p>
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm">
                             <thead>
                                 <tr class="text-left text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-600">
-                                    <th class="py-2 pr-3">Type de recette</th>
-                                    <th class="py-2 pr-3">Montant (FCFA)</th>
-                                    <th class="py-2 pr-3 text-right">Action</th>
+                                    <th class="py-2 pr-3">{{ __('finances.recaps.col_recette_type') }}</th>
+                                    <th class="py-2 pr-3">{{ __('finances.recaps.amount_fcfa') }}</th>
+                                    <th class="py-2 pr-3 text-right">{{ __('finances.common.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="lignes-assemblee-body">
@@ -61,7 +60,7 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
                                     </td>
                                     <td class="py-2 pr-2 align-top text-right">
                                         <button type="button" class="js-remove-assemblee-line rounded border border-red-300 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/30">
-                                            Supprimer
+                                            {{ __('finances.common.delete_line') }}
                                         </button>
                                     </td>
                                 </tr>
@@ -69,7 +68,7 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" id="btn-add-assemblee" class="text-sm font-semibold text-[#00b464] dark:text-emerald-400 hover:underline">+ Ajouter une ligne</button>
+                    <button type="button" id="btn-add-assemblee" class="text-sm font-semibold text-[#00b464] dark:text-emerald-400 hover:underline">{{ __('finances.common.add_line') }}</button>
                     @error('lignes_assemblee')
                     <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
@@ -77,10 +76,10 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
 
                 <div class="mt-auto flex flex-wrap gap-3 border-t border-slate-200/80 pt-6 dark:border-slate-600/60">
                     <button type="submit" class="rounded-lg bg-emerald-700 text-white px-5 py-2.5 text-sm font-medium hover:bg-emerald-800">
-                        Enregistrer le sabbat
+                        {{ __('finances.recaps.save_sabbat') }}
                     </button>
                     <a href="{{ route('finances.recaps.index') }}" class="rounded-lg border border-slate-300 dark:border-slate-600 px-5 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
-                        Annuler
+                        {{ __('ui.cancel') }}
                     </a>
                 </div>
             </form>
@@ -108,7 +107,7 @@ Saisie rapide des recettes du sabbat — {{ auth()->user()->egliseLocale?->nom }
         </td>
         <td class="py-2 pr-2 align-top text-right">
             <button type="button" class="js-remove-assemblee-line rounded border border-red-300 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/30">
-                Supprimer
+                {{ __('finances.common.delete_line') }}
             </button>
         </td>
     </tr>

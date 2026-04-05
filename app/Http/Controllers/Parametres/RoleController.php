@@ -55,7 +55,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('parametres.roles.edit', $role)
-            ->with('success', 'Rôle créé.');
+            ->with('success', __('flash.role_created'));
     }
 
     public function edit(Role $role): View
@@ -100,7 +100,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('parametres.roles.edit', $role)
-            ->with('success', 'Rôle enregistré.');
+            ->with('success', __('flash.role_saved'));
     }
 
     public function destroy(Role $role): RedirectResponse
@@ -110,7 +110,7 @@ class RoleController extends Controller
         if ($role->users()->exists()) {
             return redirect()
                 ->route('parametres.roles.index')
-                ->with('error', 'Impossible de supprimer ce rôle : des utilisateurs y sont encore rattachés.');
+                ->with('error', __('flash.role_users_blocked'));
         }
 
         $role->permissions()->detach();
@@ -118,6 +118,6 @@ class RoleController extends Controller
 
         return redirect()
             ->route('parametres.roles.index')
-            ->with('success', 'Rôle supprimé.');
+            ->with('success', __('flash.role_deleted'));
     }
 }

@@ -93,8 +93,8 @@ class Membre extends Model
     public static function labelsModesEntree(): array
     {
         return [
-            self::MODE_ENTREE_BAPTEME => 'Baptême',
-            self::MODE_ENTREE_TRANSFERT => 'Transfert',
+            self::MODE_ENTREE_BAPTEME => __('modules.membres.mode_entree.bapteme'),
+            self::MODE_ENTREE_TRANSFERT => __('modules.membres.mode_entree.transfert'),
         ];
     }
 
@@ -102,8 +102,8 @@ class Membre extends Model
     public static function labelsTypesBaptemeEntree(): array
     {
         return [
-            self::TYPE_BAPTEME_IMMERSION => 'Immersion',
-            self::TYPE_BAPTEME_PROFESSION_FOI => 'Profession de foi',
+            self::TYPE_BAPTEME_IMMERSION => __('modules.membres.type_bapteme_entree.immersion'),
+            self::TYPE_BAPTEME_PROFESSION_FOI => __('modules.membres.type_bapteme_entree.profession_de_foi'),
         ];
     }
 

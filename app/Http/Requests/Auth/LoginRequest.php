@@ -47,7 +47,7 @@ class LoginRequest extends FormRequest
         if (isset($user->actif) && ! $user->actif) {
             Auth::logout();
             throw ValidationException::withMessages([
-                'email' => 'Ce compte a été désactivé. Contactez l’administrateur.',
+                'email' => __('auth.account_disabled'),
             ]);
         }
 

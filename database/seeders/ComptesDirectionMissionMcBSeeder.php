@@ -32,13 +32,13 @@ class ComptesDirectionMissionMcBSeeder extends Seeder
 
         if ($talangai !== null) {
             $comptes[] = [
-                'email' => 'tresorier.talangai@mcb.cg',
+                'email' => 'tresorier.talangai@sda.cg',
                 'name' => 'Trésorier — TALANGAI',
                 'role' => 'tresorier_eglise',
                 'eglise_locale_id' => $talangai->id,
             ];
             $comptes[] = [
-                'email' => 'secretaire.talangai@mcb.cg',
+                'email' => 'secretaire.talangai@sda.cg',
                 'name' => 'Secrétaire d’église — TALANGAI',
                 'role' => 'secretaire_eglise',
                 'eglise_locale_id' => $talangai->id,
@@ -47,19 +47,19 @@ class ComptesDirectionMissionMcBSeeder extends Seeder
 
         $comptes = array_merge($comptes, [
             [
-                'email' => 'tresorier.mission@mcb.cg',
+                'email' => 'tresorier.mission@sda.cg',
                 'name' => 'Trésorier de mission — MCB',
                 'role' => 'tresorier_mission',
                 'eglise_locale_id' => null,
             ],
             [
-                'email' => 'secretaire.executif@mcb.cg',
+                'email' => 'secretaire.executif@sda.cg',
                 'name' => 'Secrétaire exécutif de mission — MCB',
                 'role' => 'secretaire_executif_mission',
                 'eglise_locale_id' => null,
             ],
             [
-                'email' => 'president.mission@mcb.cg',
+                'email' => 'president.mission@sda.cg',
                 'name' => 'Président de mission — MCB',
                 'role' => 'president_mission',
                 'eglise_locale_id' => null,

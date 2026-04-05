@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rapport membres — Impression</title>
+    <title>{{ __('secretariat.rapports_membres.impression_title') }}</title>
     <style>
         @page { size: A4 portrait; margin: 14mm; }
         body { font-family: Arial, Helvetica, sans-serif; color: #111827; margin: 0; }
@@ -30,62 +30,59 @@
     </style>
 </head>
 <body>
-    @php
-        $nomsMois = [1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril', 5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août', 9 => 'Septembre', 10 => 'Octobre', 11 => 'Novembre', 12 => 'Décembre'];
-    @endphp
 
     <div class="no-print">
-        <button class="btn" onclick="window.print()">Imprimer / Exporter PDF</button>
+        <button class="btn" onclick="window.print()">{{ __('secretariat.rapports_membres.print_export') }}</button>
     </div>
 
     <div class="container">
         <div class="title">
-            <h1>RAPPORT DES MEMBRES — ÉGLISE LOCALE</h1>
-            <p>Mission: {{ $rapport->egliseLocale->mission?->nom ?? '—' }} | Église: {{ $rapport->egliseLocale->nom }}</p>
+            <h1>{{ __('secretariat.rapports_membres.impression_h1') }}</h1>
+            <p>{{ __('secretariat.rapports_membres.meta_mission') }}: {{ $rapport->egliseLocale->mission?->nom ?? '—' }} | {{ __('secretariat.rapports_membres.meta_church') }}: {{ $rapport->egliseLocale->nom }}</p>
             <p>
-                Période:
+                {{ __('secretariat.rapports_membres.period_label') }}:
                 {{ $typesPeriode[$rapport->type_periode] ?? $rapport->type_periode }}
                 —
                 @if ((int) $rapport->mois > 0)
-                    {{ $nomsMois[(int) $rapport->mois] ?? $rapport->mois }}
+                    {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::createFromDate((int) $rapport->annee, (int) $rapport->mois, 1)->translatedFormat('F')) }}
                 @else
-                    Année complète
+                    {{ __('secretariat.rapports_membres.full_year') }}
                 @endif
                 {{ $rapport->annee }}
             </p>
         </div>
 
         <div class="box">
-            <strong>État de transmission:</strong> {{ $etats[$rapport->etat] ?? $rapport->etat }}
+            <strong>{{ __('secretariat.rapports_membres.transmission_strong') }}:</strong> {{ $etats[$rapport->etat] ?? $rapport->etat }}
             @if($rapport->soumis_le)
-                <div class="meta">Soumis le {{ $rapport->soumis_le->translatedFormat('d M Y à H:i') }} par {{ $rapport->soumisPar?->name ?? '—' }}</div>
+                <div class="meta">{{ __('secretariat.rapports_membres.submitted_line', ['datetime' => $rapport->soumis_le->translatedFormat('d M Y H:i'), 'name' => $rapport->soumisPar?->name ?? '—']) }}</div>
             @endif
             @if($rapport->revu_le)
-                <div class="meta">Revu le {{ $rapport->revu_le->translatedFormat('d M Y à H:i') }} par {{ $rapport->revuPar?->name ?? '—' }}</div>
+                <div class="meta">{{ __('secretariat.rapports_membres.reviewed_line', ['datetime' => $rapport->revu_le->translatedFormat('d M Y H:i'), 'name' => $rapport->revuPar?->name ?? '—']) }}</div>
             @endif
             @if($rapport->commentaire_mission)
-                <div class="meta">Commentaire mission: {{ $rapport->commentaire_mission }}</div>
+                <div class="meta">{{ __('secretariat.rapports_membres.comment_mission') }}: {{ $rapport->commentaire_mission }}</div>
             @endif
         </div>
 
         <div class="box">
-            <strong>Indicateurs principaux</strong>
+            <strong>{{ __('secretariat.rapports_membres.main_indicators') }}</strong>
             <div class="grid">
-                <div class="row"><span>Total membres</span><span>{{ number_format((int) $rapport->total_membres, 0, ',', ' ') }}</span></div>
-                <div class="row"><span>Baptêmes immersion</span><span>{{ number_format((int) $rapport->total_baptemes_immersion, 0, ',', ' ') }}</span></div>
-                <div class="row"><span>Baptêmes profession de foi</span><span>{{ number_format((int) $rapport->total_baptemes_profession_foi, 0, ',', ' ') }}</span></div>
-                <div class="row"><span>Entrées par transfert</span><span>{{ number_format((int) $rapport->total_entrees_transfert, 0, ',', ' ') }}</span></div>
-                <div class="row"><span>Changements de statut</span><span>{{ number_format((int) $rapport->total_changements_statut, 0, ',', ' ') }}</span></div>
+                <div class="row"><span>{{ __('secretariat.rapports_membres.total_members') }}</span><span>{{ number_format((int) $rapport->total_membres, 0, ',', ' ') }}</span></div>
+                <div class="row"><span>{{ __('secretariat.rapports_membres.baptemes_immersion') }}</span><span>{{ number_format((int) $rapport->total_baptemes_immersion, 0, ',', ' ') }}</span></div>
+                <div class="row"><span>{{ __('secretariat.rapports_membres.baptemes_profession') }}</span><span>{{ number_format((int) $rapport->total_baptemes_profession_foi, 0, ',', ' ') }}</span></div>
+                <div class="row"><span>{{ __('secretariat.rapports_membres.entrees_transfert') }}</span><span>{{ number_format((int) $rapport->total_entrees_transfert, 0, ',', ' ') }}</span></div>
+                <div class="row"><span>{{ __('secretariat.rapports_membres.status_changes') }}</span><span>{{ number_format((int) $rapport->total_changements_statut, 0, ',', ' ') }}</span></div>
             </div>
         </div>
 
         <div class="box">
-            <strong>Répartition par statut membre</strong>
+            <strong>{{ __('secretariat.rapports_membres.by_status_title') }}</strong>
             <table>
                 <thead>
                     <tr>
-                        <th>Statut</th>
-                        <th>Effectif</th>
+                        <th>{{ __('secretariat.rapports_membres.col_status') }}</th>
+                        <th>{{ __('secretariat.rapports_membres.col_headcount') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,7 +93,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2">Aucune donnée</td>
+                            <td colspan="2">{{ __('secretariat.rapports_membres.no_data_short') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -104,13 +101,13 @@
         </div>
 
         <div class="box">
-            <strong>Observations du secrétaire d'église</strong>
+            <strong>{{ __('secretariat.rapports_membres.church_secretary_observations') }}</strong>
             <p style="white-space: pre-wrap; margin: 8px 0 0;">{{ $rapport->notes_locales ?? '—' }}</p>
         </div>
 
         <div class="signatures">
-            <div class="sign">Secrétaire d'église</div>
-            <div class="sign">Secrétaire exécutif de mission</div>
+            <div class="sign">{{ __('secretariat.rapports_membres.signature_church_secretary') }}</div>
+            <div class="sign">{{ __('secretariat.rapports_membres.signature_mission_executive') }}</div>
         </div>
     </div>
 </body>

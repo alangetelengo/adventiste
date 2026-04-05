@@ -3,7 +3,7 @@
      style="position: fixed; top: 0; left: 250px; right: 0; height: 80px; display: flex; z-index: 2147482000; background:
         radial-gradient(ellipse 80% 80% at 20% 80%, rgba(0, 180, 100, 0.25), rgba(0, 180, 100, 0.12) 25%, transparent 50%),
         linear-gradient(135deg, #0a0f15 0%, #0d1a1a 25%, #0f2520 50%, #0d1a1a 75%, #0a0f15 100%); border: 0 !important; border-bottom: 0 !important; box-shadow: none !important; outline: 0 !important;">
-    <button type="button" id="navControl" class="nav-control shrink-0 h-full w-14 flex items-center justify-center hover:bg-slate-100/80 dark:hover:bg-white/5 focus:bg-transparent focus:outline-none focus:ring-0 active:bg-slate-100/80 dark:active:bg-white/5 cursor-pointer transition-all duration-300" title="Afficher / masquer le menu">
+    <button type="button" id="navControl" class="nav-control shrink-0 h-full w-14 flex items-center justify-center hover:bg-slate-100/80 dark:hover:bg-white/5 focus:bg-transparent focus:outline-none focus:ring-0 active:bg-slate-100/80 dark:active:bg-white/5 cursor-pointer transition-all duration-300" title="{{ __('ui.nav_menu') }}">
         <div class="hamburger flex flex-col gap-1.5 w-6 items-center justify-center">
             <span class="line block w-full h-0.5 rounded bg-linear-to-r from-church-gold via-[#00c978] to-[#8b6cb8] transition-all duration-300"></span>
             <span class="line block w-full h-0.5 rounded bg-linear-to-r from-church-gold via-[#00c978] to-[#8b6cb8] transition-all duration-300"></span>
@@ -24,12 +24,15 @@
             </span>
         </span>
         <ul class="header-right flex items-center gap-1 shrink-0">
+            <li class="mr-2 flex items-center">
+                @include('partials.locale-switcher', ['tone' => 'dark'])
+            </li>
             <li class="mr-3">
-                <button id="themeToggle" type="button" class="px-3 py-1.5 rounded bg-white/10 text-lg hover:bg-white/20 transition-colors" title="Mode clair / mode sombre">🌙</button>
+                <button id="themeToggle" type="button" class="px-3 py-1.5 rounded bg-white/10 text-lg hover:bg-white/20 transition-colors" title="{{ __('ui.theme_toggle') }}">🌙</button>
             </li>
             @auth
             <li class="mr-3">
-                <button id="notifToggle" type="button" class="relative flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors" title="Notifications" aria-haspopup="true" aria-expanded="false">
+                <button id="notifToggle" type="button" class="relative flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors" title="{{ __('ui.notifications') }}" aria-haspopup="true" aria-expanded="false">
                     <span class="relative inline-flex h-10 w-10 shrink-0 items-center justify-center">
                         <span class="text-[1.35rem] leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]" aria-hidden="true">🔔</span>
                         <span id="notifBadge" class="notif-count-badge hidden" role="status" aria-live="polite" aria-atomic="true"></span>
@@ -46,7 +49,7 @@
             </li>
             @else
             <li>
-                <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-[#00b464] text-white font-semibold text-sm hover:bg-[#00a055] transition-colors">Connexion</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-[#00b464] text-white font-semibold text-sm hover:bg-[#00a055] transition-colors">{{ __('ui.nav.login') }}</a>
             </li>
             @endauth
         </ul>
@@ -56,33 +59,33 @@
 @auth
 <div id="notifMenu" class="menu-hidden notif-dropdown-panel overflow-hidden">
     <div class="notif-dropdown-header">
-        <span class="notif-dropdown-title">Notifications</span>
+        <span class="notif-dropdown-title">{{ __('ui.notifications') }}</span>
     </div>
     <div id="notifBody" class="notif-dropdown-body">
         <div id="notifLoading" class="notif-loading">
             <span class="notif-spinner"></span>
-            <span>Chargement...</span>
+            <span>{{ __('ui.notifications.loading') }}</span>
         </div>
         <div id="notifList" class="menu-hidden"></div>
         <div id="notifEmpty" class="notif-empty menu-hidden">
             <span class="notif-empty-icon">✓</span>
-            <p>Aucune notification</p>
+            <p>{{ __('ui.notifications.empty') }}</p>
         </div>
     </div>
     <div id="notifFooter" class="notif-dropdown-footer menu-hidden">
         <form method="POST" action="{{ route('notifications.read-all') }}" class="m-0">
             @csrf
-            <button id="notifFooterMarkAll" type="submit" class="notif-footer-link w-full">Tout marquer lu</button>
+            <button id="notifFooterMarkAll" type="submit" class="notif-footer-link w-full">{{ __('ui.notifications.mark_all') }}</button>
         </form>
-        <a id="notifFooterAll" href="{{ route('notifications.index') }}" class="notif-footer-link">Voir toutes les notifications →</a>
+        <a id="notifFooterAll" href="{{ route('notifications.index') }}" class="notif-footer-link">{{ __('ui.notifications.view_all') }}</a>
     </div>
 </div>
 
 <div id="profileMenu" class="menu-hidden header-dropdown w-48 bg-white rounded-lg shadow-xl py-1 border border-slate-200 min-w-48">
-    <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">👤 Profil</a>
+    <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">👤 {{ __('ui.profile') }}</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="flex items-center gap-2 w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 font-medium">🔑 Déconnexion</button>
+        <button type="submit" class="flex items-center gap-2 w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 font-medium">🔑 {{ __('ui.logout') }}</button>
     </form>
 </div>
 @endauth

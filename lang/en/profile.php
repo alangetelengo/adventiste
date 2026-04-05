@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'page_title' => 'My profile',
+    'page_subtitle' => 'View your information and manage your account security.',
+    'back_dashboard' => 'Back to dashboard',
+    'personal_info' => 'Personal information',
+    'full_name' => 'Full name',
+    'email' => 'Email',
+    'local_church' => 'Local church',
+    'mission' => 'Mission',
+    'role_section' => 'Application role',
+    'no_roles' => 'No role assigned.',
+    'activity' => 'Activity',
+    'member_since' => 'Member since',
+    'security' => 'Account security',
+    'security_blurb' => 'Update your password regularly to protect access to your space.',
+    'change_password' => 'Change password',
+    'password_page_title' => 'Password',
+    'password_page_subtitle' => 'Update your account password.',
+    'back_profile' => 'Back to profile',
+    'current_password' => 'Current password',
+    'new_password' => 'New password',
+    'confirm_password' => 'Confirm new password',
+];

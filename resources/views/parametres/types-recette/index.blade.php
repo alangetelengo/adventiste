@@ -53,7 +53,7 @@ Libellés et catégories (dîme / offrande / don) utilisés sur les récaps de t
                         <x-action-button variant="edit" href="{{ route('parametres.types-recette.edit', $type) }}" custom-classes="text-[#00b464] dark:text-emerald-400 font-semibold text-xs hover:underline bg-transparent border-0 p-0" />
                         @endcan
                         @can('delete', $type)
-                        <x-action-button variant="delete" action="{{ route('parametres.types-recette.destroy', $type) }}" method="DELETE" confirm-message="Supprimer ce type ?" custom-classes="text-red-600 dark:text-red-400 font-semibold text-xs hover:underline bg-transparent border-0 p-0" />
+                        <x-action-button variant="delete" action="{{ route('parametres.types-recette.destroy', $type) }}" method="DELETE" :confirm-message="__('modules.common.confirm_delete_type_recette')" custom-classes="text-red-600 dark:text-red-400 font-semibold text-xs hover:underline bg-transparent border-0 p-0" />
                         @endcan
                     </td>
                 </tr>

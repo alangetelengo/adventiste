@@ -58,6 +58,6 @@ class MissionVentilationRecettesController extends Controller
 
         return redirect()
             ->route('parametres.ventilation-recettes.edit')
-            ->with('success', 'Règles de ventilation enregistrées. Elles s’appliquent aux récaps, rapports mensuels et futurs rapports annuels.');
+            ->with('success', __('flash.ventilation_recettes_saved'));
     }
 }

@@ -56,7 +56,7 @@ class DistrictController extends Controller
 
         return redirect()
             ->route('parametres.districts.edit', $district)
-            ->with('success', 'District créé.');
+            ->with('success', __('flash.district_created'));
     }
 
     public function show(Request $request, District $district): View
@@ -96,7 +96,7 @@ class DistrictController extends Controller
 
         return redirect()
             ->route('parametres.districts.edit', $district)
-            ->with('success', 'District enregistré.');
+            ->with('success', __('flash.district_saved'));
     }
 
     public function destroy(Request $request, District $district): RedirectResponse
@@ -107,6 +107,6 @@ class DistrictController extends Controller
 
         return redirect()
             ->route('parametres.districts.index')
-            ->with('success', 'District supprimé. Les églises rattachées n’ont plus de district (champ vidé).');
+            ->with('success', __('flash.district_deleted'));
     }
 }

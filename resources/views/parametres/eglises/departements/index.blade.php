@@ -53,7 +53,7 @@
                             <x-action-button variant="edit" href="{{ route('parametres.eglises.departements.edit', [$eglise, $departement]) }}" />
                             @endcan
                             @can('delete', $departement)
-                            <x-action-button variant="delete" action="{{ route('parametres.eglises.departements.destroy', [$eglise, $departement]) }}" method="DELETE" confirm-message="Supprimer définitivement ce département/ministère ? Cette action est irréversible." />
+                            <x-action-button variant="delete" action="{{ route('parametres.eglises.departements.destroy', [$eglise, $departement]) }}" method="DELETE" :confirm-message="__('modules.common.confirm_delete_departement')" />
                             @endcan
                         </div>
                     </td>

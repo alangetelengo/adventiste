@@ -146,7 +146,7 @@ class BaptemeController extends Controller
 
         return redirect()
             ->route('baptemes.show', $bapteme)
-            ->with('success', 'Baptême enregistré.');
+            ->with('success', __('flash.bapteme_stored'));
     }
 
     public function show(Bapteme $bapteme): View
@@ -210,7 +210,7 @@ class BaptemeController extends Controller
 
         return redirect()
             ->route('baptemes.show', $bapteme)
-            ->with('success', 'Baptême mis à jour.');
+            ->with('success', __('flash.bapteme_updated'));
     }
 
     public function destroy(Bapteme $bapteme): RedirectResponse
@@ -221,7 +221,7 @@ class BaptemeController extends Controller
 
         return redirect()
             ->route('baptemes.index')
-            ->with('success', 'Baptême supprimé.');
+            ->with('success', __('flash.bapteme_deleted'));
     }
 
     public function certificat(Bapteme $bapteme): View
@@ -229,9 +229,8 @@ class BaptemeController extends Controller
         $this->authorize('certificat', $bapteme);
 
         $bapteme->load(['egliseLocale.district', 'membre']);
-        $typesBapteme = Bapteme::labelsTypes();
 
-        return view('baptemes.certificat', compact('bapteme', 'typesBapteme'));
+        return view('baptemes.certificat', compact('bapteme'));
     }
 
     /**

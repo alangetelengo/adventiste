@@ -66,6 +66,6 @@ class MissionTresorerieVentilationLignesController extends Controller
 
         return redirect()
             ->route('parametres.tresorerie-ventilation-lignes.edit')
-            ->with('success', 'Lignes de ventilation enregistrées.');
+            ->with('success', __('flash.tresorerie_ventilation_lignes_saved'));
     }
 }

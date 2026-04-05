@@ -51,10 +51,10 @@ class MissionTresorerieRapportMensuel extends Model
     public static function labelsEtatsTransmission(): array
     {
         return [
-            self::ETAT_BROUILLON => 'Brouillon',
-            self::ETAT_SOUMIS => 'Soumis à validation',
-            self::ETAT_VALIDE_MISSION => 'Validé',
-            self::ETAT_REFUSE_MISSION => 'Refusé',
+            self::ETAT_BROUILLON => __('finances.mission_tresorerie_rapport.etat_brouillon'),
+            self::ETAT_SOUMIS => __('finances.mission_tresorerie_rapport.etat_soumis'),
+            self::ETAT_VALIDE_MISSION => __('finances.mission_tresorerie_rapport.etat_valide'),
+            self::ETAT_REFUSE_MISSION => __('finances.mission_tresorerie_rapport.etat_refuse'),
         ];
     }
 

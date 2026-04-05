@@ -60,7 +60,7 @@ class GroupeMissionController extends Controller
 
         return redirect()
             ->route('parametres.groupes-mission.edit', $groupe)
-            ->with('success', 'Groupe mission créé.');
+            ->with('success', __('flash.groupe_mission_created'));
     }
 
     public function show(Request $request, GroupeMission $groupe): View
@@ -111,7 +111,7 @@ class GroupeMissionController extends Controller
 
         return redirect()
             ->route('parametres.groupes-mission.edit', $groupe)
-            ->with('success', 'Groupe mission enregistré.');
+            ->with('success', __('flash.groupe_mission_saved'));
     }
 
     public function destroy(Request $request, GroupeMission $groupe): RedirectResponse
@@ -121,19 +121,19 @@ class GroupeMissionController extends Controller
         if ($groupe->membres()->exists()) {
             return redirect()
                 ->route('parametres.groupes-mission.edit', $groupe)
-                ->with('error', 'Impossible de supprimer : des membres sont encore rattachés à ce groupe. Retirez le groupe sur les fiches membres d’abord.');
+                ->with('error', __('flash.groupe_mission_membres_blocked'));
         }
 
         if ($groupe->entreesFinancieres()->exists()) {
             return redirect()
                 ->route('parametres.groupes-mission.edit', $groupe)
-                ->with('error', 'Impossible de supprimer : des lignes de finances mission existent pour ce groupe.');
+                ->with('error', __('flash.groupe_mission_finances_blocked'));
         }
 
         $groupe->delete();
 
         return redirect()
             ->route('parametres.groupes-mission.index')
-            ->with('success', 'Groupe mission supprimé.');
+            ->with('success', __('flash.groupe_mission_deleted'));
     }
 }

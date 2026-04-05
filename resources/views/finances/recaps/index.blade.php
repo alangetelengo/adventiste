@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Récaps du sabbat')
+@section('page-title', __('finances.recaps.title'))
 
 @section('page-title-info')
 @if ($egliseFiltre)
 {{ $egliseFiltre->nom }} ({{ $egliseFiltre->code_unique }})
 @else
-Toutes les églises de la mission
+{{ __('finances.recaps.subtitle_all_churches') }}
 @endif
 @endsection
 
@@ -16,14 +16,18 @@ Toutes les églises de la mission
 <a href="{{ route('finances.recaps.create') }}" class="adventiste-btn-primary">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-    Nouveau récap
+    {{ __('finances.recaps.new_recap') }}
 </a>
 </div>
 @endcan
 @endsection
 
 @php
-$labelsStatut = ['brouillon' => 'Brouillon', 'soumis' => 'Soumis', 'verrouille' => 'Verrouillé'];
+$labelsStatut = [
+    'brouillon' => __('finances.recaps.statut_brouillon'),
+    'soumis' => __('finances.recaps.statut_soumis'),
+    'verrouille' => __('finances.recaps.statut_verrouille'),
+];
 @endphp
 
 @section('content')
@@ -32,10 +36,10 @@ $labelsStatut = ['brouillon' => 'Brouillon', 'soumis' => 'Soumis', 'verrouille' 
         <table class="w-full text-sm">
             <thead>
                 <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Date du sabbat</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Église</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Statut</th>
-                    <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Actions</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.recaps.col_sabbat_date') }}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.recaps.col_church') }}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.recaps.col_status') }}</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.recaps.col_actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-slate-800 dark:text-slate-100">
@@ -60,14 +64,14 @@ $labelsStatut = ['brouillon' => 'Brouillon', 'soumis' => 'Soumis', 'verrouille' 
                         @can('update', $recap)
                         <x-action-button variant="edit" href="{{ route('finances.recaps.edit', $recap) }}" custom-classes="border border-[#00b464]/35 bg-emerald-50/90 dark:bg-emerald-950/40 text-[#00a055] dark:text-emerald-300 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/50 hover:border-[#00b464]/55 focus:ring-2 focus:ring-[#00b464]/30" />
                         @else
-                        <span class="text-xs text-slate-400 dark:text-slate-500">Lecture seule</span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500">{{ __('ui.read_only') }}</span>
                         @endcan
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="4" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400 text-sm">
-                        Aucun récapitulatif pour cette période.
+                        {{ __('finances.recaps.empty') }}
                     </td>
                 </tr>
                 @endforelse

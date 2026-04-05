@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapport dîmes et offrandes {{ $mois }}/{{ $annee }}</title>
+    <title>{{ __('impression_ventilation.html_title', ['mois' => $mois, 'annee' => $annee]) }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -125,7 +125,6 @@
 </head>
 
 @php
-    $nomsMois = [1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril', 5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août', 9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'];
     $parCode = [];
     foreach ($lignes as $ligne) {
         if (! $ligne->estTitre() && $ligne->code) {
@@ -136,107 +135,109 @@
     $val = function (string $code, string $col) use ($parCode): float {
         return isset($parCode[$code][$col]) ? (float) $parCode[$code][$col] : 0.0;
     };
+    $iv = fn (string $key) => __('impression_ventilation.'.$key);
+    $monthShort = \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::createFromDate((int) $annee, (int) $mois, 1)->translatedFormat('F')).'-'.substr((string) $annee, -2);
 @endphp
 
 <body>
     <div class="header">
         <div class="header-top">
-            <img src="{{ asset('images/logo_sda.png') }}" alt="Logo Église Adventiste" class="logo">
+            <img src="{{ asset('images/logo_sda.png') }}" alt="{{ $iv('logo_alt') }}" class="logo">
             <div class="header-lines">
-                <div class="line-1">STATION MISSIONNAIRE DES EGLISES ADVENTISTES</div>
-                <div class="line-2">DU SEPTIEME JOUR AU CONGO</div>
+                <div class="line-1">{{ $iv('header_line_1') }}</div>
+                <div class="line-2">{{ $iv('header_line_2') }}</div>
             </div>
         </div>
-        <h1>RAPPORT DÎMES ET OFFRANDES</h1>
-        <p>{{ strtoupper((string) ($rapport->mission?->nom ?? 'MISSION')) }} — Mois : {{ ($nomsMois[(int) $mois] ?? $mois).'-'.substr((string) $annee, -2) }}</p>
+        <h1>{{ $iv('h1') }}</h1>
+        <p>{{ __('impression_ventilation.subtitle', ['mission' => strtoupper((string) ($rapport->mission?->nom ?? $iv('mission_fallback'))), 'month' => $monthShort]) }}</p>
     </div>
 
     <div class="no-print">
-        <button onclick="window.print()">Imprimer</button>
+        <button onclick="window.print()">{{ $iv('print') }}</button>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="text-align:left;">Désignation</th>
-                <th class="num">Pourcentage</th>
-                <th class="num">Total du mois</th>
-                <th class="num">Total précédent</th>
-                <th class="num">Total cumulé</th>
+                <th style="text-align:left;">{{ $iv('th_designation') }}</th>
+                <th class="num">{{ $iv('th_pct') }}</th>
+                <th class="num">{{ $iv('th_month') }}</th>
+                <th class="num">{{ $iv('th_prev') }}</th>
+                <th class="num">{{ $iv('th_cumul') }}</th>
             </tr>
         </thead>
         <tbody>
             <tr class="title-row">
-                <td>DIMES DES EGLISES</td>
+                <td>{{ $iv('row_dimes_eglises') }}</td>
                 <td class="num"></td>
                 <td class="num yellow">{{ $fmt((float) $rapport->dimes_eglises) }}</td>
                 <td class="num">-</td>
                 <td class="num">{{ $fmt((float) $rapport->dimes_eglises) }}</td>
             </tr>
             <tr class="title-row">
-                <td>AUTRES DÎMES</td>
+                <td>{{ $iv('row_autres_dimes') }}</td>
                 <td class="num"></td>
                 <td class="num">{{ $fmt((float) $rapport->autres_dimes) }}</td>
                 <td class="num">-</td>
                 <td class="num">{{ $fmt((float) $rapport->autres_dimes) }}</td>
             </tr>
             <tr class="total-row">
-                <td><strong>TOTAL RECETTES DÎMES DU MOIS</strong></td>
+                <td><strong>{{ $iv('row_total_recettes_dimes') }}</strong></td>
                 <td class="num"></td>
                 <td class="num">{{ $fmt((float) $rapport->totalDimesMois()) }}</td>
                 <td class="num">-</td>
                 <td class="num">{{ $fmt((float) $rapport->totalDimesMois()) }}</td>
             </tr>
             <tr class="total-row">
-                <td>TOTAL OFFRANDES DU MOIS</td>
+                <td>{{ $iv('row_total_offrandes') }}</td>
                 <td class="num"></td>
                 <td class="num yellow">{{ $fmt((float) $rapport->offrandes_mois) }}</td>
                 <td class="num">-</td>
                 <td class="num">{{ $fmt((float) $rapport->offrandes_mois) }}</td>
             </tr>
             <tr class="total-row">
-                <td>TOTAL REVENUS DU MOIS</td>
+                <td>{{ $iv('row_total_revenus') }}</td>
                 <td class="num"></td>
                 <td class="num">{{ $fmt((float) $rapport->totalRecettesMois()) }}</td>
                 <td class="num">-</td>
                 <td class="num">{{ $fmt((float) $rapport->totalRecettesMois()) }}</td>
             </tr>
-            <tr class="title-row"><td>DIME DE LA DIME (UNION)</td><td class="num">8%</td><td class="num">{{ $fmt($val('dime_union', 'mois')) }}</td><td class="num">{{ $fmt($val('dime_union', 'precedent')) }}</td><td class="num">{{ $fmt($val('dime_union', 'cumule')) }}</td></tr>
-            <tr class="title-row"><td>POURCENTAGE DE LA DIME</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr><td>FONDS CONF. GENERALE</td><td class="num">2,6%</td><td class="num">{{ $fmt($val('fonds_cg', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_cg', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_cg', 'cumule')) }}</td></tr>
-            <tr><td>FONDS INSTITUTIONS DAO</td><td class="num">2,0%</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'cumule')) }}</td></tr>
-            <tr><td>FONDS DE RETRAITES DAO</td><td class="num">12,0%</td><td class="num">{{ $fmt($val('fonds_retraites', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_retraites', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_retraites', 'cumule')) }}</td></tr>
-            <tr><td>FONDS DIME PARTAGEE DAO</td><td class="num">7,4%</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'cumule')) }}</td></tr>
-            <tr class="total-row"><td>TOTAL POURCENTAGE DE DIME &gt;&gt;&gt;&gt;&gt;&gt;&gt;</td><td class="num"></td><td class="num">{{ $fmt($val('total_pct_dime', 'mois')) }}</td><td class="num">{{ $fmt($val('total_pct_dime', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_pct_dime', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_dime_union') }}</td><td class="num">8%</td><td class="num">{{ $fmt($val('dime_union', 'mois')) }}</td><td class="num">{{ $fmt($val('dime_union', 'precedent')) }}</td><td class="num">{{ $fmt($val('dime_union', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_pct_dime_header') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr><td>{{ $iv('row_fonds_cg') }}</td><td class="num">2,6%</td><td class="num">{{ $fmt($val('fonds_cg', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_cg', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_cg', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_fonds_dao_inst') }}</td><td class="num">2,0%</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_dao_inst', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_fonds_retraites') }}</td><td class="num">12,0%</td><td class="num">{{ $fmt($val('fonds_retraites', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_retraites', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_retraites', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_fonds_dime_partagee') }}</td><td class="num">7,4%</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'mois')) }}</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'precedent')) }}</td><td class="num">{{ $fmt($val('fonds_dime_partagee', 'cumule')) }}</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_pct_dime') }}</td><td class="num"></td><td class="num">{{ $fmt($val('total_pct_dime', 'mois')) }}</td><td class="num">{{ $fmt($val('total_pct_dime', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_pct_dime', 'cumule')) }}</td></tr>
 
-            <tr class="title-row"><td>REPARTITION OFFRANDE</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr class="title-row"><td>CONF.GENERALE / DIVISION</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr><td>FONDS CHAMPS MONDIALE - CG</td><td class="num">20%</td><td class="num">{{ $fmt($val('off_cg', 'mois')) }}</td><td class="num">{{ $fmt($val('off_cg', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_cg', 'cumule')) }}</td></tr>
-            <tr><td>FONDS OFFRANDE - DAO</td><td class="num">5%</td><td class="num">{{ $fmt($val('off_dao', 'mois')) }}</td><td class="num">{{ $fmt($val('off_dao', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_dao', 'cumule')) }}</td></tr>
-            <tr class="title-row"><td>UNION MISSION DE L'AFRIQUE CENTRALE</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr><td>FONDS OFFRANDE UMAC</td><td class="num">5%</td><td class="num">{{ $fmt($val('off_umac', 'mois')) }}</td><td class="num">{{ $fmt($val('off_umac', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_umac', 'cumule')) }}</td></tr>
-            <tr class="total-row"><td>TOTAL OFFRANDE (CG, DAO &amp; UMAC) &gt;&gt;&gt;&gt;&gt;&gt;&gt;</td><td class="num"></td><td class="num">{{ $fmt($val('total_off_haut', 'mois')) }}</td><td class="num">{{ $fmt($val('total_off_haut', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_off_haut', 'cumule')) }}</td></tr>
-            <tr class="total-row"><td>TOTAL RAPPORT (GC-DAO-UMAC)</td><td class="num"></td><td class="num">{{ $fmt($val('total_rapport', 'mois')) }}</td><td class="num">{{ $fmt($val('total_rapport', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_rapport', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_repartition_offrande') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr class="title-row"><td>{{ $iv('row_conf_division') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr><td>{{ $iv('row_fonds_champs_mondiale') }}</td><td class="num">20%</td><td class="num">{{ $fmt($val('off_cg', 'mois')) }}</td><td class="num">{{ $fmt($val('off_cg', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_cg', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_fonds_offrande_dao') }}</td><td class="num">5%</td><td class="num">{{ $fmt($val('off_dao', 'mois')) }}</td><td class="num">{{ $fmt($val('off_dao', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_dao', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_union_umac') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr><td>{{ $iv('row_fonds_offrande_umac') }}</td><td class="num">5%</td><td class="num">{{ $fmt($val('off_umac', 'mois')) }}</td><td class="num">{{ $fmt($val('off_umac', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_umac', 'cumule')) }}</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_offrande_haut') }}</td><td class="num"></td><td class="num">{{ $fmt($val('total_off_haut', 'mois')) }}</td><td class="num">{{ $fmt($val('total_off_haut', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_off_haut', 'cumule')) }}</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_rapport') }}</td><td class="num"></td><td class="num">{{ $fmt($val('total_rapport', 'mois')) }}</td><td class="num">{{ $fmt($val('total_rapport', 'precedent')) }}</td><td class="num">{{ $fmt($val('total_rapport', 'cumule')) }}</td></tr>
 
-            <tr class="title-row"><td>MISSION / FEDERATION</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr><td>REPARTITION OFFRANDE</td><td class="num">20%</td><td class="num">{{ $fmt($val('off_mission', 'mois')) }}</td><td class="num">{{ $fmt($val('off_mission', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_mission', 'cumule')) }}</td></tr>
-            <tr><td>OFFRANDE SPEC./PROJET</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr class="total-row"><td>TOTAL FONDS MISSION</td><td class="num"></td><td class="num">{{ $fmt($val('off_mission', 'mois')) }}</td><td class="num">{{ $fmt($val('off_mission', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_mission', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_mission_federation') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr><td>{{ $iv('row_repartition_offrande') }}</td><td class="num">20%</td><td class="num">{{ $fmt($val('off_mission', 'mois')) }}</td><td class="num">{{ $fmt($val('off_mission', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_mission', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_offrande_spec') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_fonds_mission') }}</td><td class="num"></td><td class="num">{{ $fmt($val('off_mission', 'mois')) }}</td><td class="num">{{ $fmt($val('off_mission', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_mission', 'cumule')) }}</td></tr>
 
-            <tr class="title-row"><td>EGLISE LOCALE</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
-            <tr><td>REPARTITION OFFRANDE</td><td class="num">50%</td><td class="num">{{ $fmt($val('off_locale', 'mois')) }}</td><td class="num">{{ $fmt($val('off_locale', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_locale', 'cumule')) }}</td></tr>
-            <tr><td>OFFRANDE SPEC./PROJET</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>FONDS CONSTRUCTION EGLISE LOCALE</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr class="total-row"><td>TOTAL FONDS EGLISE LOCALE</td><td class="num"></td><td class="num">{{ $fmt($val('off_locale', 'mois')) }}</td><td class="num">{{ $fmt($val('off_locale', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_locale', 'cumule')) }}</td></tr>
+            <tr class="title-row"><td>{{ $iv('row_eglise_locale') }}</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+            <tr><td>{{ $iv('row_repartition_offrande') }}</td><td class="num">50%</td><td class="num">{{ $fmt($val('off_locale', 'mois')) }}</td><td class="num">{{ $fmt($val('off_locale', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_locale', 'cumule')) }}</td></tr>
+            <tr><td>{{ $iv('row_offrande_spec') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_fonds_construction_locale') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_fonds_locale') }}</td><td class="num"></td><td class="num">{{ $fmt($val('off_locale', 'mois')) }}</td><td class="num">{{ $fmt($val('off_locale', 'precedent')) }}</td><td class="num">{{ $fmt($val('off_locale', 'cumule')) }}</td></tr>
 
-            <tr class="title-row"><td colspan="5">AUTRES DÎMES</td></tr>
-            <tr><td>DIMES OUVRIERS DE BUREAU</td><td class="num"></td><td class="num yellow">{{ $fmt((float) $rapport->autres_dimes) }}</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>DIMES OUVRIERS GOC ET GOB</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>DIMES PIONNIERS MISSI. GLOB.</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>DIMES RE &amp; LIBRAIRIE</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>DIMES SPECIALES</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr><td>DIMES ECOLES &amp; COLLEGES</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
-            <tr class="total-row"><td>TOTAL AUTRES DIMES &gt;&gt;&gt;&gt;&gt;&gt;&gt;</td><td class="num"></td><td class="num">{{ $fmt((float) $rapport->autres_dimes) }}</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr class="title-row"><td colspan="5">{{ $iv('section_autres_dimes') }}</td></tr>
+            <tr><td>{{ $iv('row_dimes_ouvriers_bureau') }}</td><td class="num"></td><td class="num yellow">{{ $fmt((float) $rapport->autres_dimes) }}</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_dimes_ouvriers_goc') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_dimes_pionniers') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_dimes_re_librairie') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_dimes_speciales') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr><td>{{ $iv('row_dimes_ecoles') }}</td><td class="num"></td><td class="num yellow">-</td><td class="num">-</td><td class="num">-</td></tr>
+            <tr class="total-row"><td>{{ $iv('row_total_autres_dimes') }}</td><td class="num"></td><td class="num">{{ $fmt((float) $rapport->autres_dimes) }}</td><td class="num">-</td><td class="num">-</td></tr>
         </tbody>
     </table>
 </body>

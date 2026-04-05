@@ -59,7 +59,7 @@ class RapportStationMissionController extends Controller
 
         return redirect()
             ->route('finances.rapports-station.edit', $rapport)
-            ->with('success', 'Rapport de station créé.');
+            ->with('success', __('flash.rapport_station_created'));
     }
 
     public function show(Request $request, RapportStationMission $rapport): View
@@ -127,7 +127,7 @@ class RapportStationMissionController extends Controller
 
         return redirect()
             ->route('finances.rapports-station.show', $rapport)
-            ->with('success', 'Rapport de station enregistré.');
+            ->with('success', __('flash.rapport_station_saved'));
     }
 
     public function destroy(Request $request, RapportStationMission $rapport): RedirectResponse
@@ -138,7 +138,7 @@ class RapportStationMissionController extends Controller
 
         return redirect()
             ->route('finances.rapports-station.index')
-            ->with('success', 'Rapport de station supprimé.');
+            ->with('success', __('flash.rapport_station_deleted'));
     }
 
     private function creerLignesParDefaut(RapportStationMission $rapport): void

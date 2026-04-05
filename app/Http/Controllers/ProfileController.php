@@ -34,6 +34,6 @@ class ProfileController extends Controller
 
         return redirect()
             ->route('profile.edit')
-            ->with('success', 'Votre mot de passe a été mis à jour.');
+            ->with('success', __('flash.password_updated'));
     }
 }

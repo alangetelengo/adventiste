@@ -2,12 +2,12 @@
 
 @section('content-container-class', 'w-full max-w-none px-4 sm:px-6 lg:px-8')
 
-@section('page-title', 'Paramètres')
+@section('page-title', __('parametres.hub.title'))
 
 @section('page-title-info')
     <span class="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400">
         <span class="hidden sm:inline h-px w-8 bg-linear-to-r from-transparent to-[#00b464]/45 dark:to-emerald-400/40"></span>
-        Configuration de la mission et données de référence
+        {{ __('parametres.hub.subtitle') }}
     </span>
 @endsection
 
@@ -25,13 +25,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Églises locales
+                            {{ __('parametres.hub.cards.eglises.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Annuaire des paroisses : codes uniques, rattachement district, indicateurs financiers de référence.
+                            {{ __('parametres.hub.cards.eglises.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -44,9 +44,9 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                     </div>
                     <div>
-                        <h2 class="font-semibold text-slate-900 dark:text-white">Accès restreint</h2>
+                        <h2 class="font-semibold text-slate-900 dark:text-white">{{ __('parametres.hub.restricted_title') }}</h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            La gestion des églises est réservée aux comptes <strong class="text-slate-800 dark:text-slate-200">mission</strong> (sans rattachement à une église locale). Contactez votre administrateur.
+                            {{ __('parametres.hub.restricted_eglises') }}
                         </p>
                     </div>
                 </div>
@@ -63,13 +63,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Districts
+                            {{ __('parametres.hub.cards.districts.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Découpage territorial : rattachez chaque église locale à un district.
+                            {{ __('parametres.hub.cards.districts.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -87,13 +87,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Groupes mission
+                            {{ __('parametres.hub.cards.groupes_mission.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Petits groupes et services au niveau mission : codes uniques, rattachement des membres et ventilation financière.
+                            {{ __('parametres.hub.cards.groupes_mission.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -111,13 +111,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Lignes — ventilation trésorerie
+                            {{ __('parametres.hub.cards.tresorerie_lignes.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Ordre, libellés et pourcentages du rapport mensuel mission (remontée financière).
+                            {{ __('parametres.hub.cards.tresorerie_lignes.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Configurer
+                            {{ __('parametres.hub.cta_configure') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -135,13 +135,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Types de recette
+                            {{ __('parametres.hub.cards.types_recette.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Dîme, offrandes cultuelles, construction, ÉDS, dons — liés à la ventilation (dîme / offrande / don).
+                            {{ __('parametres.hub.cards.types_recette.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Gérer
+                            {{ __('parametres.hub.cta_manage') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -159,13 +159,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Types de statut membre
+                            {{ __('parametres.hub.cards.types_statut.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Catégories pastorales des membres (actif, régulier, irrégulier, sous censure, refroidi, etc.).
+                            {{ __('parametres.hub.cards.types_statut.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Gérer
+                            {{ __('parametres.hub.cta_manage') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -183,13 +183,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Ventilation des recettes
+                            {{ __('parametres.hub.cards.ventilation_recettes.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Pourcentages mission / église locale par type (dîme, offrande, don) pour les rapports mensuels et annuels.
+                            {{ __('parametres.hub.cards.ventilation_recettes.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Configurer
+                            {{ __('parametres.hub.cta_configure') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -207,13 +207,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Utilisateurs
+                            {{ __('parametres.hub.cards.utilisateurs.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Comptes de la mission : rôles, accès église pour les trésoriers.
+                            {{ __('parametres.hub.cards.utilisateurs.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -226,9 +226,9 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                     </div>
                     <div>
-                        <h2 class="font-semibold text-slate-700 dark:text-slate-300">À venir</h2>
+                        <h2 class="font-semibold text-slate-700 dark:text-slate-300">{{ __('parametres.hub.coming_title') }}</h2>
                         <p class="mt-2 text-sm text-slate-500 dark:text-slate-500 leading-relaxed">
-                            D’autres réglages avancés seront regroupés ici.
+                            {{ __('parametres.hub.coming_body') }}
                         </p>
                     </div>
                 </div>
@@ -245,13 +245,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Rôles
+                            {{ __('parametres.hub.cards.roles.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Rôles applicatifs et association aux permissions (RBAC).
+                            {{ __('parametres.hub.cards.roles.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>
@@ -269,13 +269,13 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-[#00b464] dark:group-hover:text-emerald-300 transition-colors">
-                            Permissions
+                            {{ __('parametres.hub.cards.permissions.title') }}
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Granularité d’accès : créez et reliez les permissions aux rôles.
+                            {{ __('parametres.hub.cards.permissions.desc') }}
                         </p>
                         <p class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#00b464] dark:text-emerald-400">
-                            Accéder au module
+                            {{ __('parametres.hub.cta_access') }}
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </p>
                     </div>

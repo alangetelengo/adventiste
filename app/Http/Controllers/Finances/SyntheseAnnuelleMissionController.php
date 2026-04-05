@@ -48,7 +48,7 @@ class SyntheseAnnuelleMissionController extends Controller
         if (! Schema::hasTable('mission_tresorerie_transferts_bancaires')) {
             return redirect()
                 ->route('finances.synthese-annuelle-mission.index', ['annee' => $annee])
-                ->with('error', 'La table des transferts bancaires est absente. Lancez d’abord les migrations.');
+                ->with('error', __('flash.synthese_transfers_table_missing'));
         }
 
         $validated = $request->validate([
@@ -81,7 +81,7 @@ class SyntheseAnnuelleMissionController extends Controller
 
         return redirect()
             ->route('finances.synthese-annuelle-mission.index', ['annee' => $annee])
-            ->with('success', 'Transferts bancaires enregistrés.');
+            ->with('success', __('flash.synthese_transfers_saved'));
     }
 
     public function impression(Request $request): View
@@ -245,20 +245,13 @@ class SyntheseAnnuelleMissionController extends Controller
      */
     private function nomsMois(): array
     {
-        return [
-            1 => 'janv',
-            2 => 'févr',
-            3 => 'mars',
-            4 => 'avr',
-            5 => 'mai',
-            6 => 'juin',
-            7 => 'juil',
-            8 => 'août',
-            9 => 'sept',
-            10 => 'oct',
-            11 => 'nov',
-            12 => 'déc',
-        ];
+        $anneeRef = (int) date('Y');
+        $out = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $out[$m] = \Carbon\Carbon::createFromDate($anneeRef, $m, 1)->translatedFormat('M');
+        }
+
+        return $out;
     }
 
     /**

@@ -216,8 +216,8 @@ class MembreController extends Controller
         }
 
         $message = ($validated['mode_entree'] ?? null) === Membre::MODE_ENTREE_TRANSFERT
-            ? 'Membre transféré enregistré et activé.'
-            : 'Membre enregistré.';
+            ? __('flash.membre_stored_transfer')
+            : __('flash.membre_stored');
 
         return redirect()
             ->route('membres.edit', $membre)
@@ -373,8 +373,8 @@ class MembreController extends Controller
         }
 
         $message = ($validated['mode_entree'] ?? null) === Membre::MODE_ENTREE_TRANSFERT
-            ? 'Fiche membre mise à jour (transfert activé).'
-            : 'Fiche membre mise à jour.';
+            ? __('flash.membre_updated_transfer')
+            : __('flash.membre_updated');
 
         return redirect()
             ->route('membres.edit', $membre)
@@ -387,7 +387,7 @@ class MembreController extends Controller
 
         $missionId = (int) optional($membre->egliseLocale)->mission_id;
         if ($missionId <= 0) {
-            abort(422, 'Mission introuvable pour ce membre.');
+            abort(422, __('flash.membre_mission_not_found'));
         }
 
         $validated = $request->validate([
@@ -403,7 +403,7 @@ class MembreController extends Controller
         if ((int) $membre->type_statut_membre_id === $nouveauTypeId) {
             return redirect()
                 ->route('membres.show', $membre)
-                ->with('success', 'Le membre est déjà dans ce statut.');
+                ->with('success', __('flash.membre_status_unchanged'));
         }
 
         $membre->update([
@@ -421,7 +421,7 @@ class MembreController extends Controller
 
         return redirect()
             ->route('membres.show', $membre)
-            ->with('success', 'Statut du membre mis à jour.');
+            ->with('success', __('flash.membre_status_updated'));
     }
 
     public function destroy(Membre $membre): RedirectResponse
@@ -432,7 +432,7 @@ class MembreController extends Controller
 
         return redirect()
             ->route('membres.index')
-            ->with('success', 'Membre supprimé.');
+            ->with('success', __('flash.membre_deleted'));
     }
 
     /**

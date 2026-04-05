@@ -73,7 +73,7 @@ class EgliseLocaleController extends Controller
 
         return redirect()
             ->route('parametres.eglises.edit', $eglise)
-            ->with('success', 'Église locale créée.');
+            ->with('success', __('flash.eglise_created'));
     }
 
     public function show(Request $request, EgliseLocale $eglise): View
@@ -134,7 +134,7 @@ class EgliseLocaleController extends Controller
 
         return redirect()
             ->route('parametres.eglises.edit', $eglise)
-            ->with('success', 'Église locale enregistrée.');
+            ->with('success', __('flash.eglise_saved'));
     }
 
     public function destroy(Request $request, EgliseLocale $eglise): RedirectResponse
@@ -145,7 +145,7 @@ class EgliseLocaleController extends Controller
 
         return redirect()
             ->route('parametres.eglises.index')
-            ->with('success', 'Église locale supprimée (données liées en cascade selon la base).');
+            ->with('success', __('flash.eglise_deleted'));
     }
 
     /**

@@ -75,7 +75,7 @@ class RapportMensuelEgliseController extends Controller
         if ($existant !== null) {
             return redirect()
                 ->route('finances.rapports-mensuels.show', $existant)
-                ->with('info', 'Un rapport existe déjà pour cette période. Voici sa fiche.');
+                ->with('info', __('flash.rapport_mensuel_exists'));
         }
 
         $rapport = $this->rapportMensuelSyntheseService->regenererPourEgliseEtMois(
@@ -86,7 +86,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Rapport mensuel généré à partir des récaps du mois.');
+            ->with('success', __('flash.rapport_mensuel_generated'));
     }
 
     public function show(Request $request, RapportMensuelEglise $rapport): View
@@ -107,7 +107,7 @@ class RapportMensuelEgliseController extends Controller
         if ($rapport->verrouille_le !== null) {
             return redirect()
                 ->route('finances.rapports-mensuels.show', $rapport)
-                ->with('info', 'Ce rapport est verrouillé : les signatures ne peuvent plus être modifiées ici.');
+                ->with('info', __('flash.rapport_mensuel_locked_signatures'));
         }
 
         return view('finances.rapports-mensuels.edit', compact('rapport'));
@@ -120,7 +120,7 @@ class RapportMensuelEgliseController extends Controller
         if ($rapport->verrouille_le !== null) {
             return redirect()
                 ->route('finances.rapports-mensuels.show', $rapport)
-                ->with('error', 'Rapport verrouillé.');
+                ->with('error', __('flash.rapport_mensuel_locked'));
         }
 
         $validated = $request->validate([
@@ -145,7 +145,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Rapport enregistré.');
+            ->with('success', __('flash.rapport_mensuel_saved'));
     }
 
     public function destroy(Request $request, RapportMensuelEglise $rapport): RedirectResponse
@@ -155,14 +155,14 @@ class RapportMensuelEgliseController extends Controller
         if ($rapport->verrouille_le !== null) {
             return redirect()
                 ->route('finances.rapports-mensuels.index')
-                ->with('error', 'Impossible de supprimer un rapport verrouillé.');
+                ->with('error', __('flash.rapport_mensuel_delete_locked'));
         }
 
         $rapport->delete();
 
         return redirect()
             ->route('finances.rapports-mensuels.index')
-            ->with('success', 'Rapport supprimé.');
+            ->with('success', __('flash.rapport_mensuel_deleted'));
     }
 
     public function regenerer(Request $request, RapportMensuelEglise $rapport): RedirectResponse
@@ -172,7 +172,7 @@ class RapportMensuelEgliseController extends Controller
         if ($rapport->verrouille_le !== null) {
             return redirect()
                 ->route('finances.rapports-mensuels.show', $rapport)
-                ->with('error', 'Régénération impossible tant que le rapport est verrouillé.');
+                ->with('error', __('flash.rapport_mensuel_regen_locked'));
         }
 
         $eglise = $rapport->egliseLocale;
@@ -181,7 +181,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Totaux et lignes recalculés à partir des récaps.');
+            ->with('success', __('flash.rapport_mensuel_regenerated'));
     }
 
     public function soumettre(Request $request, RapportMensuelEglise $rapport): RedirectResponse
@@ -201,7 +201,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Rapport mensuel soumis à la mission.');
+            ->with('success', __('flash.rapport_mensuel_submitted'));
     }
 
     public function validerMission(Request $request, RapportMensuelEglise $rapport): RedirectResponse
@@ -223,7 +223,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Rapport mensuel validé par la mission.');
+            ->with('success', __('flash.rapport_mensuel_validated'));
     }
 
     public function refuserMission(Request $request, RapportMensuelEglise $rapport): RedirectResponse
@@ -245,7 +245,7 @@ class RapportMensuelEgliseController extends Controller
 
         return redirect()
             ->route('finances.rapports-mensuels.show', $rapport)
-            ->with('success', 'Rapport mensuel refusé avec commentaire.');
+            ->with('success', __('flash.rapport_mensuel_refused'));
     }
 
     private function notifierMissionSoumission(RapportMensuelEglise $rapport, int $emetteurUserId): void

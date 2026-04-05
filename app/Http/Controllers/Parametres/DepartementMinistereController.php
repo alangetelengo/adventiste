@@ -80,7 +80,7 @@ class DepartementMinistereController extends Controller
 
         return redirect()
             ->route('parametres.eglises.departements.edit', [$eglise, $departement])
-            ->with('success', 'Département/ministère créé.');
+            ->with('success', __('flash.departement_created'));
     }
 
     public function show(Request $request, EgliseLocale $eglise, DepartementMinistere $departement): View
@@ -149,7 +149,7 @@ class DepartementMinistereController extends Controller
 
         return redirect()
             ->route('parametres.eglises.departements.edit', [$eglise, $departement])
-            ->with('success', 'Département/ministère enregistré.');
+            ->with('success', __('flash.departement_saved'));
     }
 
     public function destroy(Request $request, EgliseLocale $eglise, DepartementMinistere $departement): RedirectResponse
@@ -166,13 +166,13 @@ class DepartementMinistereController extends Controller
         if ($departement->lignesRecap()->exists()) {
             return redirect()
                 ->route('parametres.eglises.departements.edit', [$eglise, $departement])
-                ->with('error', 'Impossible de supprimer : des collectes sont liées à ce département. Supprimez-les d\'abord.');
+                ->with('error', __('flash.departement_collectes_blocked'));
         }
 
         $departement->delete();
 
         return redirect()
             ->route('parametres.eglises.departements.index', $eglise)
-            ->with('success', 'Département/ministère supprimé.');
+            ->with('success', __('flash.departement_deleted'));
     }
 }

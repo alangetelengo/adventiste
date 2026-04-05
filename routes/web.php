@@ -4,6 +4,7 @@ use App\Http\Controllers\BaptemeController;
 use App\Http\Controllers\Finances\EtatDimesEglisesMissionController;
 use App\Http\Controllers\Finances\RapportStationMissionController;
 use App\Http\Controllers\Finances\SyntheseAnnuelleMissionController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MembreController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Parametres\DepartementMinistereController;
@@ -29,6 +30,10 @@ use App\Http\Controllers\TableauDeBordController;
 use App\Http\Controllers\VentilationTresorerieMissionController;
 use App\Models\GroupeMission;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/locale/{locale}', [LocaleController::class, 'switch'])
+    ->whereIn('locale', ['fr', 'en'])
+    ->name('locale.switch');
 
 Route::middleware('guest')->get('/connexion', fn () => redirect()->route('login'));
 
@@ -151,8 +156,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/ecole-du-sabbat', function () {
         return view('static', [
-            'pageTitle' => 'École du sabbat',
-            'pageDescription' => 'Leçons, classes et présences — à venir.',
+            'pageTitle' => __('static_pages.ecole_sabbat.title'),
+            'pageDescription' => __('static_pages.ecole_sabbat.description'),
         ]);
     })->name('ecoles-sabbat');
 
@@ -162,8 +167,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/evenements', function () {
         return view('static', [
-            'pageTitle' => 'Événements',
-            'pageDescription' => 'Cultes, séminaires et activités — à venir.',
+            'pageTitle' => __('static_pages.evenements.title'),
+            'pageDescription' => __('static_pages.evenements.description'),
         ]);
     })->name('evenements');
 
@@ -174,8 +179,8 @@ Route::middleware('auth')->group(function () {
         }
 
         return view('static', [
-            'pageTitle' => 'Groupes & ministères',
-            'pageDescription' => 'Les groupes « mission » (rattachement des membres, finances) sont gérés par l’équipe mission dans Paramètres. Les petits groupes locaux et ministères — à venir.',
+            'pageTitle' => __('static_pages.groupes.title'),
+            'pageDescription' => __('static_pages.groupes.description'),
         ]);
     })->name('groupes');
 

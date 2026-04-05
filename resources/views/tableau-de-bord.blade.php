@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Tableau de bord')
+@section('page-title', __('dashboard.view.page_title'))
 
 @section('page-title-info')
 @auth
@@ -12,8 +12,8 @@
 </span>
 @elseif (auth()->user()->mission_id)
 <span class="text-slate-600 dark:text-slate-400">
-    Mission <strong class="text-slate-800 dark:text-slate-200">{{ auth()->user()->mission?->nom ?? '—' }}</strong>
-    <span class="text-slate-400 dark:text-slate-500 text-sm ml-1">— vue consolidée</span>
+    {{ __('dashboard.view.mission') }} <strong class="text-slate-800 dark:text-slate-200">{{ auth()->user()->mission?->nom ?? '—' }}</strong>
+    <span class="text-slate-400 dark:text-slate-500 text-sm ml-1">{{ __('dashboard.view.mission_consolidated') }}</span>
 </span>
 @endif
 @endauth
@@ -50,7 +50,6 @@ $theme = match ($uiRole) {
         'link' => 'text-violet-600 dark:text-violet-300',
         'titleHover' => 'group-hover:text-violet-600 dark:group-hover:text-violet-300',
         'bar' => 'bg-violet-500',
-        'tagline' => 'Pilotage stratégique, finances consolidées et suivi des églises.',
     ],
     'secretaire_eglise' => [
         'heroFrom' => 'from-sky-600/[0.10] via-cyan-600/[0.08] to-blue-600/[0.10]',
@@ -66,7 +65,6 @@ $theme = match ($uiRole) {
         'link' => 'text-sky-600 dark:text-sky-300',
         'titleHover' => 'group-hover:text-sky-600 dark:group-hover:text-sky-300',
         'bar' => 'bg-sky-500',
-        'tagline' => 'Membres, baptêmes et rapports membres : secrétariat de l’église locale.',
     ],
     'tresorier_eglise' => [
         'heroFrom' => 'from-emerald-600/[0.11] via-teal-600/[0.08] to-cyan-600/[0.08]',
@@ -82,7 +80,6 @@ $theme = match ($uiRole) {
         'link' => 'text-[#00b464] dark:text-emerald-400',
         'titleHover' => 'group-hover:text-[#00b464] dark:group-hover:text-emerald-300',
         'bar' => 'bg-[#00b464]',
-        'tagline' => 'Récaps hebdomadaires, rapports mensuels et soumission mission : votre périmètre trésorerie locale.',
     ],
     'tresorier_mission' => [
         'heroFrom' => 'from-teal-600/[0.10] via-emerald-600/[0.09] to-green-600/[0.08]',
@@ -98,7 +95,6 @@ $theme = match ($uiRole) {
         'link' => 'text-teal-600 dark:text-teal-300',
         'titleHover' => 'group-hover:text-teal-600 dark:group-hover:text-teal-300',
         'bar' => 'bg-teal-500',
-        'tagline' => 'Consolidation financière, validation des récaps et groupes mission.',
     ],
     'secretaire_executif_mission' => [
         'heroFrom' => 'from-indigo-600/[0.10] via-blue-600/[0.08] to-slate-600/[0.06]',
@@ -114,7 +110,6 @@ $theme = match ($uiRole) {
         'link' => 'text-indigo-600 dark:text-indigo-300',
         'titleHover' => 'group-hover:text-indigo-600 dark:group-hover:text-indigo-300',
         'bar' => 'bg-indigo-500',
-        'tagline' => 'Vue mission : églises, membres et rapports membres par paroisse.',
     ],
     'admin_mission' => [
         'heroFrom' => 'from-rose-600/[0.08] via-amber-600/[0.08] to-slate-700/[0.08]',
@@ -130,7 +125,6 @@ $theme = match ($uiRole) {
         'link' => 'text-amber-700 dark:text-amber-300',
         'titleHover' => 'group-hover:text-amber-700 dark:group-hover:text-amber-300',
         'bar' => 'bg-amber-500',
-        'tagline' => 'Administration complète : utilisateurs, permissions, structure et finances.',
     ],
     default => [
         'heroFrom' => 'from-slate-600/[0.08] via-emerald-600/[0.07] to-slate-500/[0.06]',
@@ -146,7 +140,6 @@ $theme = match ($uiRole) {
         'link' => 'text-[#00b464] dark:text-emerald-400',
         'titleHover' => 'group-hover:text-[#00b464] dark:group-hover:text-emerald-300',
         'bar' => 'bg-[#00b464]',
-        'tagline' => 'Vos indicateurs et raccourcis selon votre périmètre.',
     ],
 };
 
@@ -172,14 +165,18 @@ $accentBar = $theme['bar'];
                 </span>
                 <div>
                     <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
-                        Bonjour{{ auth()->check() && auth()->user()->name ? ', '.explode(' ', auth()->user()->name)[0] : '' }}
+                        @if (auth()->check() && auth()->user()->name)
+                            {{ __('dashboard.view.hello_with_name', ['name' => explode(' ', auth()->user()->name)[0]]) }}
+                        @else
+                            {{ __('dashboard.view.hello') }}
+                        @endif
                     </h2>
                     <p class="mt-1 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                        {{ $theme['tagline'] }}
+                        {{ __('dashboard.taglines.'.$uiRole) }}
                     </p>
                 </div>
                 <p class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-500">
-                    Période de référence · <span class="text-slate-700 dark:text-slate-300 normal-case font-semibold">{{ $moisCourant }}</span>
+                    {{ __('dashboard.view.reference_period') }} <span class="text-slate-700 dark:text-slate-300 normal-case font-semibold">{{ $moisCourant }}</span>
                 </p>
             </div>
             @php
@@ -193,19 +190,19 @@ $accentBar = $theme['bar'];
                 @if ($heroEglises)
                 <span class="inline-flex items-center gap-1.5 rounded-xl border border-white/40 bg-white/55 px-3 py-2 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-sm dark:border-slate-600/50 dark:bg-slate-900/40 dark:text-slate-100">
                     <span class="tabular-nums text-sm">{{ number_format((int) $stats['eglises_actives'], 0, ',', ' ') }}</span>
-                    <span class="font-normal opacity-80">églises actives</span>
+                    <span class="font-normal opacity-80">{{ __('dashboard.view.churches_active') }}</span>
                 </span>
                 @endif
                 @if ($heroMembres)
                 <span class="inline-flex items-center gap-1.5 rounded-xl border border-white/40 bg-white/55 px-3 py-2 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-sm dark:border-slate-600/50 dark:bg-slate-900/40 dark:text-slate-100">
                     <span class="tabular-nums text-sm">{{ number_format((int) $stats['membres_total'], 0, ',', ' ') }}</span>
-                    <span class="font-normal opacity-80">membres</span>
+                    <span class="font-normal opacity-80">{{ __('dashboard.view.members') }}</span>
                 </span>
                 @endif
                 @if ($heroRecaps)
                 <span class="inline-flex items-center gap-1.5 rounded-xl border border-white/40 bg-white/55 px-3 py-2 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-sm dark:border-slate-600/50 dark:bg-slate-900/40 dark:text-slate-100">
                     <span class="tabular-nums text-sm">{{ number_format((int) $stats['recaps_total'], 0, ',', ' ') }}</span>
-                    <span class="font-normal opacity-80">récaps (total)</span>
+                    <span class="font-normal opacity-80">{{ __('dashboard.view.recaps_total') }}</span>
                 </span>
                 @endif
             </div>
@@ -217,8 +214,8 @@ $accentBar = $theme['bar'];
     <div>
         <div class="mb-4 flex items-end justify-between gap-3">
             <div>
-                <h3 class="text-base font-semibold text-slate-900 dark:text-white">Indicateurs clés</h3>
-                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Données calculées pour votre périmètre</p>
+                <h3 class="text-base font-semibold text-slate-900 dark:text-white">{{ __('dashboard.view.kpis_title') }}</h3>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ __('dashboard.view.kpis_subtitle') }}</p>
             </div>
         </div>
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -226,7 +223,7 @@ $accentBar = $theme['bar'];
             <div class="adventiste-card-pro-static group relative overflow-hidden rounded-xl border border-slate-200/80 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700/80 dark:hover:shadow-black/30">
                 <div class="absolute inset-x-0 top-0 h-1 bg-linear-to-r {{ $theme['kpiBar'] }} opacity-90"></div>
                 <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-50 transition-colors {{ $accentBlob }}"></div>
-                <p class="relative text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $kpi['label'] ?? 'Indicateur' }}</p>
+                <p class="relative text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{{ $kpi['label'] ?? __('dashboard.view.kpi_default') }}</p>
                 <p class="relative mt-3 text-2xl font-bold tabular-nums tracking-tight text-slate-900 dark:text-white sm:text-3xl">{{ number_format((float) ($kpi['value'] ?? 0), 0, ',', ' ') }}</p>
                 @if (!empty($kpi['suffix']))
                 <p class="relative mt-1.5 inline-flex items-center rounded-md bg-slate-100/90 px-2 py-0.5 text-[11px] font-semibold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">{{ $kpi['suffix'] }}</p>
@@ -234,7 +231,7 @@ $accentBar = $theme['bar'];
             </div>
             @empty
             <div class="adventiste-card-pro-static rounded-xl p-6 sm:col-span-2 xl:col-span-4">
-                <p class="text-sm text-slate-500 dark:text-slate-400">Aucun indicateur disponible pour ce rôle.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('dashboard.view.no_kpis') }}</p>
             </div>
             @endforelse
         </div>
@@ -244,8 +241,8 @@ $accentBar = $theme['bar'];
     <div class="adventiste-card-pro-static overflow-hidden rounded-xl">
         <div class="flex flex-col gap-1 border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 sm:flex-row sm:items-center sm:justify-between {{ $panelHeaderTone }}">
             <div>
-                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Actions rapides</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400">Raccourcis vers les tâches fréquentes</p>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.quick_actions_title') }}</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400">{{ __('dashboard.view.quick_actions_subtitle') }}</p>
             </div>
         </div>
         <div class="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:p-5">
@@ -264,8 +261,8 @@ $accentBar = $theme['bar'];
     @if($priorites->isNotEmpty())
     <div class="adventiste-card-pro-static overflow-hidden rounded-xl">
         <div class="border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 {{ $panelHeaderTone }}">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Priorités à traiter</h3>
-            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Classées par urgence relative</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.priorities_title') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ __('dashboard.view.priorities_subtitle') }}</p>
         </div>
         <div class="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 sm:p-5">
             @foreach($priorites as $item)
@@ -291,15 +288,15 @@ $accentBar = $theme['bar'];
                             <x-dynamic-icon :name="$item['icon'] ?? 'chart-bar'" class="h-5 w-5" />
                         </div>
                         <span class="inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ring-1 ring-black/5 dark:bg-slate-900/60 dark:ring-white/10">
-                            {{ ((int) ($item['value'] ?? 0)) > 0 ? 'À traiter' : 'OK' }}
+                            {{ ((int) ($item['value'] ?? 0)) > 0 ? __('dashboard.view.status_todo') : __('dashboard.view.status_ok') }}
                         </span>
                     </div>
-                    <p class="text-xs font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300">{{ $item['label'] ?? 'Priorité' }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300">{{ $item['label'] ?? __('dashboard.view.priority_default') }}</p>
                     <p class="mt-2 text-3xl font-bold tabular-nums text-slate-900 dark:text-white">{{ number_format((int) ($item['value'] ?? 0), 0, ',', ' ') }}</p>
                     <p class="mt-2 text-xs leading-relaxed opacity-90">{{ $item['help'] ?? '' }}</p>
                     @if(!empty($item['route']) && \Illuminate\Support\Facades\Route::has($item['route']) && \App\Support\NavigationGate::canVisitRoute(auth()->user(), $item['route']))
                         <a href="{{ route($item['route']) }}" class="mt-4 inline-flex items-center gap-1 text-sm font-bold no-underline {{ $accentLink }}">
-                            Accéder
+                            {{ __('dashboard.view.access') }}
                             <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                         </a>
                     @endif
@@ -316,8 +313,8 @@ $accentBar = $theme['bar'];
     @endphp
     <div class="adventiste-card-pro-static overflow-hidden rounded-xl">
         <div class="border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 {{ $panelHeaderTone }}">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Comparatif mensuel</h3>
-            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Mois courant vs mois précédent</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.comparative_title') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ __('dashboard.view.comparative_subtitle') }}</p>
         </div>
         <div class="grid gap-4 p-4 lg:grid-cols-3 sm:p-5">
             @foreach($comparatifMensuel as $ligne)
@@ -330,7 +327,7 @@ $accentBar = $theme['bar'];
                 @endphp
                 <div class="rounded-xl border border-slate-200/90 bg-slate-50/80 p-5 shadow-inner dark:border-slate-700 dark:bg-slate-900/40">
                     <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
-                        <p class="text-sm font-bold text-slate-900 dark:text-white">{{ $ligne['label'] ?? 'Indicateur' }}</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white">{{ $ligne['label'] ?? __('dashboard.view.kpi_default') }}</p>
                         <p class="text-xs font-semibold tabular-nums {{ $delta >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
                             {{ $delta >= 0 ? '+' : '' }}{{ number_format($delta, 0, ',', ' ') }} {{ $ligne['suffix'] ?? '' }}
                         </p>
@@ -338,7 +335,7 @@ $accentBar = $theme['bar'];
                     <div class="space-y-3">
                         <div>
                             <div class="mb-1.5 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-                                <span>Mois courant</span>
+                                <span>{{ __('dashboard.view.current_month') }}</span>
                                 <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ number_format($courant, 0, ',', ' ') }} {{ $ligne['suffix'] ?? '' }}</span>
                             </div>
                             <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
@@ -347,7 +344,7 @@ $accentBar = $theme['bar'];
                         </div>
                         <div>
                             <div class="mb-1.5 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-                                <span>Mois précédent</span>
+                                <span>{{ __('dashboard.view.previous_month') }}</span>
                                 <span class="tabular-nums text-slate-700 dark:text-slate-200">{{ number_format($precedent, 0, ',', ' ') }} {{ $ligne['suffix'] ?? '' }}</span>
                             </div>
                             <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
@@ -367,16 +364,16 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\RapportMembreEglise::class)
     <div class="adventiste-card-pro-static lg:col-span-2 overflow-hidden rounded-xl">
         <div class="border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 {{ $panelHeaderTone }}">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Rapports membres récents</h3>
-            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Derniers enregistrements</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.recent_member_reports') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ __('dashboard.view.last_records') }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="{{ $tableHeadTone }}">
                     <tr>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Période</th>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">État</th>
-                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">Membres</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.period') }}</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.state') }}</th>
+                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.members_col') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -391,7 +388,7 @@ $accentBar = $theme['bar'];
                         <td class="px-4 py-3 text-right tabular-nums font-medium text-slate-900 dark:text-white">{{ (int) $r->total_membres }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="3" class="px-4 py-12 text-center text-sm text-slate-500">Aucun rapport membre récent.</td></tr>
+                    <tr><td colspan="3" class="px-4 py-12 text-center text-sm text-slate-500">{{ __('dashboard.view.no_recent_member_report') }}</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -401,8 +398,8 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\Bapteme::class)
     <div class="space-y-6">
         <div class="adventiste-card-pro-static rounded-xl p-5 sm:p-6">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Baptêmes récents</h3>
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Derniers enregistrements</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.recent_baptisms') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ __('dashboard.view.last_records') }}</p>
             <div class="mt-4 space-y-3">
                 @forelse($baptemesRecents as $b)
                 <div class="flex items-center gap-3 rounded-xl border border-emerald-200/80 bg-linear-to-r from-emerald-50/90 to-white px-3 py-3 dark:border-emerald-900/40 dark:from-emerald-950/30 dark:to-slate-900/20">
@@ -413,7 +410,7 @@ $accentBar = $theme['bar'];
                     </div>
                 </div>
                 @empty
-                <p class="text-sm text-slate-500 dark:text-slate-400">Aucun baptême récent.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('dashboard.view.no_recent_baptism') }}</p>
                 @endforelse
             </div>
         </div>
@@ -423,17 +420,17 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\RapportMensuelEglise::class)
     <div class="adventiste-card-pro-static lg:col-span-2 overflow-hidden rounded-xl">
         <div class="border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 {{ $panelHeaderTone }}">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ $dashboardRole === 'secretaire_executif_mission' ? 'Rapports mensuels (églises)' : 'Rapports financiers (mission)' }}</h3>
-            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ $dashboardRole === 'secretaire_executif_mission' ? 'Dernières synthèses par paroisse (consultation)' : 'Derniers mouvements par église' }}</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ $dashboardRole === 'secretaire_executif_mission' ? __('dashboard.view.monthly_reports_churches') : __('dashboard.view.financial_reports_mission') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ $dashboardRole === 'secretaire_executif_mission' ? __('dashboard.view.last_syntheses') : __('dashboard.view.last_movements') }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="{{ $tableHeadTone }}">
                     <tr>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Église</th>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Période</th>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">État</th>
-                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">À transférer</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.church') }}</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.period') }}</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.state') }}</th>
+                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.to_transfer') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -449,7 +446,7 @@ $accentBar = $theme['bar'];
                         <td class="px-4 py-3 text-right tabular-nums font-semibold text-slate-900 dark:text-white">{{ number_format((float) $r->total_a_transferer_mission_mois, 0, ',', ' ') }} <span class="text-xs font-normal text-slate-500">FCFA</span></td>
                     </tr>
                     @empty
-                    <tr><td colspan="4" class="px-4 py-12 text-center text-sm text-slate-500">Aucun rapport financier récent.</td></tr>
+                    <tr><td colspan="4" class="px-4 py-12 text-center text-sm text-slate-500">{{ __('dashboard.view.no_recent_financial') }}</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -459,8 +456,8 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\RapportMembreEglise::class)
     <div class="space-y-6">
         <div class="adventiste-card-pro-static rounded-xl p-5 sm:p-6">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Rapports membres</h3>
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Vue consolidée mission</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.member_reports') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ __('dashboard.view.consolidated_mission_view') }}</p>
             <div class="mt-4 space-y-3">
                 @forelse($rapportsMembresMission as $r)
                 <div class="rounded-xl border border-indigo-200/80 bg-linear-to-br from-indigo-50/80 to-white px-3 py-3 dark:border-indigo-900/45 dark:from-indigo-950/35 dark:to-slate-900/20">
@@ -468,7 +465,7 @@ $accentBar = $theme['bar'];
                     <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">{{ strtoupper((string) $r->type_periode) }} {{ $r->mois ? $r->mois.'/' : '' }}{{ $r->annee }} · {{ ucfirst((string) $r->etat) }}</p>
                 </div>
                 @empty
-                <p class="text-sm text-slate-500 dark:text-slate-400">Aucun rapport membre récent.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('dashboard.view.no_recent_member_mission') }}</p>
                 @endforelse
             </div>
         </div>
@@ -479,17 +476,17 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\RecapSabbatEglise::class)
     <div class="adventiste-card-pro-static lg:col-span-2 overflow-hidden rounded-xl">
         <div class="border-b border-slate-200/90 bg-linear-to-r px-5 py-4 dark:border-slate-700/80 {{ $panelHeaderTone }}">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Derniers récaps du sabbat</h3>
-            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Saisie et statut</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.last_sabbath_recaps') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ __('dashboard.view.entry_status') }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="{{ $tableHeadTone }}">
                     <tr>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Date</th>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Église</th>
-                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">Statut</th>
-                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">Montant</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.date') }}</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.church') }}</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.status') }}</th>
+                        <th class="px-4 py-3.5 text-right text-xs font-bold uppercase tracking-wider">{{ __('dashboard.view.amount') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -506,7 +503,7 @@ $accentBar = $theme['bar'];
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-4 py-12 text-center text-sm text-slate-500">Aucune donnée récente.</td>
+                        <td colspan="4" class="px-4 py-12 text-center text-sm text-slate-500">{{ __('dashboard.view.no_recent_data') }}</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -519,8 +516,8 @@ $accentBar = $theme['bar'];
     @can('viewAny', App\Models\RapportMensuelEglise::class)
     <div class="space-y-6">
         <div class="adventiste-card-pro-static rounded-xl p-5 sm:p-6">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Rapports mensuels soumis</h3>
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ auth()->user()->hasRole('tresorier_mission') || auth()->user()->hasRole('president_mission') || auth()->user()->hasRole('admin_mission') ? 'En attente de validation mission' : 'Suivi des transmissions' }}</p>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('dashboard.view.submitted_monthly_reports') }}</h3>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ auth()->user()->hasRole('tresorier_mission') || auth()->user()->hasRole('president_mission') || auth()->user()->hasRole('admin_mission') ? __('dashboard.view.pending_validation_mission') : __('dashboard.view.transmission_tracking') }}</p>
             <div class="mt-4 space-y-3">
                 @forelse($rapportsSoumis as $rapport)
                 <div class="rounded-xl border border-indigo-200/80 bg-linear-to-br from-indigo-50/80 to-white px-3 py-3 dark:border-indigo-900/45 dark:from-indigo-950/35 dark:to-slate-900/20">
@@ -528,7 +525,7 @@ $accentBar = $theme['bar'];
                     <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">{{ $rapport->mois }}/{{ $rapport->annee }} · {{ $rapport->soumis_le?->translatedFormat('d/m/Y H:i') ?? '—' }}</p>
                 </div>
                 @empty
-                <p class="text-sm text-slate-500 dark:text-slate-400">Aucun rapport soumis en attente.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('dashboard.view.no_pending_report') }}</p>
                 @endforelse
             </div>
         </div>
@@ -539,8 +536,8 @@ $accentBar = $theme['bar'];
 
 <div class="mt-8 sm:mt-10">
     <div class="mb-4">
-        <h3 class="text-base font-semibold text-slate-900 dark:text-white">Modules</h3>
-        <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Accès direct selon votre rôle</p>
+        <h3 class="text-base font-semibold text-slate-900 dark:text-white">{{ __('dashboard.view.modules') }}</h3>
+        <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ __('dashboard.view.modules_subtitle') }}</p>
     </div>
     @php
         $cardsDashboard = collect($roleStats['cards'] ?? [])->filter(function ($card) {
@@ -585,7 +582,7 @@ $accentBar = $theme['bar'];
             <dl class="relative mt-5 grid grid-cols-2 gap-3 border-t border-slate-200/90 pt-4 text-sm dark:border-slate-600/60">
                 @foreach($card['stats'] as $key => $value)
                 <div class="{{ count($card['stats']) === 1 ? 'col-span-2' : '' }}">
-                    <dt class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ ucfirst(str_replace('_', ' ', $key)) }}</dt>
+                    <dt class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('dashboard.stats.'.$key) }}</dt>
                     <dd class="mt-1 text-xl font-bold tabular-nums text-slate-900 dark:text-white">{{ number_format((int) $value) }}</dd>
                 </div>
                 @endforeach
@@ -593,14 +590,14 @@ $accentBar = $theme['bar'];
             @endif
 
             <p class="relative mt-5 inline-flex items-center gap-1.5 text-sm font-bold {{ $accentLink }}">
-                Ouvrir le module
+                {{ __('dashboard.view.open_module') }}
                 <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
             </p>
         </a>
         @empty
-        <p class="text-sm text-slate-500 dark:text-slate-400 sm:col-span-2 lg:col-span-3">Aucun module supplémentaire n’est accessible avec vos droits actuels.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 sm:col-span-2 lg:col-span-3">{{ __('dashboard.view.no_extra_modules') }}</p>
         @endforelse
     </div>
 </div>

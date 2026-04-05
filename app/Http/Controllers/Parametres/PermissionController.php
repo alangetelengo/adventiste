@@ -45,7 +45,7 @@ class PermissionController extends Controller
 
         return redirect()
             ->route('parametres.permissions.index')
-            ->with('success', 'Permission créée. Pensez à l’associer à un ou plusieurs rôles.');
+            ->with('success', __('flash.permission_created'));
     }
 
     public function edit(Permission $permission): View
@@ -75,7 +75,7 @@ class PermissionController extends Controller
 
         return redirect()
             ->route('parametres.permissions.edit', $permission)
-            ->with('success', 'Permission enregistrée.');
+            ->with('success', __('flash.permission_saved'));
     }
 
     public function destroy(Permission $permission): RedirectResponse
@@ -85,13 +85,13 @@ class PermissionController extends Controller
         if ($permission->roles()->exists()) {
             return redirect()
                 ->route('parametres.permissions.index')
-                ->with('error', 'Retirez cette permission des rôles avant de la supprimer.');
+                ->with('error', __('flash.permission_roles_blocked'));
         }
 
         $permission->delete();
 
         return redirect()
             ->route('parametres.permissions.index')
-            ->with('success', 'Permission supprimée.');
+            ->with('success', __('flash.permission_deleted'));
     }
 }

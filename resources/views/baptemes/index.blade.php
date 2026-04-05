@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Baptêmes')
+@section('page-title', __('modules.baptemes.title'))
 
 @section('page-title-info')
 @if (auth()->user()->eglise_locale_id)
 <span class="text-slate-600 dark:text-slate-400">{{ auth()->user()->egliseLocale?->nom }}</span>
 @else
-<span class="text-slate-600 dark:text-slate-400">Registre des baptêmes des églises de la mission</span>
+<span class="text-slate-600 dark:text-slate-400">{{ __('modules.baptemes.subtitle_mission') }}</span>
 @endif
 @endsection
 
@@ -26,7 +26,7 @@
 <a href="{{ route('baptemes.create') }}" class="adventiste-btn-primary">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-    Nouveau baptême
+    {{ __('modules.baptemes.new') }}
 </a>
 </div>
 @endif
@@ -37,9 +37,9 @@
     <form method="get" action="{{ route('baptemes.index') }}" class="px-6 py-4 flex flex-wrap items-end gap-4 border-b border-slate-200/80 dark:border-slate-600/60 bg-slate-50/80 dark:bg-slate-900/40">
         @if ($eglisesFiltre !== null && $eglisesFiltre->isNotEmpty())
         <div class="min-w-48">
-            <label for="f_eglise" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Église</label>
+            <label for="f_eglise" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">{{ __('modules.baptemes.church') }}</label>
             <select name="eglise_locale_id" id="f_eglise" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
-                <option value="">Toutes</option>
+                <option value="">{{ __('modules.baptemes.all_f') }}</option>
                 @foreach ($eglisesFiltre as $e)
                 <option value="{{ $e->id }}" @selected((string) request('eglise_locale_id') === (string) $e->id)>{{ $e->nom }}</option>
                 @endforeach
@@ -47,22 +47,22 @@
         </div>
         @endif
         <div class="min-w-48">
-            <label for="f_type" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Type</label>
+            <label for="f_type" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">{{ __('modules.baptemes.type') }}</label>
             <select name="type_bapteme" id="f_type" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
-                <option value="">Tous</option>
+                <option value="">{{ __('modules.baptemes.all_m') }}</option>
                 @foreach ($typesBapteme as $key => $label)
                 <option value="{{ $key }}" @selected(request('type_bapteme') === $key)>{{ $label }}</option>
                 @endforeach
             </select>
         </div>
         <div class="min-w-48 flex-1 max-w-md">
-            <label for="f_q" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Recherche</label>
-            <input type="search" name="q" id="f_q" value="{{ request('q') }}" placeholder="Nom, officiant..." class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
+            <label for="f_q" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">{{ __('modules.baptemes.search') }}</label>
+            <input type="search" name="q" id="f_q" value="{{ request('q') }}" placeholder="{{ __('modules.baptemes.search_placeholder') }}" class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/35">
         </div>
         <div class="flex gap-2">
-            <button type="submit" class="adventiste-btn-primary">Filtrer</button>
+            <button type="submit" class="adventiste-btn-primary">{{ __('modules.baptemes.filter') }}</button>
             @if (request()->hasAny(['eglise_locale_id', 'type_bapteme', 'q']))
-            <a href="{{ route('baptemes.index') }}" class="adventiste-btn-secondary">Réinitialiser</a>
+            <a href="{{ route('baptemes.index') }}" class="adventiste-btn-secondary">{{ __('modules.baptemes.reset') }}</a>
             @endif
         </div>
     </form>
@@ -70,11 +70,11 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Candidat</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden md:table-cell">Type</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden sm:table-cell">Date</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden lg:table-cell">Église</th>
-                    <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Actions</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('modules.baptemes.col_candidate') }}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden md:table-cell">{{ __('modules.baptemes.col_type') }}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden sm:table-cell">{{ __('modules.baptemes.col_date') }}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest hidden lg:table-cell">{{ __('modules.baptemes.col_church') }}</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('modules.baptemes.col_actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-slate-800 dark:text-slate-100">
@@ -85,10 +85,10 @@
                         <span class="md:hidden text-xs text-slate-500 dark:text-slate-400 mt-1 block">{{ $typesBapteme[$bapteme->type_bapteme] ?? $bapteme->type_bapteme }}</span>
                     </td>
                     <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden md:table-cell">{{ $typesBapteme[$bapteme->type_bapteme] ?? $bapteme->type_bapteme }}</td>
-                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden sm:table-cell">{{ $bapteme->date_bapteme?->translatedFormat('d M Y') ?? '—' }}</td>
-                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden lg:table-cell">{{ $bapteme->egliseLocale?->nom ?? '—' }}</td>
+                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden sm:table-cell">{{ $bapteme->date_bapteme?->translatedFormat('d M Y') ?? __('modules.common.dash') }}</td>
+                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 hidden lg:table-cell">{{ $bapteme->egliseLocale?->nom ?? __('modules.common.dash') }}</td>
                     <td class="px-6 py-4 text-right">
-                        <div class="inline-flex flex-wrap items-center justify-end gap-1.5" role="group" aria-label="Actions">
+                        <div class="inline-flex flex-wrap items-center justify-end gap-1.5" role="group" aria-label="{{ __('modules.common.actions') }}">
                             @can('view', $bapteme)
                             <x-action-button variant="view" href="{{ route('baptemes.show', $bapteme) }}" />
                             @endcan
@@ -96,10 +96,10 @@
                             <x-action-button variant="edit" href="{{ route('baptemes.edit', $bapteme) }}" custom-classes="border border-[#00b464]/35 bg-emerald-50/90 dark:bg-emerald-950/40 text-[#00a055] dark:text-emerald-300 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/50 hover:border-[#00b464]/55 focus:ring-2 focus:ring-[#00b464]/30" />
                             @endcan
                             @can('certificat', $bapteme)
-                            <a href="{{ route('baptemes.certificat', $bapteme) }}" class="inline-flex items-center rounded-md border border-indigo-200 dark:border-indigo-700/60 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 no-underline">Certificat</a>
+                            <a href="{{ route('baptemes.certificat', $bapteme) }}" class="inline-flex items-center rounded-md border border-indigo-200 dark:border-indigo-700/60 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 no-underline">{{ __('modules.baptemes.certificat') }}</a>
                             @endcan
                             @can('delete', $bapteme)
-                            <x-action-button variant="delete" action="{{ route('baptemes.destroy', $bapteme) }}" method="DELETE" confirm-message="Supprimer cet enregistrement de baptême ?" />
+                            <x-action-button variant="delete" action="{{ route('baptemes.destroy', $bapteme) }}" method="DELETE" :confirm-message="__('modules.common.confirm_delete_bapteme')" />
                             @endcan
                         </div>
                     </td>
@@ -107,7 +107,7 @@
                 @empty
                 <tr>
                     <td colspan="5" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400 text-sm">
-                        Aucun baptême ne correspond aux critères.
+                        {{ __('modules.baptemes.index_empty') }}
                     </td>
                 </tr>
                 @endforelse

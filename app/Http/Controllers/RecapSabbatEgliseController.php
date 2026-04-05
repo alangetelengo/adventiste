@@ -179,7 +179,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('finances.recaps.index')
-            ->with('success', 'Sabbat enregistré avec succès. Vous pourrez le modifier plus tard si nécessaire.');
+            ->with('success', __('flash.recap_sabbat_saved'));
     }
 
     public function edit(Request $request, RecapSabbatEglise $recap): View
@@ -329,7 +329,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('finances.recaps.edit', $recap)
-            ->with('success', 'Récap enregistré.');
+            ->with('success', __('flash.recap_saved'));
     }
 
     public function soumettre(Request $request, RecapSabbatEglise $recap): RedirectResponse
@@ -339,7 +339,7 @@ class RecapSabbatEgliseController extends Controller
         if (! $recap->peutSoumettre()) {
             return redirect()
                 ->route('finances.recaps.edit', $recap)
-                ->with('error', 'Impossible de soumettre : corrigez les lignes refusées, ou attendez la validation des lignes déjà soumises.');
+                ->with('error', __('flash.recap_submit_blocked'));
         }
 
         DB::table('lignes_dime_offrande_recap')
@@ -355,7 +355,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('finances.recaps.edit', $recap)
-            ->with('success', 'Récap soumis à la mission. Les lignes sont en attente de validation.');
+            ->with('success', __('flash.recap_submitted'));
     }
 
     public function accepterMission(Request $request, RecapSabbatEglise $recap): RedirectResponse
@@ -365,7 +365,7 @@ class RecapSabbatEgliseController extends Controller
         if (! $recap->peutValiderParMission()) {
             return redirect()
                 ->route('finances.recaps.edit', $recap)
-                ->with('error', 'Ce récap ne peut pas être accepté (lignes non toutes « soumises »).');
+                ->with('error', __('flash.recap_accept_blocked'));
         }
 
         DB::table('lignes_dime_offrande_recap')
@@ -381,7 +381,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('finances.recaps.edit', $recap)
-            ->with('success', 'Récap accepté : les lignes sont verrouillées.');
+            ->with('success', __('flash.recap_accepted'));
     }
 
     public function refuserMission(Request $request, RecapSabbatEglise $recap): RedirectResponse
@@ -391,7 +391,7 @@ class RecapSabbatEgliseController extends Controller
         if (! $recap->peutValiderParMission()) {
             return redirect()
                 ->route('finances.recaps.edit', $recap)
-                ->with('error', 'Ce récap ne peut pas être refusé dans son état actuel.');
+                ->with('error', __('flash.recap_refuse_blocked'));
         }
 
         DB::table('lignes_dime_offrande_recap')
@@ -407,7 +407,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('finances.recaps.edit', $recap)
-            ->with('success', 'Récap refusé : l’église peut corriger les lignes concernées.');
+            ->with('success', __('flash.recap_refused'));
     }
 
     public function createContributionMembre(Request $request, Membre $membre): View
@@ -546,7 +546,7 @@ class RecapSabbatEgliseController extends Controller
 
         return redirect()
             ->route('membres.index')
-            ->with('success', 'Recette de l’église enregistrée. Elle sera prise en compte dans le rapport mensuel de la période.');
+            ->with('success', __('flash.recette_eglise_saved'));
     }
 
     private function regenererRapportMensuel(RecapSabbatEglise $recap): void

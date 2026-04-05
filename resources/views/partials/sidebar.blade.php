@@ -9,14 +9,14 @@
             <li>
                 <a href="{{ route('tableau-de-bord') }}" class="{{ $navBase }} {{ request()->routeIs('home', 'tableau-de-bord') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📊</span>
-                    <span class="nav-text">Tableau de bord</span>
+                    <span class="nav-text">{{ __('nav.dashboard') }}</span>
                 </a>
             </li>
             @can('viewAny', App\Models\Membre::class)
             <li>
                 <a href="{{ route('membres.index') }}" class="{{ $navBase }} {{ request()->routeIs('membres.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">👥</span>
-                    <span class="nav-text">Membres</span>
+                    <span class="nav-text">{{ __('nav.membres') }}</span>
                 </a>
             </li>
             @endcan
@@ -24,7 +24,7 @@
             <li>
                 <a href="{{ route('baptemes.index') }}" class="{{ $navBase }} {{ request()->routeIs('baptemes.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">🕊️</span>
-                    <span class="nav-text">Baptêmes</span>
+                    <span class="nav-text">{{ __('nav.baptemes') }}</span>
                 </a>
             </li>
             @endcan
@@ -33,12 +33,12 @@
                 @if(auth()->user()->estUtilisateurMission())
                 <a href="{{ route('parametres.eglises.index') }}" class="{{ $navBase }} {{ request()->routeIs('parametres.eglises.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📚</span>
-                    <span class="nav-text">Départements</span>
+                    <span class="nav-text">{{ __('nav.departements') }}</span>
                 </a>
                 @else
                 <a href="{{ route('parametres.eglises.departements.index', auth()->user()->egliseLocale) }}" class="{{ $navBase }} {{ request()->routeIs('parametres.eglises.departements.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📚</span>
-                    <span class="nav-text">Départements</span>
+                    <span class="nav-text">{{ __('nav.departements') }}</span>
                 </a>
                 @endif
             </li>
@@ -47,7 +47,7 @@
             <li>
                 <a href="{{ route('finances.rapports-mensuels.index') }}" class="{{ $navBase }} {{ request()->routeIs('finances.rapports-mensuels.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📑</span>
-                    <span class="nav-text">Rapports mensuels</span>
+                    <span class="nav-text">{{ __('nav.rapports_mensuels') }}</span>
                 </a>
             </li>
             @endif
@@ -55,7 +55,7 @@
             <li>
                 <a href="{{ route('secretariat.rapports-membres.index') }}" class="{{ $navBase }} {{ request()->routeIs('secretariat.rapports-membres.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">🗂️</span>
-                    <span class="nav-text">Rapports membres</span>
+                    <span class="nav-text">{{ __('nav.rapports_membres') }}</span>
                 </a>
             </li>
             @endcan
@@ -64,44 +64,44 @@
             <li>
                 <a href="{{ route('finances.ventilation-tresorerie-mission.index') }}" class="{{ $navBase }} {{ request()->routeIs('finances.ventilation-tresorerie-mission.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📈</span>
-                    <span class="nav-text">Ventilation trésorerie</span>
+                    <span class="nav-text">{{ __('nav.ventilation_tresorerie') }}</span>
                 </a>
             </li>
             @endcan
             <li>
                 <a href="{{ route('finances.etat-dimes-eglises.index') }}" class="{{ $navBase }} {{ request()->routeIs('finances.etat-dimes-eglises.*') ? $navActive : '' }}">
                     <span class="text-lg shrink-0">🧾</span>
-                    <span class="nav-text">État des dîmes</span>
+                    <span class="nav-text">{{ __('nav.etat_dimes') }}</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('finances.synthese-annuelle-mission.index') }}" class="{{ $navBase }} {{ request()->routeIs('finances.synthese-annuelle-mission.*') ? $navActive : '' }}">
                     <span class="text-lg shrink-0">📒</span>
-                    <span class="nav-text">Synthèse annuelle</span>
+                    <span class="nav-text">{{ __('nav.synthese_annuelle') }}</span>
                 </a>
             </li>
             @endcan
             <li>
                 <a href="{{ route('evenements') }}" class="{{ $navBase }} {{ request()->routeIs('evenements') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">📅</span>
-                    <span class="nav-text">Événements</span>
+                    <span class="nav-text">{{ __('nav.evenements') }}</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('groupes') }}" class="{{ $navBase }} {{ request()->routeIs('groupes') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">🙏</span>
-                    <span class="nav-text">Groupes &amp; ministères</span>
+                    <span class="nav-text">{{ __('nav.groupes_ministeres') }}</span>
                 </a>
             </li>
 
             @if(\App\Support\NavigationGate::canAccessParametresHub(auth()->user()))
             <li class="pt-4 mt-4 border-t border-[rgba(212,168,75,0.18)] nav-section-header">
-                <p class="px-5 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider nav-text">Réglages</p>
+                <p class="px-5 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider nav-text">{{ __('nav.settings_section') }}</p>
             </li>
             <li>
                 <a href="{{ route('parametres.index') }}" class="{{ $navBase }} {{ request()->routeIs('parametres.*') ? $navActive : '' }}">
                     <span class="text-lg flex-shrink-0">⚙️</span>
-                    <span class="nav-text">Paramètres</span>
+                    <span class="nav-text">{{ __('nav.parametres') }}</span>
                 </a>
             </li>
             @endif
@@ -114,7 +114,7 @@
             @csrf
             <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 text-white text-sm font-medium border border-white/15 hover:bg-white/15 transition-colors">
                 <span>🚪</span>
-                <span class="nav-text">Déconnexion</span>
+                <span class="nav-text">{{ __('nav.logout') }}</span>
             </button>
         </form>
         @endauth

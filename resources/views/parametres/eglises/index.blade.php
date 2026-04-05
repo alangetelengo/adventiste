@@ -56,7 +56,7 @@
                             <x-action-button variant="edit" href="{{ route('parametres.eglises.edit', $eglise) }}" custom-classes="border border-[#00b464]/35 bg-emerald-50/90 dark:bg-emerald-950/40 text-[#00a055] dark:text-emerald-300 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/50 hover:border-[#00b464]/55 focus:ring-2 focus:ring-[#00b464]/30" />
                             @endcan
                             @can('delete', $eglise)
-                            <x-action-button variant="delete" action="{{ route('parametres.eglises.destroy', $eglise) }}" method="DELETE" confirm-message="Supprimer cette église ? Les données liées (récaps, membres, etc.) peuvent être supprimées en cascade." />
+                            <x-action-button variant="delete" action="{{ route('parametres.eglises.destroy', $eglise) }}" method="DELETE" :confirm-message="__('modules.common.confirm_delete_eglise')" />
                             @endcan
                         </div>
                     </td>

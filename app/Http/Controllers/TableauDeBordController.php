@@ -165,11 +165,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'secretaire_eglise',
-            'role_label' => 'Secrétaire d\'église locale',
+            'role_label' => __('dashboard.roles.secretaire_eglise'),
             'cards' => [
                 [
-                    'title' => 'Membres de l\'église',
-                    'description' => 'Gestion des fiches membres et suivi des adhésions',
+                    'title' => __('dashboard.cards.secretaire_eglise.membres.title'),
+                    'description' => __('dashboard.cards.secretaire_eglise.membres.description'),
                     'icon' => 'users',
                     'route' => 'membres.index',
                     'stats' => [
@@ -179,8 +179,8 @@ class TableauDeBordController extends Controller
                     'color' => 'blue',
                 ],
                 [
-                    'title' => 'Rapports membres',
-                    'description' => 'Secrétariat : états et transmissions vers la mission',
+                    'title' => __('dashboard.cards.secretaire_eglise.rapports_membres.title'),
+                    'description' => __('dashboard.cards.secretaire_eglise.rapports_membres.description'),
                     'icon' => 'clipboard-list',
                     'route' => 'secretariat.rapports-membres.index',
                     'stats' => [
@@ -192,8 +192,8 @@ class TableauDeBordController extends Controller
                     'color' => 'indigo',
                 ],
                 [
-                    'title' => 'Rapports mensuels',
-                    'description' => 'Consultation des synthèses financières (rédigées par la trésorerie)',
+                    'title' => __('dashboard.cards.secretaire_eglise.rapports_mensuels.title'),
+                    'description' => __('dashboard.cards.secretaire_eglise.rapports_mensuels.description'),
                     'icon' => 'chart-bar',
                     'route' => 'finances.rapports-mensuels.index',
                     'stats' => [
@@ -203,8 +203,8 @@ class TableauDeBordController extends Controller
                     'color' => 'purple',
                 ],
                 [
-                    'title' => 'Baptêmes',
-                    'description' => 'Registre et certificats',
+                    'title' => __('dashboard.cards.secretaire_eglise.baptemes.title'),
+                    'description' => __('dashboard.cards.secretaire_eglise.baptemes.description'),
                     'icon' => 'document',
                     'route' => 'baptemes.index',
                     'stats' => [
@@ -218,9 +218,9 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Nouveau membre', 'route' => 'membres.create', 'icon' => 'plus'],
-                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
-                ['label' => 'Rapports membres', 'route' => 'secretariat.rapports-membres.index', 'icon' => 'document-chart-bar'],
+                ['label' => __('dashboard.actions.nouveau_membre'), 'route' => 'membres.create', 'icon' => 'plus'],
+                ['label' => __('dashboard.actions.rapports_mensuels'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.rapports_membres'), 'route' => 'secretariat.rapports-membres.index', 'icon' => 'document-chart-bar'],
             ],
         ];
     }
@@ -229,11 +229,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'tresorier_eglise',
-            'role_label' => 'Trésorier d\'église locale',
+            'role_label' => __('dashboard.roles.tresorier_eglise'),
             'cards' => [
                 [
-                    'title' => 'Récaps du sabbat',
-                    'description' => 'Validation et suivi des finances hebdomadaires',
+                    'title' => __('dashboard.cards.tresorier_eglise.recaps.title'),
+                    'description' => __('dashboard.cards.tresorier_eglise.recaps.description'),
                     'icon' => 'currency-dollar',
                     'route' => 'finances.recaps.index',
                     'stats' => [
@@ -244,8 +244,8 @@ class TableauDeBordController extends Controller
                     'color' => 'green',
                 ],
                 [
-                    'title' => 'Rapports mensuels',
-                    'description' => 'Synthèse financière mensuelle de l\'église',
+                    'title' => __('dashboard.cards.tresorier_eglise.rapports_mensuels.title'),
+                    'description' => __('dashboard.cards.tresorier_eglise.rapports_mensuels.description'),
                     'icon' => 'chart-bar',
                     'route' => 'finances.rapports-mensuels.index',
                     'stats' => [
@@ -256,8 +256,8 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Nouveau récap', 'route' => 'finances.recaps.create', 'icon' => 'plus'],
-                ['label' => 'Voir rapports', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.nouveau_recap'), 'route' => 'finances.recaps.create', 'icon' => 'plus'],
+                ['label' => __('dashboard.actions.voir_rapports'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
             ],
         ];
     }
@@ -269,11 +269,11 @@ class TableauDeBordController extends Controller
 
         return [
             'role_name' => 'secretaire_executif_mission',
-            'role_label' => 'Secrétaire exécutif de mission',
+            'role_label' => __('dashboard.roles.secretaire_executif_mission'),
             'cards' => [
                 [
-                    'title' => 'Vue d\'ensemble mission',
-                    'description' => 'Églises et membres de la mission',
+                    'title' => __('dashboard.cards.secretaire_executif_mission.vue.title'),
+                    'description' => __('dashboard.cards.secretaire_executif_mission.vue.description'),
                     'icon' => 'building',
                     'route' => 'tableau-de-bord',
                     'stats' => [
@@ -283,8 +283,8 @@ class TableauDeBordController extends Controller
                     'color' => 'indigo',
                 ],
                 [
-                    'title' => 'Rapports mensuels (églises)',
-                    'description' => 'Synthèses financières par paroisse — consultation (rédaction : trésoriers)',
+                    'title' => __('dashboard.cards.secretaire_executif_mission.rapports_mensuels.title'),
+                    'description' => __('dashboard.cards.secretaire_executif_mission.rapports_mensuels.description'),
                     'icon' => 'chart-bar',
                     'route' => 'finances.rapports-mensuels.index',
                     'stats' => [
@@ -294,8 +294,8 @@ class TableauDeBordController extends Controller
                     'color' => 'purple',
                 ],
                 [
-                    'title' => 'Rapports membres',
-                    'description' => 'Secrétariat : suivi par église',
+                    'title' => __('dashboard.cards.secretaire_executif_mission.rapports_membres.title'),
+                    'description' => __('dashboard.cards.secretaire_executif_mission.rapports_membres.description'),
                     'icon' => 'clipboard-list',
                     'route' => 'secretariat.rapports-membres.index',
                     'stats' => [
@@ -308,10 +308,10 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Gérer églises', 'route' => 'parametres.eglises.index', 'icon' => 'building'],
-                ['label' => 'Gérer membres', 'route' => 'membres.index', 'icon' => 'users'],
-                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
-                ['label' => 'Rapports membres', 'route' => 'secretariat.rapports-membres.index', 'icon' => 'clipboard-list'],
+                ['label' => __('dashboard.actions.gerer_eglises'), 'route' => 'parametres.eglises.index', 'icon' => 'building'],
+                ['label' => __('dashboard.actions.gerer_membres'), 'route' => 'membres.index', 'icon' => 'users'],
+                ['label' => __('dashboard.actions.rapports_mensuels'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.rapports_membres'), 'route' => 'secretariat.rapports-membres.index', 'icon' => 'clipboard-list'],
             ],
         ];
     }
@@ -320,11 +320,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'tresorier_mission',
-            'role_label' => 'Trésorier de mission',
+            'role_label' => __('dashboard.roles.tresorier_mission'),
             'cards' => [
                 [
-                    'title' => 'Finances consolidées',
-                    'description' => 'Vue d\'ensemble des finances de la mission',
+                    'title' => __('dashboard.cards.tresorier_mission.finances.title'),
+                    'description' => __('dashboard.cards.tresorier_mission.finances.description'),
                     'icon' => 'banknotes',
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
@@ -334,8 +334,8 @@ class TableauDeBordController extends Controller
                     'color' => 'emerald',
                 ],
                 [
-                    'title' => 'Validation récaps',
-                    'description' => 'Récaps soumis en attente de validation',
+                    'title' => __('dashboard.cards.tresorier_mission.validation_recaps.title'),
+                    'description' => __('dashboard.cards.tresorier_mission.validation_recaps.description'),
                     'icon' => 'check-circle',
                     'route' => 'finances.recaps.index',
                     'stats' => [
@@ -345,8 +345,8 @@ class TableauDeBordController extends Controller
                     'color' => 'blue',
                 ],
                 [
-                    'title' => 'Rapports mensuels (églises)',
-                    'description' => 'Liste des synthèses par paroisse et validation mission',
+                    'title' => __('dashboard.cards.tresorier_mission.rapports_mensuels.title'),
+                    'description' => __('dashboard.cards.tresorier_mission.rapports_mensuels.description'),
                     'icon' => 'chart-bar',
                     'route' => 'finances.rapports-mensuels.index',
                     'stats' => [
@@ -361,8 +361,8 @@ class TableauDeBordController extends Controller
                     'color' => 'purple',
                 ],
                 [
-                    'title' => 'Groupes mission',
-                    'description' => 'Gestion des groupes et de leurs finances',
+                    'title' => __('dashboard.cards.tresorier_mission.groupes.title'),
+                    'description' => __('dashboard.cards.tresorier_mission.groupes.description'),
                     'icon' => 'users',
                     'route' => 'parametres.groupes-mission.index',
                     'stats' => [
@@ -373,10 +373,10 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Nouveau rapport station', 'route' => 'finances.rapports-station.create', 'icon' => 'plus'],
-                ['label' => 'Rapports mensuels', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
-                ['label' => 'Gérer groupes', 'route' => 'parametres.groupes-mission.index', 'icon' => 'users'],
-                ['label' => 'Types de recette', 'route' => 'parametres.types-recette.index', 'icon' => 'document'],
+                ['label' => __('dashboard.actions.nouveau_rapport_station'), 'route' => 'finances.rapports-station.create', 'icon' => 'plus'],
+                ['label' => __('dashboard.actions.rapports_mensuels'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.gerer_groupes'), 'route' => 'parametres.groupes-mission.index', 'icon' => 'users'],
+                ['label' => __('dashboard.actions.types_recette'), 'route' => 'parametres.types-recette.index', 'icon' => 'document'],
             ],
         ];
     }
@@ -385,11 +385,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'president_mission',
-            'role_label' => 'Président de mission',
+            'role_label' => __('dashboard.roles.president_mission'),
             'cards' => [
                 [
-                    'title' => 'Vue stratégique',
-                    'description' => 'Tableau de bord général de la mission',
+                    'title' => __('dashboard.cards.president_mission.strategie.title'),
+                    'description' => __('dashboard.cards.president_mission.strategie.description'),
                     'icon' => 'presentation-chart-line',
                     'route' => 'tableau-de-bord',
                     'stats' => [
@@ -400,8 +400,8 @@ class TableauDeBordController extends Controller
                     'color' => 'slate',
                 ],
                 [
-                    'title' => 'État des finances',
-                    'description' => 'Suivi global des finances mission',
+                    'title' => __('dashboard.cards.president_mission.finances.title'),
+                    'description' => __('dashboard.cards.president_mission.finances.description'),
                     'icon' => 'currency-dollar',
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
@@ -411,8 +411,8 @@ class TableauDeBordController extends Controller
                     'color' => 'green',
                 ],
                 [
-                    'title' => 'Administration',
-                    'description' => 'Gestion des utilisateurs et permissions',
+                    'title' => __('dashboard.cards.president_mission.admin.title'),
+                    'description' => __('dashboard.cards.president_mission.admin.description'),
                     'icon' => 'cog-6-tooth',
                     'route' => 'parametres.utilisateurs.index',
                     'stats' => [
@@ -423,10 +423,10 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Gérer utilisateurs', 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
-                ['label' => 'Paramètres mission', 'route' => 'parametres.index', 'icon' => 'cog'],
-                ['label' => 'Rapports mensuels églises', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
-                ['label' => 'Rapports station', 'route' => 'finances.rapports-station.index', 'icon' => 'chart-bar'],
+                ['label' => __('dashboard.actions.gerer_utilisateurs'), 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
+                ['label' => __('dashboard.actions.parametres_mission'), 'route' => 'parametres.index', 'icon' => 'cog'],
+                ['label' => __('dashboard.actions.rapports_mensuels_eglises'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.rapports_station'), 'route' => 'finances.rapports-station.index', 'icon' => 'chart-bar'],
             ],
         ];
     }
@@ -435,11 +435,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'admin_mission',
-            'role_label' => 'Administrateur de mission',
+            'role_label' => __('dashboard.roles.admin_mission'),
             'cards' => [
                 [
-                    'title' => 'Administration complète',
-                    'description' => 'Contrôle total de la mission',
+                    'title' => __('dashboard.cards.admin_mission.admin_complete.title'),
+                    'description' => __('dashboard.cards.admin_mission.admin_complete.description'),
                     'icon' => 'shield-check',
                     'route' => 'parametres.index',
                     'stats' => [
@@ -450,8 +450,8 @@ class TableauDeBordController extends Controller
                     'color' => 'red',
                 ],
                 [
-                    'title' => 'Données financières',
-                    'description' => 'Vue complète sur toutes les finances',
+                    'title' => __('dashboard.cards.admin_mission.donnees_fin.title'),
+                    'description' => __('dashboard.cards.admin_mission.donnees_fin.description'),
                     'icon' => 'banknotes',
                     'route' => 'finances.rapports-station.index',
                     'stats' => [
@@ -461,8 +461,8 @@ class TableauDeBordController extends Controller
                     'color' => 'emerald',
                 ],
                 [
-                    'title' => 'Structure mission',
-                    'description' => 'Gestion complète de l\'organisation',
+                    'title' => __('dashboard.cards.admin_mission.structure.title'),
+                    'description' => __('dashboard.cards.admin_mission.structure.description'),
                     'icon' => 'building',
                     'route' => 'parametres.eglises.index',
                     'stats' => [
@@ -474,11 +474,11 @@ class TableauDeBordController extends Controller
                 ],
             ],
             'actions' => [
-                ['label' => 'Administration', 'route' => 'parametres.index', 'icon' => 'cog'],
-                ['label' => 'Gérer utilisateurs', 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
-                ['label' => 'Rapports mensuels églises', 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
-                ['label' => 'Permissions', 'route' => 'parametres.permissions.index', 'icon' => 'document'],
-                ['label' => 'Rôles', 'route' => 'parametres.roles.index', 'icon' => 'users'],
+                ['label' => __('dashboard.actions.administration'), 'route' => 'parametres.index', 'icon' => 'cog'],
+                ['label' => __('dashboard.actions.gerer_utilisateurs'), 'route' => 'parametres.utilisateurs.index', 'icon' => 'users'],
+                ['label' => __('dashboard.actions.rapports_mensuels_eglises'), 'route' => 'finances.rapports-mensuels.index', 'icon' => 'eye'],
+                ['label' => __('dashboard.actions.permissions'), 'route' => 'parametres.permissions.index', 'icon' => 'document'],
+                ['label' => __('dashboard.actions.roles'), 'route' => 'parametres.roles.index', 'icon' => 'users'],
             ],
         ];
     }
@@ -487,11 +487,11 @@ class TableauDeBordController extends Controller
     {
         return [
             'role_name' => 'default',
-            'role_label' => 'Utilisateur',
+            'role_label' => __('dashboard.roles.default'),
             'cards' => [
                 [
-                    'title' => 'Mes données',
-                    'description' => 'Accès à vos informations personnelles',
+                    'title' => __('dashboard.cards.default.mes_donnees.title'),
+                    'description' => __('dashboard.cards.default.mes_donnees.description'),
                     'icon' => 'user',
                     'route' => 'profile.edit',
                     'stats' => [],
@@ -602,12 +602,12 @@ class TableauDeBordController extends Controller
 
         $kpisList = [];
         if ($canRecap) {
-            $kpisList[] = ['label' => 'Recettes du mois', 'value' => (int) round($recettesMois), 'suffix' => 'FCFA'];
-            $kpisList[] = ['label' => 'Récaps saisis', 'value' => (int) (clone $recapsMois)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.recettes_mois'), 'value' => (int) round($recettesMois), 'suffix' => 'FCFA'];
+            $kpisList[] = ['label' => __('dashboard.kpi.recaps_saisis'), 'value' => (int) (clone $recapsMois)->count(), 'suffix' => ''];
         }
         if ($canRapport) {
-            $kpisList[] = ['label' => 'À transférer mission', 'value' => (int) round((float) (clone $rapportMois)->sum('total_a_transferer_mission_mois')), 'suffix' => 'FCFA'];
-            $kpisList[] = ['label' => 'Rapports soumis', 'value' => (int) (clone $rapportBase)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.a_transferer_mission'), 'value' => (int) round((float) (clone $rapportMois)->sum('total_a_transferer_mission_mois')), 'suffix' => 'FCFA'];
+            $kpisList[] = ['label' => __('dashboard.kpi.rapports_soumis'), 'value' => (int) (clone $rapportBase)->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
         }
 
         $recapsRecents = $canRecap
@@ -676,14 +676,14 @@ class TableauDeBordController extends Controller
 
         $kpisList = [];
         if ($canMembre) {
-            $kpisList[] = ['label' => 'Membres total', 'value' => (int) (clone $membresBase)->count(), 'suffix' => ''];
-            $kpisList[] = ['label' => 'Membres actifs', 'value' => (int) (clone $membresBase)->where('actif', true)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.membres_total'), 'value' => (int) (clone $membresBase)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.membres_actifs'), 'value' => (int) (clone $membresBase)->where('actif', true)->count(), 'suffix' => ''];
         }
         if ($canBapteme) {
-            $kpisList[] = ['label' => 'Baptêmes (mois)', 'value' => (int) Bapteme::query()->where('eglise_locale_id', $egliseId)->whereYear('date_bapteme', $now->year)->whereMonth('date_bapteme', $now->month)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.baptemes_mois'), 'value' => (int) Bapteme::query()->where('eglise_locale_id', $egliseId)->whereYear('date_bapteme', $now->year)->whereMonth('date_bapteme', $now->month)->count(), 'suffix' => ''];
         }
         if ($canRapportMembre) {
-            $kpisList[] = ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->where('eglise_locale_id', $egliseId)->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.rapports_membres_soumis'), 'value' => (int) RapportMembreEglise::query()->where('eglise_locale_id', $egliseId)->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
         }
 
         return [
@@ -744,19 +744,19 @@ class TableauDeBordController extends Controller
 
         $kpisList = [];
         if ($canEglise) {
-            $kpisList[] = ['label' => 'Églises actives', 'value' => (int) EgliseLocale::query()->where('mission_id', $missionId)->where('actif', true)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.eglises_actives'), 'value' => (int) EgliseLocale::query()->where('mission_id', $missionId)->where('actif', true)->count(), 'suffix' => ''];
         }
         if ($canMembre) {
-            $kpisList[] = ['label' => 'Membres mission', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.membres_mission'), 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
         }
         if ($canRapportFin) {
             $labelFinSoumis = $dashboardRole === 'secretaire_executif_mission'
-                ? 'Rapports mensuels soumis'
-                : 'Rapports finances soumis';
+                ? __('dashboard.kpi.rapports_mensuels_soumis')
+                : __('dashboard.kpi.rapports_finances_soumis');
             $kpisList[] = ['label' => $labelFinSoumis, 'value' => (int) RapportMensuelEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat_transmission', RapportMensuelEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
         }
         if ($canRapportMembre) {
-            $kpisList[] = ['label' => 'Rapports membres soumis', 'value' => (int) RapportMembreEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.rapports_membres_soumis'), 'value' => (int) RapportMembreEglise::query()->whereHas('egliseLocale', fn ($q) => $q->where('mission_id', $missionId))->where('etat', RapportMembreEglise::ETAT_SOUMIS)->count(), 'suffix' => ''];
         }
 
         return [
@@ -780,10 +780,10 @@ class TableauDeBordController extends Controller
         $g = Gate::forUser($user);
         $kpisList = [];
         if ($g->allows('viewAny', RapportMensuelEglise::class)) {
-            $kpisList[] = ['label' => 'Rapports total', 'value' => (int) $this->rapportsScopes($user)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.rapports_total'), 'value' => (int) $this->rapportsScopes($user)->count(), 'suffix' => ''];
         }
         if ($g->allows('viewAny', Membre::class)) {
-            $kpisList[] = ['label' => 'Membres total', 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
+            $kpisList[] = ['label' => __('dashboard.kpi.membres_total'), 'value' => (int) $this->membresScopes($user)->count(), 'suffix' => ''];
         }
 
         return [
@@ -809,27 +809,27 @@ class TableauDeBordController extends Controller
 
             if ($prioritesTresoMission) {
                 $prioritesMission[] = [
-                    'label' => 'Transferts non rapprochés',
+                    'label' => __('dashboard.priorite.transferts_non_rapproches'),
                     'value' => $this->transfertsNonRapproches($missionId, (int) $now->year, (int) $now->month),
                     'route' => 'finances.synthese-annuelle-mission.index',
                     'tone' => 'amber',
-                    'help' => 'Mois avec écart entre transfert attendu et montant bancaire saisi.',
+                    'help' => __('dashboard.priorite.transferts_help'),
                     'icon' => 'banknotes',
                 ];
             }
 
             $prioritesMission[] = [
-                'label' => 'Rapports églises en retard',
+                'label' => __('dashboard.priorite.rapports_retard'),
                 'value' => $this->rapportsEglisesEnRetard($missionId, (int) $now->year, (int) $now->month),
                 'route' => 'finances.rapports-mensuels.index',
                 'tone' => 'rose',
-                'help' => 'Églises sans rapport mensuel finalisé pour la période.',
+                'help' => __('dashboard.priorite.rapports_retard_help'),
                 'icon' => 'document-chart-bar',
             ];
 
             if ($prioritesTresoMission) {
                 $prioritesMission[] = [
-                    'label' => 'Rapports soumis à valider',
+                    'label' => __('dashboard.priorite.a_valider'),
                     'value' => (int) RapportMensuelEglise::query()
                         ->where('annee', (int) $now->year)
                         ->where('mois', (int) $now->month)
@@ -838,7 +838,7 @@ class TableauDeBordController extends Controller
                         ->count(),
                     'route' => 'finances.rapports-mensuels.index',
                     'tone' => 'indigo',
-                    'help' => 'Rapports mensuels en attente de validation par la trésorerie / direction.',
+                    'help' => __('dashboard.priorite.a_valider_help'),
                     'icon' => 'check-circle',
                 ];
             }
@@ -865,11 +865,11 @@ class TableauDeBordController extends Controller
         if ($user->hasRole('secretaire_eglise')) {
             return $this->trierPriorites([
                 [
-                    'label' => 'Rapport mensuel à finaliser (trésorerie)',
+                    'label' => __('dashboard.priorite.rapport_mensuel_treso'),
                     'value' => $rapportRetard,
                     'route' => 'finances.rapports-mensuels.index',
                     'tone' => 'rose',
-                    'help' => 'Suivi du rapport financier mensuel — rédaction et signatures : trésorier d’église.',
+                    'help' => __('dashboard.priorite.rapport_mensuel_treso_help'),
                     'icon' => 'document-chart-bar',
                 ],
             ]);
@@ -877,27 +877,27 @@ class TableauDeBordController extends Controller
 
         return $this->trierPriorites([
             [
-                'label' => 'Récaps brouillons',
+                'label' => __('dashboard.priorite.recaps_brouillons'),
                 'value' => (int) $this->recapsScopes($user)->where('statut', 'brouillon')->count(),
                 'route' => 'finances.recaps.index',
                 'tone' => 'amber',
-                'help' => 'Récaps encore non finalisés.',
+                'help' => __('dashboard.priorite.recaps_brouillons_help'),
                 'icon' => 'currency-dollar',
             ],
             [
-                'label' => 'Récaps soumis à traiter',
+                'label' => __('dashboard.priorite.recaps_soumis'),
                 'value' => (int) $this->recapsScopes($user)->where('statut', 'soumis')->count(),
                 'route' => 'finances.recaps.index',
                 'tone' => 'indigo',
-                'help' => 'Récaps en attente de validation.',
+                'help' => __('dashboard.priorite.recaps_soumis_help'),
                 'icon' => 'check-circle',
             ],
             [
-                'label' => 'Rapport église en retard',
+                'label' => __('dashboard.priorite.rapport_retard_eglise'),
                 'value' => $rapportRetard,
                 'route' => 'finances.rapports-mensuels.index',
                 'tone' => 'rose',
-                'help' => 'Rapport mensuel de la période non finalisé.',
+                'help' => __('dashboard.priorite.rapport_retard_eglise_help'),
                 'icon' => 'document-chart-bar',
             ],
         ]);
@@ -935,9 +935,9 @@ class TableauDeBordController extends Controller
             $prevOff = (float) ($previous?->offrandes ?? 0);
 
             return [
-                ['label' => 'Dîmes', 'courant' => $curDimes, 'precedent' => $prevDimes, 'suffix' => 'FCFA'],
-                ['label' => 'Offrandes', 'courant' => $curOff, 'precedent' => $prevOff, 'suffix' => 'FCFA'],
-                ['label' => 'Total recettes', 'courant' => $curDimes + $curOff, 'precedent' => $prevDimes + $prevOff, 'suffix' => 'FCFA'],
+                ['label' => __('dashboard.comparatif.dimes'), 'courant' => $curDimes, 'precedent' => $prevDimes, 'suffix' => 'FCFA'],
+                ['label' => __('dashboard.comparatif.offrandes'), 'courant' => $curOff, 'precedent' => $prevOff, 'suffix' => 'FCFA'],
+                ['label' => __('dashboard.comparatif.total_recettes'), 'courant' => $curDimes + $curOff, 'precedent' => $prevDimes + $prevOff, 'suffix' => 'FCFA'],
             ];
         }
 
@@ -954,9 +954,9 @@ class TableauDeBordController extends Controller
             ->first();
 
         return [
-            ['label' => 'Dîmes', 'courant' => (float) ($current?->dimes ?? 0), 'precedent' => (float) ($previous?->dimes ?? 0), 'suffix' => 'FCFA'],
-            ['label' => 'Offrandes', 'courant' => (float) ($current?->offrandes ?? 0), 'precedent' => (float) ($previous?->offrandes ?? 0), 'suffix' => 'FCFA'],
-            ['label' => 'À transférer mission', 'courant' => (float) ($current?->transferer ?? 0), 'precedent' => (float) ($previous?->transferer ?? 0), 'suffix' => 'FCFA'],
+            ['label' => __('dashboard.comparatif.dimes'), 'courant' => (float) ($current?->dimes ?? 0), 'precedent' => (float) ($previous?->dimes ?? 0), 'suffix' => 'FCFA'],
+            ['label' => __('dashboard.comparatif.offrandes'), 'courant' => (float) ($current?->offrandes ?? 0), 'precedent' => (float) ($previous?->offrandes ?? 0), 'suffix' => 'FCFA'],
+            ['label' => __('dashboard.comparatif.a_transferer'), 'courant' => (float) ($current?->transferer ?? 0), 'precedent' => (float) ($previous?->transferer ?? 0), 'suffix' => 'FCFA'],
         ];
     }
 

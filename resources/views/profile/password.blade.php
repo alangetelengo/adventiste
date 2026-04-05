@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('page-title', 'Mot de passe')
+@section('page-title', __('profile.password_page_title'))
 
 @section('page-title-info')
-    <span class="text-slate-600 dark:text-slate-400">Mettez à jour le mot de passe de votre compte.</span>
+    <span class="text-slate-600 dark:text-slate-400">{{ __('profile.password_page_subtitle') }}</span>
 @endsection
 
 @section('btn-create')
@@ -11,7 +11,7 @@
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        Retour au profil
+        {{ __('profile.back_profile') }}
     </a>
 @endsection
 
@@ -25,7 +25,7 @@
         @method('PUT')
 
         <div>
-            <label for="current_password" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">Mot de passe actuel</label>
+            <label for="current_password" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">{{ __('profile.current_password') }}</label>
             <input type="password" name="current_password" id="current_password" required autocomplete="current-password"
                 class="{{ $inputClass }} @error('current_password') border-red-500 focus:ring-red-500/35 focus:border-red-500 @enderror">
             @error('current_password')
@@ -34,7 +34,7 @@
         </div>
 
         <div>
-            <label for="password" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">Nouveau mot de passe</label>
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">{{ __('profile.new_password') }}</label>
             <input type="password" name="password" id="password" required autocomplete="new-password"
                 class="{{ $inputClass }} @error('password') border-red-500 focus:ring-red-500/35 focus:border-red-500 @enderror">
             @error('password')
@@ -43,14 +43,14 @@
         </div>
 
         <div>
-            <label for="password_confirmation" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">Confirmer le nouveau mot de passe</label>
+            <label for="password_confirmation" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">{{ __('profile.confirm_password') }}</label>
             <input type="password" name="password_confirmation" id="password_confirmation" required autocomplete="new-password"
                 class="{{ $inputClass }}">
         </div>
 
         <div class="flex flex-wrap gap-3 pt-2">
-            <button type="submit" class="adventiste-btn-primary">Enregistrer</button>
-            <a href="{{ route('profile.edit') }}" class="adventiste-btn-secondary inline-flex items-center justify-center no-underline">Annuler</a>
+            <button type="submit" class="adventiste-btn-primary">{{ __('ui.save') }}</button>
+            <a href="{{ route('profile.edit') }}" class="adventiste-btn-secondary inline-flex items-center justify-center no-underline">{{ __('ui.cancel') }}</a>
         </div>
     </form>
 </div>

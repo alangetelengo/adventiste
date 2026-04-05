@@ -92,9 +92,29 @@ class LigneDimeOffrandeRecap extends Model
     public static function libellesTypesRevenu(): array
     {
         return [
-            self::TYPE_DIME => 'Dîme',
-            self::TYPE_OFFRANDE => 'Offrande',
-            self::TYPE_DON => 'Don',
+            self::TYPE_DIME => __('finances.ligne_recap.type_dime'),
+            self::TYPE_OFFRANDE => __('finances.ligne_recap.type_offrande'),
+            self::TYPE_DON => __('finances.ligne_recap.type_don'),
+        ];
+    }
+
+    /** @return array<string, string> */
+    public static function labelsStatutLigne(): array
+    {
+        return [
+            self::STATUT_BROUILLON => __('finances.ligne_recap.statut_brouillon'),
+            self::STATUT_SOUMIS => __('finances.ligne_recap.statut_soumis'),
+            self::STATUT_VERROUILLE => __('finances.ligne_recap.statut_verrouille'),
+            self::STATUT_REJETE => __('finances.ligne_recap.statut_rejete'),
+        ];
+    }
+
+    /** @return array<string, string> */
+    public static function labelsOrigine(): array
+    {
+        return [
+            self::ORIGINE_ASSEMBLEE => __('finances.ligne_recap.origine_assemblee'),
+            self::ORIGINE_INDIVIDUEL => __('finances.ligne_recap.origine_individuel'),
         ];
     }
 

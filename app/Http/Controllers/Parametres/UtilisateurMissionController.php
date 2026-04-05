@@ -107,7 +107,7 @@ class UtilisateurMissionController extends Controller
 
         return redirect()
             ->route('parametres.utilisateurs.edit', $user)
-            ->with('success', 'Utilisateur créé.');
+            ->with('success', __('flash.utilisateur_created'));
     }
 
     public function edit(Request $request, User $utilisateur): View
@@ -193,7 +193,7 @@ class UtilisateurMissionController extends Controller
 
         return redirect()
             ->route('parametres.utilisateurs.edit', $utilisateur)
-            ->with('success', 'Utilisateur enregistré.');
+            ->with('success', __('flash.utilisateur_saved'));
     }
 
     public function destroy(Request $request, User $utilisateur): RedirectResponse
@@ -212,7 +212,7 @@ class UtilisateurMissionController extends Controller
             if ($autresAdmins === 0) {
                 return redirect()
                     ->route('parametres.utilisateurs.index')
-                    ->with('error', 'Impossible de supprimer le dernier administrateur mission.');
+                    ->with('error', __('flash.utilisateur_last_admin'));
             }
         }
 
@@ -220,6 +220,6 @@ class UtilisateurMissionController extends Controller
 
         return redirect()
             ->route('parametres.utilisateurs.index')
-            ->with('success', 'Utilisateur supprimé.');
+            ->with('success', __('flash.utilisateur_deleted'));
     }
 }

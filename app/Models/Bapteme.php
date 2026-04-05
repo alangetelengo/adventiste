@@ -60,8 +60,8 @@ class Bapteme extends Model
     public static function labelsTypes(): array
     {
         return [
-            self::TYPE_IMMERSION => 'Immersion',
-            self::TYPE_PROFESSION_FOI => 'Profession de foi',
+            self::TYPE_IMMERSION => __('modules.baptemes.types.immersion'),
+            self::TYPE_PROFESSION_FOI => __('modules.baptemes.types.profession_de_foi'),
         ];
     }
 

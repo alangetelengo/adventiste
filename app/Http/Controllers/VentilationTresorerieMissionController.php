@@ -119,7 +119,7 @@ class VentilationTresorerieMissionController extends Controller
 
         return redirect()
             ->route('finances.ventilation-tresorerie-mission.edit', ['annee' => $annee, 'mois' => $mois])
-            ->with('success', 'Rapport de ventilation trésorerie enregistré.');
+            ->with('success', __('flash.ventilation_stored'));
     }
 
     public function soumettre(Request $request, int $annee, int $mois): RedirectResponse
@@ -155,7 +155,7 @@ class VentilationTresorerieMissionController extends Controller
 
         return redirect()
             ->route('finances.ventilation-tresorerie-mission.edit', ['annee' => $annee, 'mois' => $mois])
-            ->with('success', 'Rapport soumis pour validation.');
+            ->with('success', __('flash.ventilation_submitted'));
     }
 
     public function validerMission(Request $request, int $annee, int $mois): RedirectResponse
@@ -184,7 +184,7 @@ class VentilationTresorerieMissionController extends Controller
 
         return redirect()
             ->route('finances.ventilation-tresorerie-mission.edit', ['annee' => $annee, 'mois' => $mois])
-            ->with('success', 'Rapport validé.');
+            ->with('success', __('flash.ventilation_validated'));
     }
 
     public function refuserMission(Request $request, int $annee, int $mois): RedirectResponse
@@ -213,7 +213,7 @@ class VentilationTresorerieMissionController extends Controller
 
         return redirect()
             ->route('finances.ventilation-tresorerie-mission.edit', ['annee' => $annee, 'mois' => $mois])
-            ->with('success', 'Rapport refusé avec commentaire.');
+            ->with('success', __('flash.ventilation_refused'));
     }
 
     public function impression(Request $request, int $annee, int $mois): View

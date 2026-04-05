@@ -1,34 +1,30 @@
 @extends('layouts.app')
 
-@section('page-title', 'Ventilation trésorerie mission')
+@section('page-title', __('finances.ventilation.title'))
 
 @section('page-title-info')
-    Rapport mensuel de ventilation (dîmes / offrandes) selon les lignes paramétrées pour votre mission.
+    {{ __('finances.ventilation.subtitle') }}
 @endsection
-
-@php
-    $nomsMois = [1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril', 5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août', 9 => 'Septembre', 10 => 'Octobre', 11 => 'Novembre', 12 => 'Décembre'];
-@endphp
 
 @section('content')
     <div class="adventiste-card-pro-static mb-8 p-6 sm:p-7">
-        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-4">Ouvrir une période</h2>
+        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-4">{{ __('finances.common.open_period') }}</h2>
         <form class="flex flex-wrap items-end gap-4" onsubmit="return false;">
             <div>
-                <label for="nav-annee" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Année</label>
+                <label for="nav-annee" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ __('finances.common.year') }}</label>
                 <input type="number" id="nav-annee" name="annee" value="{{ request('annee', (int) date('Y')) }}" min="2000" max="2100" required
                     class="w-28 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
             </div>
             <div>
-                <label for="nav-mois" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Mois</label>
+                <label for="nav-mois" class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ __('finances.common.month') }}</label>
                 <select id="nav-mois" name="mois" class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm min-w-40">
                     @for ($m = 1; $m <= 12; $m++)
-                        <option value="{{ $m }}" @selected((int) request('mois', (int) date('n')) === $m)>{{ $nomsMois[$m] }}</option>
+                        <option value="{{ $m }}" @selected((int) request('mois', (int) date('n')) === $m)>{{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::createFromDate((int) date('Y'), $m, 1)->translatedFormat('F')) }}</option>
                     @endfor
                 </select>
             </div>
             <a href="#" id="ventilation-open-period" class="inline-flex items-center gap-2 rounded-lg bg-emerald-700 text-white px-5 py-2.5 text-sm font-medium hover:bg-emerald-800 no-underline">
-                Saisir le rapport
+                {{ __('finances.common.enter_report') }}
             </a>
         </form>
         @push('scripts')
@@ -50,18 +46,18 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="bg-linear-to-r from-slate-50 to-slate-100/80 dark:from-slate-700/80 dark:to-slate-800/80 border-b-2 border-slate-200 dark:border-slate-600">
-                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Période</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Statut</th>
-                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Dîmes (mois)</th>
-                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Offrandes (mois)</th>
-                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.rapports_mensuels.col_period') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.ventilation.col_status') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.ventilation.col_dimes_month') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('finances.ventilation.col_offrandes_month') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{{ __('ui.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-slate-800 dark:text-slate-100">
                     @forelse ($rapports as $rapport)
                         <tr class="group hover:bg-emerald-50/50 dark:hover:bg-slate-700/40 transition-colors duration-200">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
-                                {{ $nomsMois[(int) $rapport->mois] ?? $rapport->mois }} {{ $rapport->annee }}
+                                {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::createFromDate((int) $rapport->annee, (int) $rapport->mois, 1)->translatedFormat('F')) }} {{ $rapport->annee }}
                             </td>
                             @php
                                 $etat = (string) ($rapport->etat_transmission ?? \App\Models\MissionTresorerieRapportMensuel::ETAT_BROUILLON);
@@ -71,10 +67,11 @@
                                     \App\Models\MissionTresorerieRapportMensuel::ETAT_REFUSE_MISSION => 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300',
                                     default => 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200',
                                 };
+                                $labelsEtat = \App\Models\MissionTresorerieRapportMensuel::labelsEtatsTransmission();
                             @endphp
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold {{ $etatClass }}">
-                                    {{ \App\Models\MissionTresorerieRapportMensuel::labelsEtatsTransmission()[$etat] ?? 'Brouillon' }}
+                                    {{ $labelsEtat[$etat] ?? $etat }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right tabular-nums text-slate-700 dark:text-slate-200">
@@ -85,14 +82,14 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('finances.ventilation-tresorerie-mission.edit', ['annee' => $rapport->annee, 'mois' => $rapport->mois]) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800/90 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all no-underline">
-                                    Ouvrir
+                                    {{ __('finances.common.open') }}
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                                Aucun rapport enregistré. Choisissez une période ci-dessus pour commencer la saisie.
+                                {{ __('finances.ventilation.empty') }}
                             </td>
                         </tr>
                     @endforelse

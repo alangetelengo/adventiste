@@ -69,10 +69,10 @@ class RapportMensuelEglise extends Model
     public static function labelsEtatsTransmission(): array
     {
         return [
-            self::ETAT_BROUILLON => 'Brouillon',
-            self::ETAT_SOUMIS => 'Soumis à la mission',
-            self::ETAT_VALIDE_MISSION => 'Validé mission',
-            self::ETAT_REFUSE_MISSION => 'Refusé mission',
+            self::ETAT_BROUILLON => __('finances.rapport_mensuel_eglise.etat_brouillon'),
+            self::ETAT_SOUMIS => __('finances.rapport_mensuel_eglise.etat_soumis'),
+            self::ETAT_VALIDE_MISSION => __('finances.rapport_mensuel_eglise.etat_valide'),
+            self::ETAT_REFUSE_MISSION => __('finances.rapport_mensuel_eglise.etat_refuse'),
         ];
     }
 

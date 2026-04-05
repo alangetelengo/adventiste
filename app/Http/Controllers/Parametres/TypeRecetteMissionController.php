@@ -72,7 +72,7 @@ class TypeRecetteMissionController extends Controller
 
         return redirect()
             ->route('parametres.types-recette.index')
-            ->with('success', 'Type de recette créé.');
+            ->with('success', __('flash.type_recette_created'));
     }
 
     public function edit(Request $request, TypeRecetteMission $type): View
@@ -126,7 +126,7 @@ class TypeRecetteMissionController extends Controller
 
         return redirect()
             ->route('parametres.types-recette.index')
-            ->with('success', 'Type de recette mis à jour.');
+            ->with('success', __('flash.type_recette_updated'));
     }
 
     public function destroy(TypeRecetteMission $type): RedirectResponse
@@ -136,13 +136,13 @@ class TypeRecetteMissionController extends Controller
         if ($type->lignesRecap()->exists()) {
             return redirect()
                 ->route('parametres.types-recette.index')
-                ->with('error', 'Ce type est utilisé dans des récaps : désactivez-le plutôt que le supprimer.');
+                ->with('error', __('flash.type_recette_in_use'));
         }
 
         $type->delete();
 
         return redirect()
             ->route('parametres.types-recette.index')
-            ->with('success', 'Type de recette supprimé.');
+            ->with('success', __('flash.type_recette_deleted'));
     }
 }

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'page_title' => 'Mon profil',
+    'page_subtitle' => 'Consultez vos informations et gérez la sécurité de votre compte.',
+    'back_dashboard' => 'Retour au tableau de bord',
+    'personal_info' => 'Informations personnelles',
+    'full_name' => 'Nom complet',
+    'email' => 'Courriel',
+    'local_church' => 'Église locale',
+    'mission' => 'Mission',
+    'role_section' => 'Rôle dans l’application',
+    'no_roles' => 'Aucun rôle assigné.',
+    'activity' => 'Activité',
+    'member_since' => 'Membre depuis',
+    'security' => 'Sécurité du compte',
+    'security_blurb' => 'Mettez à jour votre mot de passe régulièrement pour protéger l’accès à votre espace.',
+    'change_password' => 'Changer le mot de passe',
+    'password_page_title' => 'Mot de passe',
+    'password_page_subtitle' => 'Mettez à jour le mot de passe de votre compte.',
+    'back_profile' => 'Retour au profil',
+    'current_password' => 'Mot de passe actuel',
+    'new_password' => 'Nouveau mot de passe',
+    'confirm_password' => 'Confirmer le nouveau mot de passe',
+];

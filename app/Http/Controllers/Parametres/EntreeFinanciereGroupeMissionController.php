@@ -93,7 +93,7 @@ class EntreeFinanciereGroupeMissionController extends Controller
 
         return redirect()
             ->route('parametres.groupes-mission.entrees.index', $groupe)
-            ->with('success', 'Entrée financière enregistrée.');
+            ->with('success', __('flash.entree_financiere_saved'));
     }
 
     public function edit(Request $request, GroupeMission $groupe, EntreeFinanciereGroupeMission $entree): View
@@ -135,7 +135,7 @@ class EntreeFinanciereGroupeMissionController extends Controller
 
         return redirect()
             ->route('parametres.groupes-mission.entrees.index', $groupe)
-            ->with('success', 'Entrée financière enregistrée.');
+            ->with('success', __('flash.entree_financiere_saved'));
     }
 
     public function destroy(Request $request, GroupeMission $groupe, EntreeFinanciereGroupeMission $entree): RedirectResponse
@@ -151,6 +151,6 @@ class EntreeFinanciereGroupeMissionController extends Controller
 
         return redirect()
             ->route('parametres.groupes-mission.entrees.index', $groupe)
-            ->with('success', 'Entrée financière supprimée.');
+            ->with('success', __('flash.entree_financiere_deleted'));
     }
 }

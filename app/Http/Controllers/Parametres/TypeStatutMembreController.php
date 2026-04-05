@@ -66,7 +66,7 @@ class TypeStatutMembreController extends Controller
 
         return redirect()
             ->route('parametres.types-statut-membre.index')
-            ->with('success', 'Type de statut membre créé.');
+            ->with('success', __('flash.type_statut_created'));
     }
 
     public function edit(Request $request, TypeStatutMembre $type): View
@@ -111,7 +111,7 @@ class TypeStatutMembreController extends Controller
 
         return redirect()
             ->route('parametres.types-statut-membre.index')
-            ->with('success', 'Type de statut membre mis à jour.');
+            ->with('success', __('flash.type_statut_updated'));
     }
 
     public function destroy(TypeStatutMembre $type): RedirectResponse
@@ -121,19 +121,19 @@ class TypeStatutMembreController extends Controller
         if ($type->is_system) {
             return redirect()
                 ->route('parametres.types-statut-membre.index')
-                ->with('error', 'Les statuts système ne peuvent pas être supprimés.');
+                ->with('error', __('flash.type_statut_system_delete'));
         }
 
         if ($type->membres()->exists() || $type->historiques()->exists()) {
             return redirect()
                 ->route('parametres.types-statut-membre.index')
-                ->with('error', 'Ce type est déjà utilisé : désactivez-le plutôt que le supprimer.');
+                ->with('error', __('flash.type_statut_in_use'));
         }
 
         $type->delete();
 
         return redirect()
             ->route('parametres.types-statut-membre.index')
-            ->with('success', 'Type de statut membre supprimé.');
+            ->with('success', __('flash.type_statut_deleted'));
     }
 }

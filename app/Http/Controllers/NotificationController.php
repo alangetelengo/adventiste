@@ -58,7 +58,7 @@ class NotificationController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Notifications marquées comme lues.');
+            ->with('success', __('flash.notifications_read'));
     }
 
     public function open(Request $request, NotificationInterne $notification): RedirectResponse

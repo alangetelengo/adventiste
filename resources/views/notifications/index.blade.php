@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('page-title', 'Notifications')
+@section('page-title', __('notifications.page_title'))
 
 @section('page-title-info')
-    Historique de vos notifications récentes.
+    {{ __('notifications.subtitle') }}
 @endsection
 
 @section('btn-create')
     <form method="post" action="{{ route('notifications.read-all') }}" class="m-0">
         @csrf
-        <button type="submit" class="adventiste-btn-secondary">Tout marquer comme lu</button>
+        <button type="submit" class="adventiste-btn-secondary">{{ __('notifications.mark_all_read') }}</button>
     </form>
 @endsection
 
@@ -26,12 +26,12 @@
                             @endif
                             <p class="mt-1 text-xs text-slate-500">{{ $notification->created_at?->diffForHumans() }}</p>
                         </div>
-                        <a href="{{ route('notifications.open', $notification) }}" class="text-sm text-emerald-700 dark:text-emerald-300 font-medium hover:underline no-underline">Ouvrir</a>
+                        <a href="{{ route('notifications.open', $notification) }}" class="text-sm text-emerald-700 dark:text-emerald-300 font-medium hover:underline no-underline">{{ __('notifications.open') }}</a>
                     </div>
                 </div>
             @empty
                 <div class="px-6 py-16 text-center text-slate-500 dark:text-slate-400 text-sm">
-                    Aucune notification.
+                    {{ __('notifications.empty') }}
                 </div>
             @endforelse
         </div>

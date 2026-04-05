@@ -14,21 +14,21 @@
 
 <div class="space-y-6">
     <div class="space-y-4">
-        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200/80 dark:border-slate-600/60 pb-2">Rattachement</h3>
+        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200/80 dark:border-slate-600/60 pb-2">{{ __('modules.membres.form_section_rattachement') }}</h3>
         <div class="membre-form-rattachement gap-4">
             @if (auth()->user()->eglise_locale_id !== null)
                 <div>
                     <input type="hidden" name="eglise_locale_id" value="{{ auth()->user()->eglise_locale_id }}">
                     <p class="text-sm leading-snug text-slate-600 dark:text-slate-400">
-                        Église : <strong class="text-slate-800 dark:text-slate-200">{{ auth()->user()->egliseLocale?->nom }}</strong>
+                        {{ __('modules.membres.church_prefix') }} <strong class="text-slate-800 dark:text-slate-200">{{ auth()->user()->egliseLocale?->nom }}</strong>
                         <span class="font-mono text-xs text-slate-500">({{ auth()->user()->egliseLocale?->code_unique }})</span>
                     </p>
                 </div>
             @else
                 <div>
-                    <label for="eglise_locale_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Église locale</label>
+                    <label for="eglise_locale_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_local_church') }}</label>
                     <select name="eglise_locale_id" id="eglise_locale_id" class="{{ $selectGrid }} w-full" required>
-                        <option value="">— Choisir —</option>
+                        <option value="">{{ __('modules.common.choose') }}</option>
                         @foreach ($eglises as $eglise)
                             <option value="{{ $eglise->id }}" @selected((string) old('eglise_locale_id', $m?->eglise_locale_id ?? $egliseParDéfaut ?? '') === (string) $eglise->id)>{{ $eglise->nom }} ({{ $eglise->code_unique }})</option>
                         @endforeach
@@ -41,9 +41,9 @@
 
             @if ($canEditGroupeMission)
                 <div>
-                    <label for="groupe_mission_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Groupe mission (optionnel)</label>
+                    <label for="groupe_mission_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_mission_group') }}</label>
                     <select name="groupe_mission_id" id="groupe_mission_id" class="{{ $selectGrid }} w-full">
-                        <option value="">— Aucun —</option>
+                        <option value="">{{ __('modules.common.none') }}</option>
                         @foreach ($groupes as $g)
                             <option value="{{ $g->id }}" @selected((string) old('groupe_mission_id', $m?->groupe_mission_id) === (string) $g->id)>{{ $g->nom }}</option>
                         @endforeach
@@ -53,7 +53,7 @@
                     @enderror
                     @can('viewAny', App\Models\GroupeMission::class)
                         <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-500">
-                            <a href="{{ route('parametres.groupes-mission.index') }}" class="font-semibold text-[#00b464] hover:underline">Gérer les groupes mission</a>
+                            <a href="{{ route('parametres.groupes-mission.index') }}" class="font-semibold text-[#00b464] hover:underline">{{ __('modules.membres.form_manage_groups') }}</a>
                         </p>
                     @endcan
                 </div>
@@ -63,25 +63,25 @@
 
     {{-- Grille 3 colonnes (CSS .membre-form-body-grid) : Identité → Famille → Vie spirituelle --}}
     <div class="membre-form-body-grid gap-4">
-        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200/80 dark:border-slate-600/60 pb-2">Identité</h3>
+        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200/80 dark:border-slate-600/60 pb-2">{{ __('modules.membres.form_identity') }}</h3>
         <div>
-            <label for="nom" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Nom</label>
+            <label for="nom" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_nom') }}</label>
             <input type="text" name="nom" id="nom" required value="{{ old('nom', $m?->nom) }}" class="{{ $fieldGrid }} min-w-0" autocomplete="family-name">
             @error('nom')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="prenom" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Prénom</label>
+            <label for="prenom" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_prenom') }}</label>
             <input type="text" name="prenom" id="prenom" required value="{{ old('prenom', $m?->prenom) }}" class="{{ $fieldGrid }} min-w-0" autocomplete="given-name">
             @error('prenom')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="sexe" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Sexe</label>
+            <label for="sexe" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_sexe') }}</label>
             <select name="sexe" id="sexe" class="{{ $selectGrid }} w-full min-w-0">
-                <option value="">—</option>
+                <option value="">{{ __('modules.common.empty_select') }}</option>
                 <option value="M" @selected(old('sexe', $m?->sexe) === 'M')>M</option>
                 <option value="F" @selected(old('sexe', $m?->sexe) === 'F')>F</option>
             </select>
@@ -90,28 +90,28 @@
             @enderror
         </div>
         <div>
-            <label for="date_naissance" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date de naissance</label>
+            <label for="date_naissance" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_date_naissance') }}</label>
             <input type="date" name="date_naissance" id="date_naissance" value="{{ old('date_naissance', $m?->date_naissance?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
             @error('date_naissance')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="lieu_naissance" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Lieu de naissance</label>
+            <label for="lieu_naissance" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_lieu_naissance') }}</label>
             <input type="text" name="lieu_naissance" id="lieu_naissance" value="{{ old('lieu_naissance', $m?->lieu_naissance) }}" class="{{ $fieldGrid }} min-w-0">
             @error('lieu_naissance')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="telephone" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Téléphone</label>
+            <label for="telephone" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_telephone') }}</label>
             <input type="text" name="telephone" id="telephone" value="{{ old('telephone', $m?->telephone) }}" class="{{ $fieldGrid }} min-w-0" autocomplete="tel">
             @error('telephone')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="occupation" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Occupation</label>
+            <label for="occupation" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_occupation') }}</label>
             <input type="text" name="occupation" id="occupation" value="{{ old('occupation', $m?->occupation) }}" class="{{ $fieldGrid }} min-w-0">
             @error('occupation')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -119,62 +119,62 @@
         </div>
 
         <div class="sm:col-span-3">
-            <label for="adresses" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Adresse(s)</label>
+            <label for="adresses" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_adresses') }}</label>
             <textarea name="adresses" id="adresses" class="{{ $textareaFull }}" rows="3">{{ old('adresses', $m?->adresses) }}</textarea>
             @error('adresses')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
 
-        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">Famille &amp; études</h3>
+        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">{{ __('modules.membres.form_family') }}</h3>
         <div>
-            <label for="noms_pere" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Noms du père</label>
+            <label for="noms_pere" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_noms_pere') }}</label>
             <input type="text" name="noms_pere" id="noms_pere" value="{{ old('noms_pere', $m?->noms_pere) }}" class="{{ $fieldGrid }} min-w-0">
             @error('noms_pere')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="noms_mere" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Noms de la mère</label>
+            <label for="noms_mere" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_noms_mere') }}</label>
             <input type="text" name="noms_mere" id="noms_mere" value="{{ old('noms_mere', $m?->noms_mere) }}" class="{{ $fieldGrid }} min-w-0">
             @error('noms_mere')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="niveau_etudes" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Niveau d’études</label>
+            <label for="niveau_etudes" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_niveau_etudes') }}</label>
             <input type="text" name="niveau_etudes" id="niveau_etudes" value="{{ old('niveau_etudes', $m?->niveau_etudes) }}" class="{{ $fieldGrid }} min-w-0">
             @error('niveau_etudes')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="situation_matrimoniale" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Situation matrimoniale</label>
+            <label for="situation_matrimoniale" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_situation_matrimoniale') }}</label>
             <input type="text" name="situation_matrimoniale" id="situation_matrimoniale" value="{{ old('situation_matrimoniale', $m?->situation_matrimoniale) }}" class="{{ $fieldGrid }} min-w-0">
             @error('situation_matrimoniale')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="date_mariage" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date de mariage</label>
+            <label for="date_mariage" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_date_mariage') }}</label>
             <input type="date" name="date_mariage" id="date_mariage" value="{{ old('date_mariage', $m?->date_mariage?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
             @error('date_mariage')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="conjoint" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Conjoint(e)</label>
+            <label for="conjoint" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_conjoint') }}</label>
             <input type="text" name="conjoint" id="conjoint" value="{{ old('conjoint', $m?->conjoint) }}" class="{{ $fieldGrid }} min-w-0">
             @error('conjoint')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
 
-        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">Entrée dans l'église</h3>
+        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">{{ __('modules.membres.form_church_entry') }}</h3>
         <div>
-            <label for="mode_entree" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Mode d'entrée</label>
+            <label for="mode_entree" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_mode_entree') }}</label>
             <select name="mode_entree" id="mode_entree" class="{{ $selectGrid }} min-w-0 w-full" required>
-                <option value="">— Choisir —</option>
+                <option value="">{{ __('modules.common.choose') }}</option>
                 @foreach ($modesEntree as $key => $label)
                     <option value="{{ $key }}" @selected(old('mode_entree', $m?->mode_entree) === $key)>{{ $label }}</option>
                 @endforeach
@@ -183,13 +183,13 @@
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
             <p id="hint-mode-transfert" class="mt-1.5 text-xs text-slate-500 dark:text-slate-400 hidden">
-                Mode transfert : l'église d'origine et la date de réception sont obligatoires, puis le membre est activé automatiquement.
+                {{ __('modules.membres.form_hint_transfert') }}
             </p>
         </div>
         <div>
-            <label for="type_statut_membre_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Statut membre</label>
+            <label for="type_statut_membre_id" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_statut_membre') }}</label>
             <select name="type_statut_membre_id" id="type_statut_membre_id" class="{{ $selectGrid }} min-w-0 w-full">
-                <option value="">— Sélection automatique (Actif) —</option>
+                <option value="">{{ __('modules.membres.form_statut_auto') }}</option>
                 @foreach ($typesStatut as $typeStatut)
                     <option value="{{ $typeStatut->id }}" @selected((string) old('type_statut_membre_id', $m?->type_statut_membre_id) === (string) $typeStatut->id)>
                         {{ $typeStatut->libelle }}
@@ -201,9 +201,9 @@
             @enderror
         </div>
         <div id="block-type-bapteme">
-            <label for="type_bapteme_entree" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Type de baptême d'entrée</label>
+            <label for="type_bapteme_entree" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_type_bapteme_entree') }}</label>
             <select name="type_bapteme_entree" id="type_bapteme_entree" class="{{ $selectGrid }} min-w-0 w-full">
-                <option value="">— Choisir —</option>
+                <option value="">{{ __('modules.common.choose') }}</option>
                 @foreach ($typesBaptemeEntree as $key => $label)
                     <option value="{{ $key }}" @selected(old('type_bapteme_entree', $m?->type_bapteme_entree) === $key)>{{ $label }}</option>
                 @endforeach
@@ -213,52 +213,52 @@
             @enderror
         </div>
 
-        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">Vie spirituelle</h3>
+        <h3 class="membre-form-body-grid__full text-sm font-bold text-slate-800 dark:text-slate-200 mt-2 border-y border-slate-200/80 py-4 dark:border-slate-600/60">{{ __('modules.membres.form_spiritual') }}</h3>
         <div id="block-date-bapteme">
-            <label for="date_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date de baptême</label>
+            <label for="date_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_date_bapteme') }}</label>
             <input type="date" name="date_bapteme" id="date_bapteme" value="{{ old('date_bapteme', $m?->date_bapteme?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
             @error('date_bapteme')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div id="block-date-admission-eglise">
-            <label for="date_admission_eglise" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Date d'admission au registre</label>
+            <label for="date_admission_eglise" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_date_admission') }}</label>
             <input type="date" name="date_admission_eglise" id="date_admission_eglise" value="{{ old('date_admission_eglise', $m?->date_admission_eglise?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Inscription comme membre (secrétariat). Vide = même date que le baptême pour le tri et l’affichage.</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ __('modules.membres.form_date_admission_hint') }}</p>
             @error('date_admission_eglise')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div id="block-lieu-bapteme">
-            <label for="lieu_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Lieu de baptême</label>
+            <label for="lieu_bapteme" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_lieu_bapteme') }}</label>
             <input type="text" name="lieu_bapteme" id="lieu_bapteme" value="{{ old('lieu_bapteme', $m?->lieu_bapteme) }}" class="{{ $fieldGrid }} min-w-0">
             @error('lieu_bapteme')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div>
-            <label for="religion_anterieure" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Religion antérieure</label>
+            <label for="religion_anterieure" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_religion_anterieure') }}</label>
             <input type="text" name="religion_anterieure" id="religion_anterieure" value="{{ old('religion_anterieure', $m?->religion_anterieure) }}" class="{{ $fieldGrid }} min-w-0">
             @error('religion_anterieure')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div id="block-baptise-par">
-            <label for="baptise_par" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Baptisé(e) par</label>
+            <label for="baptise_par" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_baptise_par') }}</label>
             <input type="text" name="baptise_par" id="baptise_par" value="{{ old('baptise_par', $m?->baptise_par) }}" class="{{ $fieldGrid }} min-w-0">
             @error('baptise_par')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div id="block-eglise-origine">
-            <label for="recu_dans_eglise_de" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Reçu(e) dans l’église de</label>
+            <label for="recu_dans_eglise_de" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_recu_eglise_de') }}</label>
             <input type="text" name="recu_dans_eglise_de" id="recu_dans_eglise_de" value="{{ old('recu_dans_eglise_de', $m?->recu_dans_eglise_de) }}" class="{{ $fieldGrid }} min-w-0">
             @error('recu_dans_eglise_de')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
         <div id="block-date-reception">
-            <label for="recu_le" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Reçu(e) le</label>
+            <label for="recu_le" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_recu_le') }}</label>
             <input type="date" name="recu_le" id="recu_le" value="{{ old('recu_le', $m?->recu_le?->format('Y-m-d')) }}" class="{{ $fieldGrid }} min-w-0">
             @error('recu_le')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -266,7 +266,7 @@
         </div>
 
         <div class="membre-form-body-grid__full">
-            <label for="observations" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">Observations</label>
+            <label for="observations" class="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1.5">{{ __('modules.membres.form_observations') }}</label>
             <textarea name="observations" id="observations" class="{{ $textareaFull }}" rows="4">{{ old('observations', $m?->observations) }}</textarea>
             @error('observations')
                 <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>

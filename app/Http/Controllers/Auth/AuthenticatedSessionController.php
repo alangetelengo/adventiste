@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
             return back()
                 ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Ce compte n’est rattaché ni à une église ni à une mission.']);
+                ->withErrors(['email' => __('auth.account_not_linked')]);
         }
 
         return redirect()->intended(route('tableau-de-bord'));

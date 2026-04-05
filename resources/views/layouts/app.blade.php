@@ -126,7 +126,7 @@
                         btn.dataset.originalHtml = btn.innerHTML;
                     }
 
-                    var loadingText = btn.dataset.loadingText || form.dataset.loadingText || 'Chargement...';
+                    var loadingText = btn.dataset.loadingText || form.dataset.loadingText || @json(__('ui.loading'));
                     if (btn instanceof HTMLButtonElement) {
                         btn.innerHTML = '<span class="form-submit-spinner"></span> ' + loadingText;
                     } else {
