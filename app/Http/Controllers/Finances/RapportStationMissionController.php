@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RapportStationMission;
 use App\Models\LigneRapportStationMission;
 use App\Models\LigneAutresDime;
-use App\Models\MissionReglesVentilationRecettes;
+use App\Models\MissionTresorerieVentilationLigne;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -77,11 +77,7 @@ class RapportStationMissionController extends Controller
 
         $rapport->loadMissing('mission', 'lignes', 'lignesAutresDimes');
 
-        $regles = MissionReglesVentilationRecettes::query()
-            ->where('mission_id', $rapport->mission_id)
-            ->get();
-
-        return view('finances.rapports-station.edit', compact('rapport', 'regles'));
+        return view('finances.rapports-station.edit', compact('rapport'));
     }
 
     public function update(Request $request, RapportStationMission $rapport): RedirectResponse
@@ -147,22 +143,29 @@ class RapportStationMissionController extends Controller
             return;
         }
 
-        $regles = MissionReglesVentilationRecettes::query()
+        $lignesVentilation = MissionTresorerieVentilationLigne::query()
             ->where('mission_id', $rapport->mission_id)
             ->orderBy('ordre')
             ->get();
 
-        $ordre = 0;
-        foreach ($regles as $regle) {
+        $ordreTri = 0;
+        foreach ($lignesVentilation as $ligne) {
+            if ($ligne->estTitre()) {
+                continue;
+            }
+            $code = $ligne->code;
+            if ($code === null || $code === '') {
+                $code = 'ligne_'.$ligne->id;
+            }
             LigneRapportStationMission::create([
                 'rapport_station_mission_id' => $rapport->id,
-                'code_ligne' => $regle->code_ligne,
-                'pourcentage' => $regle->pourcentage,
+                'code_ligne' => $code,
+                'pourcentage' => $ligne->pourcentage,
                 'montant_mois' => 0,
                 'montant_periode_precedente' => 0,
                 'montant_cumule' => 0,
                 'montant_mois_saisi_manuel' => false,
-                'ordre_tri' => $ordre++,
+                'ordre_tri' => $ordreTri++,
             ]);
         }
     }
